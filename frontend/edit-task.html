@@ -445,7 +445,12 @@
       <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
         <div class="mb-10">
           <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-            <a id="breadcrumb-back" class="hover:text-primary transition-colors underline underline-offset-2" href="#">Dashboard</a>
+            <a
+              id="breadcrumb-back"
+              class="hover:text-primary transition-colors underline underline-offset-2"
+              href="#"
+              >Dashboard</a
+            >
             <span class="material-symbols-outlined text-xs">chevron_right</span>
             <span id="breadcrumb-label" class="text-on-surface">Edit Task</span>
           </nav>
@@ -733,7 +738,11 @@
           completed: document.querySelector('input[type=checkbox]').checked,
         }
         if (todoId) {
-          await fetch(`${API}/todos/${todoId}`, { method: 'PUT', headers, body: JSON.stringify(body) })
+          await fetch(`${API}/todos/${todoId}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body),
+          })
         } else {
           await fetch(`${API}/todos`, { method: 'POST', headers, body: JSON.stringify(body) })
         }
@@ -793,7 +802,6 @@
       document.querySelector('button[type=button]').addEventListener('click', () => {
         window.location.href = backHref
       })
-
 
       // Expandable search (edit-task has no search, skip)
 
