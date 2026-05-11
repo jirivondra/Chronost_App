@@ -4,7 +4,7 @@ tasks:
   # --- API ---
   be-up:
     desc: Start the FastAPI backend
-    cmd: uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+    cmd: .venv/bin/uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 
   # --- Tests ---
   run-test:

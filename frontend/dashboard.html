@@ -628,6 +628,24 @@
           return div
         }
 
+        const TASK_PREVIEW_LIMIT = 10
+
+        function renderShowAllBtn(allTodos, container) {
+          const btn = document.createElement('button')
+          btn.className =
+            'mt-2 flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/70 transition-colors self-start'
+          btn.innerHTML = `
+            <span class="material-symbols-outlined text-[18px]">expand_more</span>
+            Zobrazit všechny úkoly (${allTodos.length})`
+          btn.addEventListener('click', () => {
+            btn.remove()
+            allTodos
+              .slice(TASK_PREVIEW_LIMIT)
+              .forEach((todo) => container.appendChild(renderTodo(todo)))
+          })
+          return btn
+        }
+
         async function loadTodos() {
           let res
           try {
@@ -655,14 +673,24 @@
             openList.innerHTML =
               '<p class="text-on-surface-variant text-sm italic opacity-50">No open tasks. Create one with + New Task.</p>'
           } else {
-            open.forEach((todo) => openList.appendChild(renderTodo(todo)))
+            open
+              .slice(0, TASK_PREVIEW_LIMIT)
+              .forEach((todo) => openList.appendChild(renderTodo(todo)))
+            if (open.length > TASK_PREVIEW_LIMIT) {
+              openList.appendChild(renderShowAllBtn(open, openList))
+            }
           }
 
           if (done.length === 0) {
             doneList.innerHTML =
               '<p class="text-on-surface-variant text-sm italic opacity-50">No finished tasks yet.</p>'
           } else {
-            done.forEach((todo) => doneList.appendChild(renderTodo(todo)))
+            done
+              .slice(0, TASK_PREVIEW_LIMIT)
+              .forEach((todo) => doneList.appendChild(renderTodo(todo)))
+            if (done.length > TASK_PREVIEW_LIMIT) {
+              doneList.appendChild(renderShowAllBtn(done, doneList))
+            }
           }
 
           // Aktualizuj pulse statistiku
