@@ -66,5 +66,10 @@ jobs:
       - name: Start API
         run: uvicorn api.main:app --host 0.0.0.0 --port 8000 &
 
+      - name: Wait for API
+        run: |
+          timeout 30 bash -c \
+            'until curl -sf -u "$API_USERNAME:$API_PASSWORD" http://localhost:8000/todos > /dev/null; do sleep 1; done'
+
       - name: Run tests
         run: task run-test

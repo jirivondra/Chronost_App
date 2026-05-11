@@ -129,11 +129,7 @@
       html.sidebar-collapsed .sidebar-user {
         display: none;
       }
-      html.sidebar-collapsed #sidebar .new-task-btn {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        justify-content: center;
-      }
+
       html.sidebar-collapsed #sidebar .sidebar-logo-link {
         display: none;
       }
@@ -344,14 +340,6 @@
             <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
           </button>
         </div>
-        <!-- New Task Button -->
-        <button
-          id="new-task-btn"
-          class="new-task-btn bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-transform active:scale-95 mb-2"
-        >
-          <span class="material-symbols-outlined text-sm flex-shrink-0">add</span>
-          <span class="sidebar-label">New Task</span>
-        </button>
         <!-- Navigation Links -->
         <nav class="flex-1 flex flex-col gap-1">
           <a
@@ -463,13 +451,22 @@
         <div class="col-span-8 flex flex-col gap-10">
           <!-- Open Tasks -->
           <section>
-            <div class="flex items-center gap-2 mb-6">
-              <span class="w-1 h-6 bg-primary-dim rounded-full"></span>
-              <h3
-                class="font-headline font-bold uppercase tracking-widest text-on-surface/50 text-sm"
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-2">
+                <span class="w-1 h-6 bg-primary-dim rounded-full"></span>
+                <h3
+                  class="font-headline font-bold uppercase tracking-widest text-on-surface/50 text-sm"
+                >
+                  Open Tasks
+                </h3>
+              </div>
+              <button
+                id="new-task-btn"
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-transform"
               >
-                Open Tasks
-              </h3>
+                <span class="material-symbols-outlined text-sm">add</span>
+                New Task
+              </button>
             </div>
             <div id="open-list" class="flex flex-col gap-4">
               <p class="text-on-surface-variant text-sm">Loading tasks...</p>
@@ -595,9 +592,13 @@
         <div class="flex justify-between items-start">
           <h4 class="font-headline text-lg font-bold ${todo.completed ? 'text-on-surface-variant line-through' : 'text-on-surface'}">${todo.title}</h4>
           <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="p-2 text-on-surface-variant hover:text-primary transition-colors edit-btn" data-id="${todo.id}">
+            ${
+              !todo.completed
+                ? `<button class="p-2 text-on-surface-variant hover:text-primary transition-colors edit-btn" data-id="${todo.id}">
               <span class="material-symbols-outlined text-[20px]">edit</span>
-            </button>
+            </button>`
+                : ''
+            }
             <button class="p-2 text-on-surface-variant hover:text-error transition-colors delete-btn" data-id="${todo.id}">
               <span class="material-symbols-outlined text-[20px]">delete</span>
             </button>
@@ -615,8 +616,8 @@
             loadTodos()
           })
 
-          div.querySelector('.edit-btn').addEventListener('click', () => {
-            window.location.href = `edit-task.html?id=${todo.id}`
+          div.querySelector('.edit-btn')?.addEventListener('click', () => {
+            window.location.href = `edit-task.html?id=${todo.id}&from=dashboard`
           })
 
           div.querySelector('.delete-btn').addEventListener('click', async () => {
@@ -674,9 +675,9 @@
             `${doneCount}/${total} TASKS COMPLETED`
         }
 
-        // New Task tlačítko v sidebaru
+        // New Task button
         document.getElementById('new-task-btn').addEventListener('click', () => {
-          window.location.href = 'edit-task.html'
+          window.location.href = 'edit-task.html?from=dashboard'
         })
 
         // Sidebar toggle

@@ -128,11 +128,7 @@
       html.sidebar-collapsed .sidebar-user {
         display: none;
       }
-      html.sidebar-collapsed #sidebar .new-task-btn {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        justify-content: center;
-      }
+
       html.sidebar-collapsed #sidebar .sidebar-logo-link {
         display: none;
       }
@@ -336,12 +332,6 @@
             <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
           </button>
         </div>
-        <button
-          class="new-task-btn bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-transform active:scale-95 mb-2"
-        >
-          <span class="material-symbols-outlined text-sm flex-shrink-0">add</span>
-          <span class="sidebar-label">New Task</span>
-        </button>
         <nav class="flex-1 flex flex-col gap-1">
           <a
             class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
@@ -455,7 +445,12 @@
       <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
         <div class="mb-10">
           <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-            <a class="hover:text-primary transition-colors" href="#">Tasks</a>
+            <a
+              id="breadcrumb-back"
+              class="hover:text-primary transition-colors underline underline-offset-2"
+              href="#"
+              >Dashboard</a
+            >
             <span class="material-symbols-outlined text-xs">chevron_right</span>
             <span id="breadcrumb-label" class="text-on-surface">Edit Task</span>
           </nav>
@@ -646,10 +641,8 @@
         <span class="material-symbols-outlined">dashboard</span>
         <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
       </a>
-      <a class="flex flex-col items-center gap-1 text-[#4656b8]" href="#">
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1"
-          >check_circle</span
-        >
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">check_circle</span>
         <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
       </a>
       <button
@@ -687,6 +680,17 @@
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
       const params = new URLSearchParams(window.location.search)
       const todoId = params.get('id')
+      const fromParam = params.get('from')
+
+      // Resolve back destination and breadcrumb label
+      const backSources = {
+        dashboard: { label: 'Dashboard', href: 'dashboard.html' },
+        tasks: { label: 'Tasks', href: 'tasks.html' },
+      }
+      const backSource = backSources[fromParam] || backSources.dashboard
+      const backHref = backSource.href
+      document.getElementById('breadcrumb-back').textContent = backSource.label
+      document.getElementById('breadcrumb-back').href = '#'
 
       // Track original values for change detection (edit mode)
       let originalTitle = ''
@@ -734,20 +738,32 @@
           completed: document.querySelector('input[type=checkbox]').checked,
         }
         if (todoId) {
-          await fetch(`${API}/todos/${todoId}`, { method: 'PUT', headers, body: JSON.stringify(body) })
+          await fetch(`${API}/todos/${todoId}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body),
+          })
         } else {
           await fetch(`${API}/todos`, { method: 'POST', headers, body: JSON.stringify(body) })
         }
-        window.location.href = 'dashboard.html'
+        window.location.href = backHref
       }
 
-      // Back button
-      document.getElementById('back-btn').addEventListener('click', () => {
+      function navigateBack() {
         if (hasUnsavedChanges()) {
           document.getElementById('back-dialog').classList.remove('hidden')
         } else {
-          window.location.href = 'dashboard.html'
+          window.location.href = backHref
         }
+      }
+
+      // Back button
+      document.getElementById('back-btn').addEventListener('click', navigateBack)
+
+      // Breadcrumb back link
+      document.getElementById('breadcrumb-back').addEventListener('click', (e) => {
+        e.preventDefault()
+        navigateBack()
       })
 
       // Dialog — Yes (save & leave)
@@ -779,17 +795,12 @@
         } else {
           await fetch(`${API}/todos`, { method: 'POST', headers, body: JSON.stringify(body) })
         }
-        window.location.href = 'dashboard.html'
+        window.location.href = backHref
       })
 
       // Cancel
       document.querySelector('button[type=button]').addEventListener('click', () => {
-        window.location.href = 'dashboard.html'
-      })
-
-      // New Task button
-      document.querySelector('.new-task-btn').addEventListener('click', () => {
-        window.location.href = 'edit-task.html'
+        window.location.href = backHref
       })
 
       // Expandable search (edit-task has no search, skip)
