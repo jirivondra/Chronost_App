@@ -348,6 +348,9 @@
 
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault()
+        const btn = e.submitter
+        btn.disabled = true
+        btn.textContent = 'Signing in…'
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
 
@@ -364,14 +367,26 @@
 
         const token = btoa(`${username}:${password}`)
 
-        const res = await fetch(`${API}/todos`, {
-          headers: { Authorization: `Basic ${token}` },
-        })
+        let res
+        try {
+          res = await fetch(`${API}/todos`, {
+            headers: { Authorization: `Basic ${token}` },
+          })
+        } catch {
+          const msg = document.getElementById('error-msg')
+          msg.textContent = 'Cannot connect to server. Make sure the backend is running on port 8000.'
+          msg.classList.remove('hidden')
+          btn.disabled = false
+          btn.textContent = 'Sign In →'
+          return
+        }
 
         if (res.ok) {
           sessionStorage.setItem('auth', token)
           window.location.href = 'dashboard.html'
         } else {
+          document.getElementById('error-msg').textContent =
+            'You have entered an incorrect username or password. Please check your login credentials.'
           document.getElementById('error-msg').classList.remove('hidden')
           document.getElementById('username').classList.add('ring-error/50')
           document.getElementById('password').classList.add('ring-error/50')
