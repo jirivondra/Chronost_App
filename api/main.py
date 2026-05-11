@@ -33,6 +33,8 @@ DB_FILE = os.path.join(os.path.dirname(__file__), "todos.json")
 
 
 def load_db() -> dict[int, dict]:
+    if not os.path.exists(DB_FILE):
+        return {}
     with open(DB_FILE, "r") as f:
         items = json.load(f)
     return {item["id"]: item for item in items}
