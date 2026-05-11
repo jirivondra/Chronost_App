@@ -374,7 +374,8 @@
           })
         } catch {
           const msg = document.getElementById('error-msg')
-          msg.textContent = 'Cannot connect to server. Make sure the backend is running on port 8000.'
+          msg.textContent =
+            'Cannot connect to server. Make sure the backend is running on port 8000.'
           msg.classList.remove('hidden')
           btn.disabled = false
           btn.textContent = 'Sign In →'
