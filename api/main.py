@@ -89,7 +89,7 @@ def get_openapi_schema(_=Depends(authenticate)):
 
 @app.get("/todos", summary="Get all TODOs")
 def get_todos(_=Depends(authenticate)):
-    return list(load_db().values())
+    return sorted(load_db().values(), key=lambda t: t["id"], reverse=True)
 
 
 @app.post("/todos", status_code=201, summary="Create a TODO")
