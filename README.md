@@ -136,8 +136,8 @@ Všechny endpointy vyžadují autentizaci.
 
 ## Testing
 
-| Typ           | Nástroj    | Repozitář                                                                           |
-| ------------- | ---------- | ----------------------------------------------------------------------------------- |
-| API testy     | Jest       | [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing)    |
-| E2E testy     | Playwright | [Chronos_Playwright_testing](https://github.com/jirivondra/Chronos_Playwright_testing) |
-| Manuální      | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection) |
+| Typ       | Nástroj    | Repozitář                                                                              |
+| --------- | ---------- | -------------------------------------------------------------------------------------- |
+| API testy | Jest       | [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing)       |
+| E2E testy | Playwright | [Chronos_Playwright_testing](https://github.com/jirivondra/Chronos_Playwright_testing) |
+| Manuální  | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection)   |
