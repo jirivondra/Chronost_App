@@ -112,6 +112,16 @@ Swagger UI je dostupný na `http://localhost:8000/docs` po spuštění API. Je c
 
 API používá HTTP Basic Auth. Přihlašovací údaje se nastavují v `api/.env`.
 
+### Příklad použití
+
+V Postmanu: záložka **Authorization** → Type: **Basic Auth** → zadej username + password z `.env`.
+
+Nebo curl:
+
+```bash
+curl http://localhost:8000/todos --user 'your-username:your-password'
+```
+
 ## API endpointy
 
 Všechny endpointy vyžadují autentizaci.
@@ -123,3 +133,11 @@ Všechny endpointy vyžadují autentizaci.
 | GET    | `/todos/:id` | Detail úkolu       |
 | PUT    | `/todos/:id` | Aktualizace úkolu  |
 | DELETE | `/todos/:id` | Smazání úkolu      |
+
+## Testing
+
+| Typ           | Nástroj    | Repozitář                                                                           |
+| ------------- | ---------- | ----------------------------------------------------------------------------------- |
+| API testy     | Jest       | [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing)    |
+| E2E testy     | Playwright | [Chronos_Playwright_testing](https://github.com/jirivondra/Chronos_Playwright_testing) |
+| Manuální      | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection) |
