@@ -578,36 +578,104 @@
       } else {
         const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
 
-        function renderTodo(todo) {
+        function renderTodo(todo, preview) {
           const div = document.createElement('div')
           div.className =
             'group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-container shadow-[0_12px_40px_rgba(49,50,59,0.03)] flex items-start gap-6'
-          div.innerHTML = `
-      <div class="mt-1">
-        <input type="checkbox" ${todo.completed ? 'checked' : ''}
-          class="w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer"
-          data-id="${todo.id}"/>
-      </div>
-      <div class="flex-1 ${todo.completed ? 'opacity-60' : ''}">
-        <div class="flex justify-between items-start">
-          <h4 class="font-headline text-lg font-bold ${todo.completed ? 'text-on-surface-variant line-through' : 'text-on-surface'}">${todo.title}</h4>
-          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            ${
-              !todo.completed
-                ? `<button class="p-2 text-on-surface-variant hover:text-primary transition-colors edit-btn" data-id="${todo.id}">
-              <span class="material-symbols-outlined text-[20px]">edit</span>
-            </button>`
-                : ''
-            }
-            <button class="p-2 text-on-surface-variant hover:text-error transition-colors delete-btn" data-id="${todo.id}">
-              <span class="material-symbols-outlined text-[20px]">delete</span>
-            </button>
-          </div>
-        </div>
-        ${todo.description ? `<p class="text-on-surface-variant font-body text-sm mt-1">${todo.description}</p>` : ''}
-      </div>`
 
-          div.querySelector('input[type=checkbox]').addEventListener('change', async (e) => {
+          const checkbox = document.createElement('input')
+          checkbox.type = 'checkbox'
+          checkbox.checked = todo.completed
+          checkbox.className =
+            'w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer'
+          checkbox.dataset.id = todo.id
+
+          const checkboxWrap = document.createElement('div')
+          checkboxWrap.className = 'mt-1'
+          checkboxWrap.appendChild(checkbox)
+
+          const content = document.createElement('div')
+          content.className = 'flex-1' + (todo.completed ? ' opacity-60' : '')
+
+          const titleRow = document.createElement('div')
+          titleRow.className = 'flex justify-between items-start'
+
+          const title = document.createElement('h4')
+          title.className =
+            'font-headline text-lg font-bold ' +
+            (todo.completed ? 'text-on-surface-variant line-through' : 'text-on-surface')
+          title.textContent = todo.title
+
+          const actions = document.createElement('div')
+          actions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+
+          if (!todo.completed) {
+            const editBtn = document.createElement('button')
+            editBtn.className =
+              'p-2 text-on-surface-variant hover:text-primary transition-colors edit-btn'
+            editBtn.dataset.id = todo.id
+            editBtn.innerHTML =
+              '<span class="material-symbols-outlined text-[20px]">edit</span>'
+            actions.appendChild(editBtn)
+          }
+
+          const deleteBtn = document.createElement('button')
+          deleteBtn.className =
+            'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
+          deleteBtn.dataset.id = todo.id
+          deleteBtn.innerHTML =
+            '<span class="material-symbols-outlined text-[20px]">delete</span>'
+          actions.appendChild(deleteBtn)
+
+          titleRow.appendChild(title)
+          titleRow.appendChild(actions)
+          content.appendChild(titleRow)
+
+          if (todo.description) {
+            if (preview) {
+              const wrapper = document.createElement('div')
+              wrapper.style.position = 'relative'
+              wrapper.style.height = '2.5rem'
+              wrapper.style.overflow = 'hidden'
+              wrapper.style.marginTop = '0.25rem'
+
+              const p = document.createElement('p')
+              p.className = 'text-on-surface-variant font-body text-sm'
+              p.textContent = todo.description
+
+              const gradient = document.createElement('div')
+              gradient.style.position = 'absolute'
+              gradient.style.bottom = '0'
+              gradient.style.left = '0'
+              gradient.style.right = '0'
+              gradient.style.height = '1.5rem'
+              gradient.style.background = 'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
+              gradient.style.pointerEvents = 'none'
+
+              wrapper.appendChild(p)
+              wrapper.appendChild(gradient)
+              content.appendChild(wrapper)
+
+              div.addEventListener('mouseenter', () => {
+                gradient.style.background =
+                  'linear-gradient(to bottom,rgba(239,237,246,0),#efedf6)'
+              })
+              div.addEventListener('mouseleave', () => {
+                gradient.style.background =
+                  'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
+              })
+            } else {
+              const p = document.createElement('p')
+              p.className = 'text-on-surface-variant font-body text-sm mt-1'
+              p.textContent = todo.description
+              content.appendChild(p)
+            }
+          }
+
+          div.appendChild(checkboxWrap)
+          div.appendChild(content)
+
+          checkbox.addEventListener('change', async (e) => {
             await fetch(`${API}/todos/${todo.id}`, {
               method: 'PUT',
               headers,
@@ -616,11 +684,11 @@
             loadTodos()
           })
 
-          div.querySelector('.edit-btn')?.addEventListener('click', () => {
+          content.querySelector('.edit-btn')?.addEventListener('click', () => {
             window.location.href = `edit-task.html?id=${todo.id}&from=dashboard`
           })
 
-          div.querySelector('.delete-btn').addEventListener('click', async () => {
+          deleteBtn.addEventListener('click', async () => {
             await fetch(`${API}/todos/${todo.id}`, { method: 'DELETE', headers })
             loadTodos()
           })
@@ -641,7 +709,7 @@
             btn.remove()
             allTodos
               .slice(TASK_PREVIEW_LIMIT)
-              .forEach((todo) => container.appendChild(renderTodo(todo)))
+              .forEach((todo) => container.appendChild(renderTodo(todo, container.id === 'open-list')))
           })
           return btn
         }
@@ -675,7 +743,7 @@
           } else {
             open
               .slice(0, TASK_PREVIEW_LIMIT)
-              .forEach((todo) => openList.appendChild(renderTodo(todo)))
+              .forEach((todo) => openList.appendChild(renderTodo(todo, true)))
             if (open.length > TASK_PREVIEW_LIMIT) {
               openList.appendChild(renderShowAllBtn(open, openList))
             }

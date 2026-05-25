@@ -3,7 +3,7 @@ from fastapi.security import HTTPBasic
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 import uvicorn
 import secrets
@@ -51,13 +51,13 @@ def next_id(todos: dict[int, dict]) -> int:
 
 class TodoCreate(BaseModel):
     title: str
-    description: Optional[str] = None
+    description: Optional[str] = Field(default=None, max_length=5000)
     completed: bool = False
 
 
 class TodoUpdate(BaseModel):
     title: Optional[str] = None
-    description: Optional[str] = None
+    description: Optional[str] = Field(default=None, max_length=5000)
     completed: Optional[bool] = None
 
 

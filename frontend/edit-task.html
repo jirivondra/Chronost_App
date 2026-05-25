@@ -494,7 +494,11 @@
                 id="task-desc"
                 placeholder="Enter task description..."
                 rows="6"
+                maxlength="5000"
               ></textarea>
+              <p class="text-xs text-on-surface-variant/50 text-right mt-1">
+                <span id="desc-count">0</span> / 5000
+              </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
               <div class="flex items-center justify-between p-6 bg-surface-container rounded-2xl">
@@ -674,7 +678,10 @@
       }
 
       document.getElementById('task-title').addEventListener('input', checkForm)
-      document.getElementById('task-desc').addEventListener('input', checkForm)
+      document.getElementById('task-desc').addEventListener('input', function () {
+        document.getElementById('desc-count').textContent = this.value.length
+        checkForm()
+      })
       document.querySelector('input[type=checkbox]').addEventListener('change', checkForm)
 
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
@@ -711,10 +718,12 @@
           .then((r) => r.json())
           .then((todo) => {
             document.getElementById('task-title').value = todo.title
-            document.getElementById('task-desc').value = todo.description || ''
+            const desc = todo.description || ''
+            document.getElementById('task-desc').value = desc
+            document.getElementById('desc-count').textContent = desc.length
             document.querySelector('input[type=checkbox]').checked = todo.completed
             originalTitle = todo.title
-            originalDesc = todo.description || ''
+            originalDesc = desc
             originalCompleted = todo.completed
             checkForm()
           })
