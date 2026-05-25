@@ -607,17 +607,20 @@
           title.textContent = todo.title
 
           const actions = document.createElement('div')
-          actions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+          actions.className = 'flex items-center gap-1'
 
           const infoBtn = document.createElement('button')
           infoBtn.className =
-            'p-2 text-on-surface-variant hover:text-primary transition-colors'
-          infoBtn.dataset.tip = 'Detail'
+            'p-2 text-on-surface-variant/40 hover:text-primary transition-colors flex-shrink-0'
+          infoBtn.title = 'Detail'
           infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
           infoBtn.addEventListener('click', () => {
             window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
           })
           actions.appendChild(infoBtn)
+
+          const hoverActions = document.createElement('div')
+          hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
 
           if (!todo.completed) {
             const editBtn = document.createElement('button')
@@ -626,7 +629,7 @@
             editBtn.dataset.id = todo.id
             editBtn.innerHTML =
               '<span class="material-symbols-outlined text-[20px]">edit</span>'
-            actions.appendChild(editBtn)
+            hoverActions.appendChild(editBtn)
           }
 
           const deleteBtn = document.createElement('button')
@@ -635,7 +638,9 @@
           deleteBtn.dataset.id = todo.id
           deleteBtn.innerHTML =
             '<span class="material-symbols-outlined text-[20px]">delete</span>'
-          actions.appendChild(deleteBtn)
+          hoverActions.appendChild(deleteBtn)
+
+          actions.appendChild(hoverActions)
 
           titleRow.appendChild(title)
           titleRow.appendChild(actions)
@@ -694,7 +699,7 @@
             loadTodos()
           })
 
-          content.querySelector('.edit-btn')?.addEventListener('click', () => {
+          hoverActions.querySelector('.edit-btn')?.addEventListener('click', () => {
             window.location.href = `edit-task.html?id=${todo.id}&from=dashboard`
           })
 
