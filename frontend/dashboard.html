@@ -607,25 +607,37 @@
           title.textContent = todo.title
 
           const actions = document.createElement('div')
-          actions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+          actions.className = 'flex items-center gap-1'
+
+          const hoverActions = document.createElement('div')
+          hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+
+          const infoBtn = document.createElement('button')
+          infoBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
+          infoBtn.title = 'Detail'
+          infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
+          infoBtn.addEventListener('click', () => {
+            window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
+          })
+          hoverActions.appendChild(infoBtn)
 
           if (!todo.completed) {
             const editBtn = document.createElement('button')
             editBtn.className =
               'p-2 text-on-surface-variant hover:text-primary transition-colors edit-btn'
             editBtn.dataset.id = todo.id
-            editBtn.innerHTML =
-              '<span class="material-symbols-outlined text-[20px]">edit</span>'
-            actions.appendChild(editBtn)
+            editBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">edit</span>'
+            hoverActions.appendChild(editBtn)
           }
 
           const deleteBtn = document.createElement('button')
           deleteBtn.className =
             'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
           deleteBtn.dataset.id = todo.id
-          deleteBtn.innerHTML =
-            '<span class="material-symbols-outlined text-[20px]">delete</span>'
-          actions.appendChild(deleteBtn)
+          deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>'
+          hoverActions.appendChild(deleteBtn)
+
+          actions.appendChild(hoverActions)
 
           titleRow.appendChild(title)
           titleRow.appendChild(actions)
@@ -657,12 +669,10 @@
               content.appendChild(wrapper)
 
               div.addEventListener('mouseenter', () => {
-                gradient.style.background =
-                  'linear-gradient(to bottom,rgba(239,237,246,0),#efedf6)'
+                gradient.style.background = 'linear-gradient(to bottom,rgba(239,237,246,0),#efedf6)'
               })
               div.addEventListener('mouseleave', () => {
-                gradient.style.background =
-                  'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
+                gradient.style.background = 'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
               })
             } else {
               const p = document.createElement('p')
@@ -684,7 +694,7 @@
             loadTodos()
           })
 
-          content.querySelector('.edit-btn')?.addEventListener('click', () => {
+          hoverActions.querySelector('.edit-btn')?.addEventListener('click', () => {
             window.location.href = `edit-task.html?id=${todo.id}&from=dashboard`
           })
 
@@ -709,7 +719,9 @@
             btn.remove()
             allTodos
               .slice(TASK_PREVIEW_LIMIT)
-              .forEach((todo) => container.appendChild(renderTodo(todo, container.id === 'open-list')))
+              .forEach((todo) =>
+                container.appendChild(renderTodo(todo, container.id === 'open-list'))
+              )
           })
           return btn
         }
