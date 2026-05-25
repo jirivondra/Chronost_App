@@ -1,0 +1,781 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Task Detail - Chronos</title>
+    <link rel="icon" type="image/png" href="assets/image.png" />
+    <script>
+      if (localStorage.getItem('sidebarCollapsed') === 'true')
+        document.documentElement.classList.add('sidebar-collapsed')
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-fixed': '#f1cefc',
+              'secondary-dim': '#3d5762',
+              'on-primary-container': '#00116a',
+              'tertiary-fixed-dim': '#e2c0ee',
+              'on-primary-fixed-variant': '#011882',
+              'error-dim': '#6b0221',
+              outline: '#7a7a84',
+              'on-secondary-container': '#3c5561',
+              'secondary-fixed-dim': '#bdd9e6',
+              'on-tertiary': '#fff7fc',
+              'primary-container': '#8696fd',
+              background: '#fbf8fe',
+              'secondary-container': '#cbe7f5',
+              tertiary: '#71557c',
+              'tertiary-container': '#f1cefc',
+              primary: '#4656b8',
+              'on-surface': '#31323b',
+              'on-primary-fixed': '#000000',
+              'surface-tint': '#4656b8',
+              'on-surface-variant': '#5e5e68',
+              error: '#a8364b',
+              'primary-dim': '#3949ab',
+              'tertiary-dim': '#64496f',
+              'surface-variant': '#e3e1ed',
+              'surface-bright': '#fbf8fe',
+              'on-secondary-fixed': '#29434e',
+              'inverse-on-surface': '#9e9ca2',
+              'primary-fixed-dim': '#7989ee',
+              'on-secondary': '#f2faff',
+              'error-container': '#f97386',
+              'on-secondary-fixed-variant': '#455f6b',
+              'surface-container-high': '#e9e7f1',
+              'primary-fixed': '#8696fd',
+              'on-tertiary-container': '#5d4368',
+              'surface-container-lowest': '#ffffff',
+              'surface-container': '#efedf6',
+              'surface-container-highest': '#e3e1ed',
+              'on-background': '#31323b',
+              'inverse-surface': '#0d0e12',
+              secondary: '#49636f',
+              'on-primary': '#faf8ff',
+              'on-error': '#fff7f7',
+              'on-error-container': '#6e0523',
+              'secondary-fixed': '#cbe7f5',
+              'on-tertiary-fixed-variant': '#674c72',
+              surface: '#fbf8fe',
+              'surface-dim': '#dad9e4',
+              'inverse-primary': '#8696fd',
+              'surface-container-low': '#f5f2fb',
+              'outline-variant': '#b2b1bc',
+              'on-tertiary-fixed': '#493055',
+            },
+            borderRadius: {
+              DEFAULT: '0.125rem',
+              lg: '0.25rem',
+              xl: '0.5rem',
+              full: '0.75rem',
+            },
+            fontFamily: {
+              headline: ['Manrope'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .brand-font {
+        font-family: 'Manrope', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      #sidebar {
+        width: 18rem;
+        transition: width 0.3s ease;
+        overflow: visible;
+      }
+      html.sidebar-collapsed #sidebar {
+        width: 4rem;
+      }
+      html.sidebar-collapsed .sidebar-label {
+        display: none !important;
+      }
+      html.sidebar-collapsed #sidebar nav a {
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      html.sidebar-collapsed .sidebar-user {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-logo-link {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-header {
+        justify-content: center;
+      }
+      html.sidebar-collapsed #toggle-icon {
+        transform: scaleX(-1);
+      }
+      .ml-sidebar {
+        margin-left: 18rem;
+        transition: margin-left 0.3s ease;
+      }
+      html.sidebar-collapsed .ml-sidebar {
+        margin-left: 4rem;
+      }
+      [data-tip] {
+        position: relative;
+      }
+      #sidebar [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translateY(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      #sidebar [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 5px);
+        transform: translateY(-50%);
+        border: 5px solid transparent;
+        border-right-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-bottom-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      [data-tip]:hover::after,
+      [data-tip]:hover::before {
+        opacity: 1;
+      }
+      .mech-clock {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #4656b8;
+        background: #fff;
+        position: relative;
+        box-shadow:
+          0 4px 12px rgba(70, 86, 184, 0.12),
+          inset 0 1px 3px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .mech-clock::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        background: #4656b8;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+      .mech-hand {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom center;
+        border-radius: 3px;
+      }
+      .mech-hour {
+        width: 3px;
+        height: 9px;
+        background: #31323b;
+        margin-left: -1.5px;
+        z-index: 3;
+      }
+      .mech-minute {
+        width: 2px;
+        height: 14px;
+        background: #5e5e68;
+        margin-left: -1px;
+        z-index: 2;
+      }
+      .mech-second {
+        width: 1.5px;
+        height: 16px;
+        background: #4656b8;
+        margin-left: -0.75px;
+        z-index: 4;
+      }
+      .search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .search-input {
+        width: 0;
+        opacity: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 0.875rem;
+        color: #31323b;
+        transition:
+          width 0.3s ease,
+          opacity 0.3s ease,
+          padding 0.3s ease;
+        pointer-events: none;
+      }
+      .search-wrap.open .search-input {
+        width: 180px;
+        opacity: 1;
+        padding: 0 0.5rem;
+        pointer-events: all;
+      }
+      .search-wrap.open {
+        background: #f5f2fb;
+        border-radius: 9999px;
+        padding: 0.4rem 0.75rem;
+      }
+      .search-wrap:not(.open) {
+        gap: 0;
+      }
+      .readonly-field {
+        cursor: default;
+        user-select: text;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="h-screen fixed left-0 top-0 bg-[#f5f2fb] dark:bg-slate-900 z-50">
+      <div class="flex flex-col gap-2 p-4 h-full">
+        <div class="sidebar-header mb-8 flex items-center justify-between px-2">
+          <a href="dashboard.html" class="sidebar-logo-link flex items-center gap-3 min-w-0">
+            <img src="assets/image.png" alt="Chronos" class="h-8 w-auto flex-shrink-0" />
+            <div class="sidebar-label min-w-0">
+              <h1
+                class="text-xl font-black text-[#4656b8] dark:text-[#8696fd] font-headline truncate"
+              >
+                Chronos
+              </h1>
+              <p class="font-['Manrope'] text-sm font-semibold text-slate-500 truncate">
+                Personal Space
+              </p>
+            </div>
+          </a>
+          <button
+            id="sidebar-toggle"
+            class="p-2 rounded-xl hover:bg-[#e9e7f1] transition-colors text-slate-500 flex-shrink-0 ml-1"
+            data-tip="Toggle sidebar"
+          >
+            <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
+          </button>
+        </div>
+        <nav class="flex-1 flex flex-col gap-1">
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="dashboard.html"
+            data-tip="Dashboard"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">dashboard</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
+          </a>
+          <a
+            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            href="#"
+            data-tip="Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">check_circle</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Tasks</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="#"
+            data-tip="Calendar"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">calendar_today</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Calendar</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="#"
+            data-tip="Archive"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">inventory_2</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Archive</span>
+          </a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-4">
+          <div class="sidebar-label h-px bg-outline-variant/15 mx-2"></div>
+          <div class="sidebar-label px-4 pb-3 flex flex-col items-center gap-0.5">
+            <p class="text-[10px] font-extrabold uppercase tracking-widest text-on-surface/70">
+              App version
+            </p>
+            <p id="app-version" class="text-[10px] text-on-surface-variant/40 font-mono">v—</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="ml-sidebar flex flex-col min-h-screen">
+      <!-- Top Nav Bar -->
+      <header class="bg-[#fbf8fe]/80 backdrop-blur-xl top-0 sticky z-40 h-20">
+        <div class="flex justify-between items-center w-full px-8 h-full max-w-screen-2xl mx-auto">
+          <div class="flex items-center gap-3">
+            <button
+              id="back-btn"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Back"
+            >
+              <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+            </button>
+            <h2 class="text-2xl font-extrabold text-[#4656b8] font-['Manrope'] tracking-tight">
+              Chronos
+            </h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="mech-clock hidden sm:block">
+              <div class="mech-hand mech-hour" id="hand-hour"></div>
+              <div class="mech-hand mech-minute" id="hand-minute"></div>
+              <div class="mech-hand mech-second" id="hand-second"></div>
+            </div>
+            <div class="search-wrap hidden sm:flex" id="search-wrap">
+              <button
+                id="search-btn"
+                class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                data-tip="Search"
+              >
+                <span class="material-symbols-outlined text-[22px]">search</span>
+              </button>
+              <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+            </div>
+            <button
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Notifications"
+            >
+              <span class="material-symbols-outlined text-[22px]">notifications</span>
+            </button>
+            <button
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Settings"
+            >
+              <span class="material-symbols-outlined text-[22px]">settings</span>
+            </button>
+            <a
+              href="logout.html"
+              class="flex items-center justify-center text-slate-500 hover:text-error transition-colors"
+              data-tip="Log out"
+            >
+              <span class="material-symbols-outlined text-[22px]">logout</span>
+            </a>
+            <div
+              class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20 flex-shrink-0"
+              data-tip="Jiří Vondra"
+            >
+              <img
+                alt="Jiří Vondra"
+                class="w-full h-full object-cover"
+                src="assets/avatars/admin.png"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Main Content -->
+      <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
+        <div class="mb-10">
+          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+            <a
+              id="breadcrumb-back"
+              class="hover:text-primary transition-colors underline underline-offset-2"
+              href="dashboard.html"
+              >Dashboard</a
+            >
+            <span class="material-symbols-outlined text-xs">chevron_right</span>
+            <span class="text-on-surface">Task Detail</span>
+          </nav>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1
+                class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
+              >
+                Task Detail
+              </h1>
+              <p class="text-on-surface-variant mt-2 text-lg">
+                View the details of this task.
+              </p>
+            </div>
+            <span
+              id="status-badge"
+              class="hidden mt-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
+            ></span>
+          </div>
+        </div>
+        <!-- Detail Card -->
+        <div
+          class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-12 shadow-sm border border-outline-variant/5"
+        >
+          <div class="space-y-10">
+            <!-- Title -->
+            <div class="space-y-3">
+              <p class="text-xs font-bold uppercase tracking-widest text-primary ml-1">
+                Task Title
+              </p>
+              <div
+                class="w-full bg-surface-container-low rounded-2xl p-6 text-xl font-semibold text-on-surface"
+                id="task-title"
+              ></div>
+            </div>
+            <!-- Description -->
+            <div class="space-y-3" id="desc-section">
+              <p class="text-xs font-bold uppercase tracking-widest text-primary ml-1">
+                Description
+              </p>
+              <div
+                class="w-full bg-surface-container-low rounded-2xl p-6 text-base text-on-surface-variant leading-relaxed min-h-[9rem] whitespace-pre-wrap"
+                id="task-desc"
+              ></div>
+            </div>
+            <!-- Status row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+              <div class="flex items-center justify-between p-6 bg-surface-container rounded-2xl">
+                <div class="flex flex-col">
+                  <span class="font-headline font-bold text-on-surface">Task Completed</span>
+                  <span class="text-xs text-on-surface-variant">Status of this objective</span>
+                </div>
+                <div
+                  id="completed-indicator"
+                  class="flex items-center gap-2 text-sm font-semibold"
+                >
+                  <span class="material-symbols-outlined text-[20px]">radio_button_unchecked</span>
+                  <span>Open</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-6 bg-tertiary-container/30 rounded-2xl">
+                <div
+                  class="bg-tertiary text-on-tertiary h-12 w-12 rounded-xl flex items-center justify-center"
+                >
+                  <span class="material-symbols-outlined">event</span>
+                </div>
+                <div>
+                  <span class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
+                    >Due Date</span
+                  >
+                  <span class="block font-headline font-bold text-on-surface">October 24, 2023</span>
+                </div>
+              </div>
+            </div>
+            <!-- Action buttons -->
+            <div
+              class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 border-t border-outline-variant/10"
+            >
+              <button
+                id="close-btn"
+                class="w-full sm:w-auto px-10 py-4 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors"
+                type="button"
+              >
+                Close
+              </button>
+              <button
+                id="edit-btn"
+                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm shadow-xl shadow-primary/20 active:scale-95 transition-transform flex items-center gap-2 justify-center"
+                type="button"
+              >
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+                Edit Task
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Contextual Metadata -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem] flex flex-col justify-between"
+          >
+            <div>
+              <span
+                class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-widest mb-4"
+                >Project Context</span
+              >
+              <h3 class="text-2xl font-bold font-headline text-on-surface">
+                System Scalability 2024
+              </h3>
+              <p class="text-on-surface-variant mt-2">
+                This task is part of the core infrastructure milestone. Completion affects 4
+                downstream dependencies.
+              </p>
+            </div>
+            <div class="flex -space-x-2 mt-6">
+              <img
+                alt="Team member"
+                class="h-8 w-8 rounded-full border-2 border-surface"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfzEMCPEyvXU8xOphPFCng44HaMfckdlBX6XWHv1sGQSP80wRVfblBiJsfdk0RQDGfODFGjq7etJNaTie4Xnh3lyv0dGzVyKpSEp7rZZdJWednLu0mR8enDAOTHNIk6NRFZYBe0Qcna0O2Gjs2O1Xr4c8GtBtx-29j7Y2twWBqqj2LhZDYvQW66kDULxok_OrjhrpQciu4zg5QNRPkJv8AEQwtEQ2z3bAU701TLKxKEEMo8OKLG40uq_1_F9BxZH_ZzgTroO3zj3Q-"
+              />
+              <img
+                alt="Team member"
+                class="h-8 w-8 rounded-full border-2 border-surface"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUU_VgyZcJ6CfoSKr-Mmh1g-8GXZNR0y_bqwpECIY3qAIJv4o1-ElzYE3jyr74_gCM0yd93VweNItVmHCruRDvAReJhuNE3BSu60G6HKbVWuXnjUWo4ANgGs4GZQGqsMJBksEgWzXgXIgxWSH50YqKEyml_20r3ih-ONL4VlRhbEtgx7TKwNm33w8EFjQPCGKqoMnsQwiQj2LySe96l49eXMSCv1X0Ne7xioBqS73FLmBC-wku0Mv76kiqGZUwVb2qwXpeVUEY-vM"
+              />
+              <div
+                class="h-8 w-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant"
+              >
+                +3
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-variant p-8 rounded-[2rem] relative overflow-hidden group">
+            <div class="relative z-10">
+              <span class="material-symbols-outlined text-primary text-4xl mb-4">history</span>
+              <h4 class="font-headline font-bold text-on-surface">Last Edit</h4>
+              <p class="text-on-surface-variant text-sm mt-1">2 hours ago by Alex Rivers</p>
+            </div>
+            <div
+              class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
+            >
+              <span class="material-symbols-outlined text-9xl">edit_note</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <button
+      id="back-to-top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-10 right-10 w-14 h-14 bg-surface-container-highest text-on-surface rounded-full shadow-[0_12px_40px_rgba(49,50,59,0.1)] flex items-center justify-center transition-all duration-300 hover:bg-primary hover:text-on-primary opacity-0 pointer-events-none z-50"
+    >
+      <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+
+    <!-- Mobile Navigation -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fbf8fe] border-t border-outline-variant/10 flex justify-around items-center h-20 px-4 z-50"
+    >
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
+      </a>
+      <button
+        class="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg -mt-10 border-4 border-background"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </button>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Config</span>
+      </a>
+    </nav>
+
+    <script>
+      const API = 'http://localhost:8000'
+      const auth = sessionStorage.getItem('auth')
+      if (!auth) window.location.href = 'login.html'
+
+      const headers = { Authorization: `Basic ${auth}` }
+      const params = new URLSearchParams(window.location.search)
+      const todoId = params.get('id')
+      const fromParam = params.get('from')
+
+      const backHref = fromParam === 'tasks' ? 'tasks.html' : 'dashboard.html'
+      document.getElementById('breadcrumb-back').href = backHref
+
+      if (!todoId) {
+        window.location.href = backHref
+      }
+
+      fetch(`${API}/todos/${todoId}`, { headers })
+        .then((r) => {
+          if (r.status === 401) window.location.href = 'login.html'
+          return r.json()
+        })
+        .then((todo) => {
+          document.getElementById('task-title').textContent = todo.title
+
+          const descSection = document.getElementById('desc-section')
+          const descEl = document.getElementById('task-desc')
+          if (todo.description) {
+            descEl.textContent = todo.description
+          } else {
+            descSection.classList.add('hidden')
+          }
+
+          const indicator = document.getElementById('completed-indicator')
+          if (todo.completed) {
+            indicator.innerHTML = `
+              <span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">check_circle</span>
+              <span class="text-primary">Completed</span>`
+
+            const badge = document.getElementById('status-badge')
+            badge.textContent = 'Completed'
+            badge.classList.remove('hidden')
+            badge.classList.add('bg-primary/10', 'text-primary')
+
+            document.getElementById('edit-btn').classList.add('hidden')
+          } else {
+            const badge = document.getElementById('status-badge')
+            badge.textContent = 'Open'
+            badge.classList.remove('hidden')
+            badge.classList.add('bg-surface-container', 'text-on-surface-variant')
+          }
+        })
+        .catch(() => {
+          window.location.href = backHref
+        })
+
+      document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = backHref
+      })
+
+      document.getElementById('close-btn').addEventListener('click', () => {
+        window.location.href = backHref
+      })
+
+      document.getElementById('edit-btn').addEventListener('click', () => {
+        window.location.href = `edit-task.html?id=${todoId}&from=dashboard`
+      })
+
+      // App version
+      fetch('assets/version.json')
+        .then((r) => r.json())
+        .then((d) => {
+          const el = document.getElementById('app-version')
+          if (el) el.textContent = d.version
+        })
+        .catch(() => {})
+
+      // Mechanical clock
+      ;(function () {
+        function updateClock() {
+          const now = new Date()
+          const sec = now.getSeconds() + now.getMilliseconds() / 1000
+          const min = now.getMinutes() + sec / 60
+          const hour = (now.getHours() % 12) + min / 60
+          document.getElementById('hand-second').style.transform =
+            `translateX(-50%) rotate(${sec * 6}deg)`
+          document.getElementById('hand-minute').style.transform =
+            `translateX(-50%) rotate(${min * 6}deg)`
+          document.getElementById('hand-hour').style.transform =
+            `translateX(-50%) rotate(${hour * 30}deg)`
+        }
+        updateClock()
+        setInterval(updateClock, 1000)
+      })()
+
+      // Back to top
+      window.addEventListener('scroll', () => {
+        const btn = document.getElementById('back-to-top')
+        if (window.scrollY > 100) {
+          btn.classList.remove('opacity-0', 'pointer-events-none')
+        } else {
+          btn.classList.add('opacity-0', 'pointer-events-none')
+        }
+      })
+
+      // Sidebar toggle
+      ;(function () {
+        const html = document.documentElement
+        const collapsed = localStorage.getItem('sidebarCollapsed') === 'true'
+        if (collapsed) html.classList.add('sidebar-collapsed')
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+          const isNowCollapsed = !html.classList.contains('sidebar-collapsed')
+          html.classList.toggle('sidebar-collapsed', isNowCollapsed)
+          localStorage.setItem('sidebarCollapsed', isNowCollapsed)
+        })
+      })()
+
+      // Expandable search
+      ;(function () {
+        const wrap = document.getElementById('search-wrap')
+        const btn = document.getElementById('search-btn')
+        const input = document.getElementById('search-input')
+        btn.addEventListener('click', () => {
+          wrap.classList.toggle('open')
+          if (wrap.classList.contains('open')) {
+            input.focus()
+            btn.removeAttribute('data-tip')
+          } else {
+            input.value = ''
+            btn.setAttribute('data-tip', 'Search')
+          }
+        })
+        input.addEventListener('blur', () => {
+          if (!input.value) {
+            wrap.classList.remove('open')
+            btn.setAttribute('data-tip', 'Search')
+          }
+        })
+      })()
+    </script>
+  </body>
+</html>
