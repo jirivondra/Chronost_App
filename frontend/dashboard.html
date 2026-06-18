@@ -374,6 +374,14 @@
             <span class="material-symbols-outlined flex-shrink-0">inventory_2</span>
             <span class="sidebar-label font-headline text-sm font-semibold">Archive</span>
           </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="calculator.html"
+            data-tip="Calculator"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">calculate</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Calculator</span>
+          </a>
         </nav>
         <!-- Bottom Action / User -->
         <div class="mt-auto flex flex-col gap-4">
@@ -542,6 +550,148 @@
                   <p class="text-xs text-on-surface-variant">02:00 PM — Office</p>
                 </div>
               </div>
+            </div>
+          </div>
+          <!-- Calculator Widget -->
+          <div
+            class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm border border-outline-variant/5"
+          >
+            <div class="mb-4 text-center">
+              <h4 class="font-headline text-lg font-bold text-on-surface">Calculator</h4>
+            </div>
+            <!-- Display -->
+            <div class="bg-surface-container rounded-xl px-4 py-3 mb-3 text-right">
+              <p id="w-history" class="text-xs text-on-surface-variant h-4 font-mono truncate">
+                &nbsp;
+              </p>
+              <p
+                id="w-display"
+                class="text-3xl font-black font-headline text-on-surface mt-1 truncate"
+              >
+                0
+              </p>
+            </div>
+            <!-- Keypad -->
+            <div class="grid grid-cols-4 gap-1.5">
+              <!-- Row 1 -->
+              <button
+                class="w-calc-func col-span-2 py-3 rounded-xl text-sm font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-all"
+                data-action="clear"
+              >
+                C
+              </button>
+              <button
+                class="w-calc-func py-3 rounded-xl text-sm font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-all"
+                data-action="backspace"
+              >
+                ⌫
+              </button>
+              <button
+                class="w-op-btn py-3 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+                data-wop="Divide"
+                data-wsym="÷"
+              >
+                ÷
+              </button>
+              <!-- Row 2 -->
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="7"
+              >
+                7
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="8"
+              >
+                8
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="9"
+              >
+                9
+              </button>
+              <button
+                class="w-op-btn py-3 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+                data-wop="Multiply"
+                data-wsym="×"
+              >
+                ×
+              </button>
+              <!-- Row 3 -->
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="4"
+              >
+                4
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="5"
+              >
+                5
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="6"
+              >
+                6
+              </button>
+              <button
+                class="w-op-btn py-3 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+                data-wop="Subtract"
+                data-wsym="−"
+              >
+                −
+              </button>
+              <!-- Row 4 -->
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="1"
+              >
+                1
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="2"
+              >
+                2
+              </button>
+              <button
+                class="w-num-btn py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="3"
+              >
+                3
+              </button>
+              <button
+                class="w-op-btn py-3 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+                data-wop="Add"
+                data-wsym="+"
+              >
+                +
+              </button>
+              <!-- Row 5 -->
+              <button
+                class="w-num-btn col-span-2 py-3 rounded-xl text-sm font-bold bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+                data-digit="0"
+              >
+                0
+              </button>
+              <button
+                id="w-calc-btn"
+                class="col-span-2 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold text-base active:scale-95 transition-transform"
+              >
+                =
+              </button>
+            </div>
+            <!-- Error -->
+            <div
+              id="w-error"
+              class="hidden mt-3 rounded-xl p-3 bg-error/10 flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-error text-[18px]">error</span>
+              <p id="w-error-msg" class="text-error text-xs font-medium"></p>
             </div>
           </div>
           <!-- Motivational Image Card -->
@@ -865,6 +1015,145 @@
           }
         })
       } // end else (auth guard)
+
+      // Calculator widget
+      ;(function () {
+        const SOAP_URL = 'http://localhost:8001'
+        const TNS = 'chronos.calculator'
+        const OP_SYM = { Add: '+', Subtract: '−', Multiply: '×', Divide: '÷' }
+
+        let entryA = ''
+        let entryB = ''
+        let currentOp = null
+        let activeEntry = 'a'
+        let justCalculated = false
+
+        const display = document.getElementById('w-display')
+        const historyEl = document.getElementById('w-history')
+        const errorEl = document.getElementById('w-error')
+
+        function updateDisplay() {
+          display.textContent = (activeEntry === 'a' ? entryA : entryB) || '0'
+        }
+
+        function highlightOp(op) {
+          document.querySelectorAll('.w-op-btn').forEach((btn) => {
+            if (btn.dataset.wop === op) {
+              btn.style.background = '#4656b8'
+              btn.style.color = '#faf8ff'
+            } else {
+              btn.style.background = ''
+              btn.style.color = ''
+            }
+          })
+        }
+
+        function reset() {
+          entryA = ''
+          entryB = ''
+          currentOp = null
+          activeEntry = 'a'
+          justCalculated = false
+          highlightOp(null)
+          historyEl.innerHTML = '&nbsp;'
+          errorEl.classList.add('hidden')
+          updateDisplay()
+        }
+
+        document.querySelectorAll('.w-num-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const d = btn.dataset.digit
+            if (justCalculated) {
+              entryA = d === '0' ? '' : d
+              entryB = ''
+              currentOp = null
+              activeEntry = 'a'
+              justCalculated = false
+              highlightOp(null)
+              historyEl.innerHTML = '&nbsp;'
+              errorEl.classList.add('hidden')
+            } else if (activeEntry === 'a') {
+              if (entryA.length >= 10) return
+              entryA = entryA === '' && d === '0' ? '' : entryA + d
+            } else {
+              if (entryB.length >= 10) return
+              entryB = entryB === '' && d === '0' ? '' : entryB + d
+            }
+            updateDisplay()
+          })
+        })
+
+        document.querySelectorAll('.w-op-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (!entryA) entryA = '0'
+            currentOp = btn.dataset.wop
+            activeEntry = 'b'
+            entryB = ''
+            justCalculated = false
+            errorEl.classList.add('hidden')
+            highlightOp(currentOp)
+            historyEl.textContent = `${entryA} ${OP_SYM[currentOp]}`
+            updateDisplay()
+          })
+        })
+
+        document.querySelector('[data-action="clear"]').addEventListener('click', reset)
+
+        document.querySelector('[data-action="backspace"]').addEventListener('click', () => {
+          if (justCalculated) {
+            reset()
+            return
+          }
+          if (activeEntry === 'a') {
+            entryA = entryA.slice(0, -1)
+          } else {
+            entryB = entryB.slice(0, -1)
+          }
+          updateDisplay()
+        })
+
+        document.getElementById('w-calc-btn').addEventListener('click', async () => {
+          if (!currentOp || !entryB) return
+          const a = parseInt(entryA || '0', 10)
+          const b = parseInt(entryB, 10)
+          const xml = `<?xml version='1.0' encoding='utf-8'?><soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Body><tns:${currentOp} xmlns:tns="${TNS}"><tns:a>${a}</tns:a><tns:b>${b}</tns:b></tns:${currentOp}></soap-env:Body></soap-env:Envelope>`
+          errorEl.classList.add('hidden')
+          try {
+            const res = await fetch(SOAP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: currentOp },
+              body: xml,
+            })
+            const text = await res.text()
+            const doc = new DOMParser().parseFromString(text, 'text/xml')
+            const fault = doc.querySelector('faultstring')
+            if (fault) {
+              document.getElementById('w-error-msg').textContent = fault.textContent
+              errorEl.classList.remove('hidden')
+              return
+            }
+            const node = doc.querySelector(`${currentOp}Result`)
+            if (node) {
+              const num = parseFloat(node.textContent)
+              const formatted = Number.isInteger(num)
+                ? num.toString()
+                : num.toFixed(10).replace(/\.?0+$/, '')
+              historyEl.textContent = `${entryA} ${OP_SYM[currentOp]} ${entryB} =`
+              display.textContent = formatted
+              entryA = formatted
+              entryB = ''
+              currentOp = null
+              activeEntry = 'a'
+              justCalculated = true
+              highlightOp(null)
+            }
+          } catch {
+            document.getElementById('w-error-msg').textContent =
+              'SOAP service is not running. Start it with: task soap-up'
+            errorEl.classList.remove('hidden')
+          }
+        })
+      })()
     </script>
   </body>
 </html>
