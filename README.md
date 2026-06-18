@@ -4,11 +4,11 @@ A full-stack TODO application with a FastAPI backend and a static HTML/CSS front
 
 ## Stack
 
-| Layer    | Technology              |
-| -------- | ----------------------- |
-| API      | Python, FastAPI         |
-| SOAP     | Python, spyne (SOAP 1.1)|
-| Frontend | HTML, Tailwind CSS      |
+| Layer    | Technology               |
+| -------- | ------------------------ |
+| API      | Python, FastAPI          |
+| SOAP     | Python, spyne (SOAP 1.1) |
+| Frontend | HTML, Tailwind CSS       |
 
 ## Project structure
 
@@ -101,16 +101,16 @@ task be-down
 
 ## Taskfile commands
 
-| Command         | Description                                  |
-| --------------- | -------------------------------------------- |
-| `task be-up`    | Spustí FastAPI backend + SOAP Calculator     |
-| `task be-down`  | Zastaví FastAPI backend + SOAP Calculator    |
-| `task soap-up`  | Spustí pouze SOAP Calculator (port 8001)     |
-| `task soap-down`| Zastaví SOAP Calculator                      |
-| `task fe-up`    | Spustí frontend server                       |
-| `task fe-down`  | Zastaví frontend server                      |
-| `task restart`  | Restartuje API (clean + be-up)               |
-| `task clean`    | Smaže Python cache soubory                   |
+| Command          | Description                               |
+| ---------------- | ----------------------------------------- |
+| `task be-up`     | Spustí FastAPI backend + SOAP Calculator  |
+| `task be-down`   | Zastaví FastAPI backend + SOAP Calculator |
+| `task soap-up`   | Spustí pouze SOAP Calculator (port 8001)  |
+| `task soap-down` | Zastaví SOAP Calculator                   |
+| `task fe-up`     | Spustí frontend server                    |
+| `task fe-down`   | Zastaví frontend server                   |
+| `task restart`   | Restartuje API (clean + be-up)            |
+| `task clean`     | Smaže Python cache soubory                |
 
 ## SOAP Calculator service
 
@@ -118,10 +118,10 @@ Projekt obsahuje SOAP 1.1 kalkulačkovou službu postavenou na knihovně [spyne]
 
 **Dostupné operace:** `Add`, `Subtract`, `Multiply`, `Divide` (vstup i výstup: `Float`)
 
-| URL                              | Popis                     |
-| -------------------------------- | ------------------------- |
-| `http://localhost:8001`          | SOAP endpoint             |
-| `http://localhost:8001/?wsdl`    | WSDL definice             |
+| URL                           | Popis         |
+| ----------------------------- | ------------- |
+| `http://localhost:8001`       | SOAP endpoint |
+| `http://localhost:8001/?wsdl` | WSDL definice |
 
 ### Testování v SoapUI
 
