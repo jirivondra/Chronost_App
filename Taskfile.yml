@@ -47,6 +47,14 @@ tasks:
     desc: Stop the running API
     cmd: pkill -f "uvicorn api.main:app" || true
 
+  soap-up:
+    desc: Start the SOAP Calculator service on http://localhost:8001
+    cmd: .venv/bin/python -m api.soap_calculator
+
+  soap-down:
+    desc: Stop the SOAP Calculator service
+    cmd: pkill -f "api.soap_calculator" || true
+
   restart:
     desc: Clean cache and restart the API
     cmds:
