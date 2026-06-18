@@ -3,8 +3,10 @@ version: '3'
 tasks:
   # --- API ---
   be-up:
-    desc: Start the FastAPI backend
-    cmd: .venv/bin/uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+    desc: Start the FastAPI backend and SOAP Calculator service
+    cmds:
+      - .venv/bin/python -m api.soap_calculator &
+      - .venv/bin/uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 
   # --- Tests ---
   run-test:
@@ -44,8 +46,10 @@ tasks:
     cmd: find . -type d -name __pycache__ -exec rm -rf {} +
 
   be-down:
-    desc: Stop the running API
-    cmd: pkill -f "uvicorn api.main:app" || true
+    desc: Stop the FastAPI backend and SOAP Calculator service
+    cmds:
+      - pkill -f "uvicorn api.main:app" || true
+      - pkill -f "api.soap_calculator" || true
 
   soap-up:
     desc: Start the SOAP Calculator service on http://localhost:8001
