@@ -552,6 +552,112 @@
               </div>
             </div>
           </div>
+          <!-- Calculator Widget -->
+          <div
+            class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm border border-outline-variant/5"
+          >
+            <div class="flex items-center justify-between mb-5">
+              <div>
+                <h4 class="font-headline text-lg font-bold text-on-surface">Calculator</h4>
+                <p class="text-xs text-on-surface-variant mt-0.5">via SOAP service</p>
+              </div>
+              <a
+                href="calculator.html"
+                class="p-2 text-on-surface-variant hover:text-primary transition-colors"
+                title="Otevřít plnou stránku"
+              >
+                <span class="material-symbols-outlined text-[18px]">open_in_full</span>
+              </a>
+            </div>
+            <!-- Inputs -->
+            <div class="flex items-center gap-2 mb-3">
+              <input
+                id="w-num-a"
+                type="number"
+                value="10"
+                class="flex-1 min-w-0 bg-surface-container-low border-none rounded-xl px-3 py-2.5 text-base font-bold text-on-surface text-center focus:ring-2 focus:ring-primary transition-all"
+              />
+              <span id="w-op-symbol" class="text-lg font-black text-primary-dim flex-shrink-0"
+                >+</span
+              >
+              <input
+                id="w-num-b"
+                type="number"
+                value="5"
+                class="flex-1 min-w-0 bg-surface-container-low border-none rounded-xl px-3 py-2.5 text-base font-bold text-on-surface text-center focus:ring-2 focus:ring-primary transition-all"
+              />
+            </div>
+            <!-- Op buttons -->
+            <div class="grid grid-cols-4 gap-1.5 mb-3">
+              <button
+                data-wop="Add"
+                data-wsym="+"
+                class="w-op-btn py-2 rounded-xl text-sm font-bold transition-all bg-primary text-on-primary"
+              >
+                +
+              </button>
+              <button
+                data-wop="Subtract"
+                data-wsym="−"
+                class="w-op-btn py-2 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+              >
+                −
+              </button>
+              <button
+                data-wop="Multiply"
+                data-wsym="×"
+                class="w-op-btn py-2 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+              >
+                ×
+              </button>
+              <button
+                data-wop="Divide"
+                data-wsym="÷"
+                class="w-op-btn py-2 rounded-xl text-sm font-bold transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
+              >
+                ÷
+              </button>
+            </div>
+            <!-- Calculate -->
+            <button
+              id="w-calc-btn"
+              class="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm active:scale-95 transition-transform flex items-center justify-center gap-1.5"
+            >
+              <span class="material-symbols-outlined text-[16px]">send</span>
+              Vypočítat
+            </button>
+            <!-- Result -->
+            <div
+              id="w-result"
+              class="hidden mt-3 rounded-xl p-3 bg-surface-container-low flex items-center gap-3"
+            >
+              <span
+                class="material-symbols-outlined text-primary text-[18px]"
+                style="
+                  font-variation-settings:
+                    'FILL' 1,
+                    'wght' 400,
+                    'GRAD' 0,
+                    'opsz' 24;
+                "
+                >check_circle</span
+              >
+              <div>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                  Výsledek
+                </p>
+                <p id="w-result-value" class="text-xl font-black font-headline text-on-surface"></p>
+              </div>
+            </div>
+            <!-- Error -->
+            <div
+              id="w-error"
+              class="hidden mt-3 rounded-xl p-3 bg-error/10 flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-error text-[18px]">error</span>
+              <p id="w-error-msg" class="text-error text-xs font-medium"></p>
+            </div>
+          </div>
           <!-- Motivational Image Card -->
           <div class="relative h-64 rounded-[2rem] overflow-hidden group">
             <img
@@ -873,6 +979,75 @@
           }
         })
       } // end else (auth guard)
+
+      // Calculator widget
+      ;(function () {
+        const SOAP_URL = 'http://localhost:8001'
+        const TNS = 'chronos.calculator'
+        let activeOp = 'Add'
+
+        document.querySelectorAll('.w-op-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.w-op-btn').forEach((b) => {
+              b.classList.remove('bg-primary', 'text-on-primary')
+              b.classList.add(
+                'bg-surface-container',
+                'text-on-surface',
+                'hover:bg-surface-container-high'
+              )
+            })
+            btn.classList.add('bg-primary', 'text-on-primary')
+            btn.classList.remove(
+              'bg-surface-container',
+              'text-on-surface',
+              'hover:bg-surface-container-high'
+            )
+            activeOp = btn.dataset.wop
+            document.getElementById('w-op-symbol').textContent = btn.dataset.wsym
+          })
+        })
+
+        document.getElementById('w-calc-btn').addEventListener('click', async () => {
+          const a = parseFloat(document.getElementById('w-num-a').value)
+          const b = parseFloat(document.getElementById('w-num-b').value)
+          if (isNaN(a) || isNaN(b)) return
+
+          const xml = `<?xml version='1.0' encoding='utf-8'?><soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Body><tns:${activeOp} xmlns:tns="${TNS}"><tns:a>${a}</tns:a><tns:b>${b}</tns:b></tns:${activeOp}></soap-env:Body></soap-env:Envelope>`
+
+          const resultEl = document.getElementById('w-result')
+          const errorEl = document.getElementById('w-error')
+          resultEl.classList.add('hidden')
+          errorEl.classList.add('hidden')
+
+          try {
+            const res = await fetch(SOAP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/xml; charset=utf-8', SOAPAction: activeOp },
+              body: xml,
+            })
+            const text = await res.text()
+            const doc = new DOMParser().parseFromString(text, 'text/xml')
+            const fault = doc.querySelector('faultstring')
+            if (fault) {
+              document.getElementById('w-error-msg').textContent = fault.textContent
+              errorEl.classList.remove('hidden')
+            } else {
+              const node = doc.querySelector(`${activeOp}Result`)
+              if (node) {
+                const num = parseFloat(node.textContent)
+                document.getElementById('w-result-value').textContent = Number.isInteger(num)
+                  ? num
+                  : num.toFixed(10).replace(/\.?0+$/, '')
+                resultEl.classList.remove('hidden')
+              }
+            }
+          } catch {
+            document.getElementById('w-error-msg').textContent =
+              'SOAP service není spuštěna. Spusť: task soap-up'
+            errorEl.classList.remove('hidden')
+          }
+        })
+      })()
     </script>
   </body>
 </html>
