@@ -685,29 +685,6 @@
                 =
               </button>
             </div>
-            <!-- Result -->
-            <div
-              id="w-result"
-              class="hidden mt-3 rounded-xl p-3 bg-surface-container-low flex items-center gap-3"
-            >
-              <span
-                class="material-symbols-outlined text-primary text-[18px]"
-                style="
-                  font-variation-settings:
-                    'FILL' 1,
-                    'wght' 400,
-                    'GRAD' 0,
-                    'opsz' 24;
-                "
-                >check_circle</span
-              >
-              <div>
-                <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
-                  Výsledek
-                </p>
-                <p id="w-result-value" class="text-xl font-black font-headline text-on-surface"></p>
-              </div>
-            </div>
             <!-- Error -->
             <div
               id="w-error"
@@ -1053,7 +1030,6 @@
 
         const display = document.getElementById('w-display')
         const historyEl = document.getElementById('w-history')
-        const resultEl = document.getElementById('w-result')
         const errorEl = document.getElementById('w-error')
 
         function updateDisplay() {
@@ -1080,7 +1056,6 @@
           justCalculated = false
           highlightOp(null)
           historyEl.innerHTML = '&nbsp;'
-          resultEl.classList.add('hidden')
           errorEl.classList.add('hidden')
           updateDisplay()
         }
@@ -1096,7 +1071,6 @@
               justCalculated = false
               highlightOp(null)
               historyEl.innerHTML = '&nbsp;'
-              resultEl.classList.add('hidden')
               errorEl.classList.add('hidden')
             } else if (activeEntry === 'a') {
               if (entryA.length >= 10) return
@@ -1116,7 +1090,6 @@
             activeEntry = 'b'
             entryB = ''
             justCalculated = false
-            resultEl.classList.add('hidden')
             errorEl.classList.add('hidden')
             highlightOp(currentOp)
             historyEl.textContent = `${entryA} ${OP_SYM[currentOp]}`
@@ -1144,7 +1117,6 @@
           const a = parseInt(entryA || '0', 10)
           const b = parseInt(entryB, 10)
           const xml = `<?xml version='1.0' encoding='utf-8'?><soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Body><tns:${currentOp} xmlns:tns="${TNS}"><tns:a>${a}</tns:a><tns:b>${b}</tns:b></tns:${currentOp}></soap-env:Body></soap-env:Envelope>`
-          resultEl.classList.add('hidden')
           errorEl.classList.add('hidden')
           try {
             const res = await fetch(SOAP_URL, {
@@ -1168,8 +1140,6 @@
                 : num.toFixed(10).replace(/\.?0+$/, '')
               historyEl.textContent = `${entryA} ${OP_SYM[currentOp]} ${entryB} =`
               display.textContent = formatted
-              document.getElementById('w-result-value').textContent = formatted
-              resultEl.classList.remove('hidden')
               entryA = formatted
               entryB = ''
               currentOp = null
@@ -1179,7 +1149,7 @@
             }
           } catch {
             document.getElementById('w-error-msg').textContent =
-              'SOAP service není spuštěna. Spusť: task soap-up'
+              'SOAP service is not running. Start it with: task soap-up'
             errorEl.classList.remove('hidden')
           }
         })
