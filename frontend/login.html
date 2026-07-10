@@ -384,6 +384,7 @@
 
         if (res.ok) {
           sessionStorage.setItem('auth', token)
+          localStorage.removeItem('sidebarCollapsed')
           window.location.href = 'dashboard.html'
         } else {
           document.getElementById('error-msg').textContent =
