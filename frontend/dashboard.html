@@ -352,11 +352,19 @@
           </a>
           <a
             class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
-            href="#"
-            data-tip="Tasks"
+            href="open-tasks.html"
+            data-tip="Open Tasks"
           >
             <span class="material-symbols-outlined flex-shrink-0">check_circle</span>
-            <span class="sidebar-label font-headline text-sm font-semibold">Tasks</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="finished-tasks.html"
+            data-tip="Closed Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">done_all</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
           </a>
           <a
             class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
@@ -373,14 +381,6 @@
           >
             <span class="material-symbols-outlined flex-shrink-0">inventory_2</span>
             <span class="sidebar-label font-headline text-sm font-semibold">Archive</span>
-          </a>
-          <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
-            href="calculator.html"
-            data-tip="Calculator"
-          >
-            <span class="material-symbols-outlined flex-shrink-0">calculate</span>
-            <span class="sidebar-label font-headline text-sm font-semibold">Calculator</span>
           </a>
         </nav>
         <!-- Bottom Action / User -->
@@ -857,21 +857,15 @@
         }
 
         const TASK_PREVIEW_LIMIT = 10
+        const SHOW_ALL_MIN = 5
 
-        function renderShowAllBtn(allTodos, container) {
+        function renderShowAllBtn(label, href) {
           const btn = document.createElement('button')
           btn.className =
-            'mt-2 flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/70 transition-colors self-start'
-          btn.innerHTML = `
-            <span class="material-symbols-outlined text-[18px]">expand_more</span>
-            Zobrazit všechny úkoly (${allTodos.length})`
+            'mt-4 self-center flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-transform'
+          btn.innerHTML = label
           btn.addEventListener('click', () => {
-            btn.remove()
-            allTodos
-              .slice(TASK_PREVIEW_LIMIT)
-              .forEach((todo) =>
-                container.appendChild(renderTodo(todo, container.id === 'open-list'))
-              )
+            window.location.href = href
           })
           return btn
         }
@@ -906,8 +900,8 @@
             open
               .slice(0, TASK_PREVIEW_LIMIT)
               .forEach((todo) => openList.appendChild(renderTodo(todo, true)))
-            if (open.length > TASK_PREVIEW_LIMIT) {
-              openList.appendChild(renderShowAllBtn(open, openList))
+            if (open.length >= SHOW_ALL_MIN) {
+              openList.appendChild(renderShowAllBtn('Show all open tasks', 'open-tasks.html'))
             }
           }
 
@@ -918,8 +912,10 @@
             done
               .slice(0, TASK_PREVIEW_LIMIT)
               .forEach((todo) => doneList.appendChild(renderTodo(todo)))
-            if (done.length > TASK_PREVIEW_LIMIT) {
-              doneList.appendChild(renderShowAllBtn(done, doneList))
+            if (done.length >= SHOW_ALL_MIN) {
+              doneList.appendChild(
+                renderShowAllBtn('Show all finished tasks', 'finished-tasks.html')
+              )
             }
           }
 
