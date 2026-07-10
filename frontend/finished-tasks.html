@@ -1,0 +1,768 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Closed Tasks - Chronos</title>
+    <link rel="icon" type="image/png" href="assets/image.png" />
+    <script>
+      if (localStorage.getItem('sidebarCollapsed') === 'true')
+        document.documentElement.classList.add('sidebar-collapsed')
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-fixed': '#f1cefc',
+              'secondary-dim': '#3d5762',
+              'on-primary-container': '#00116a',
+              'tertiary-fixed-dim': '#e2c0ee',
+              'on-primary-fixed-variant': '#011882',
+              'error-dim': '#6b0221',
+              outline: '#7a7a84',
+              'on-secondary-container': '#3c5561',
+              'secondary-fixed-dim': '#bdd9e6',
+              'on-tertiary': '#fff7fc',
+              'primary-container': '#8696fd',
+              background: '#fbf8fe',
+              'secondary-container': '#cbe7f5',
+              tertiary: '#71557c',
+              'tertiary-container': '#f1cefc',
+              primary: '#4656b8',
+              'on-surface': '#31323b',
+              'on-primary-fixed': '#000000',
+              'surface-tint': '#4656b8',
+              'on-surface-variant': '#5e5e68',
+              error: '#a8364b',
+              'primary-dim': '#3949ab',
+              'tertiary-dim': '#64496f',
+              'surface-variant': '#e3e1ed',
+              'surface-bright': '#fbf8fe',
+              'on-secondary-fixed': '#29434e',
+              'inverse-on-surface': '#9e9ca2',
+              'primary-fixed-dim': '#7989ee',
+              'on-secondary': '#f2faff',
+              'error-container': '#f97386',
+              'on-secondary-fixed-variant': '#455f6b',
+              'surface-container-high': '#e9e7f1',
+              'primary-fixed': '#8696fd',
+              'on-tertiary-container': '#5d4368',
+              'surface-container-lowest': '#ffffff',
+              'surface-container': '#efedf6',
+              'surface-container-highest': '#e3e1ed',
+              'on-background': '#31323b',
+              'inverse-surface': '#0d0e12',
+              secondary: '#49636f',
+              'on-primary': '#faf8ff',
+              'on-error': '#fff7f7',
+              'on-error-container': '#6e0523',
+              'secondary-fixed': '#cbe7f5',
+              'on-tertiary-fixed-variant': '#674c72',
+              surface: '#fbf8fe',
+              'surface-dim': '#dad9e4',
+              'inverse-primary': '#8696fd',
+              'surface-container-low': '#f5f2fb',
+              'outline-variant': '#b2b1bc',
+              'on-tertiary-fixed': '#493055',
+            },
+            borderRadius: {
+              DEFAULT: '0.125rem',
+              lg: '0.25rem',
+              xl: '0.5rem',
+              full: '0.75rem',
+            },
+            fontFamily: {
+              headline: ['Manrope'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .brand-font {
+        font-family: 'Manrope', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      #sidebar {
+        width: 18rem;
+        transition: width 0.3s ease;
+        overflow: visible;
+      }
+      html.sidebar-collapsed #sidebar {
+        width: 4rem;
+      }
+      html.sidebar-collapsed .sidebar-label {
+        display: none !important;
+      }
+      html.sidebar-collapsed #sidebar nav a {
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      html.sidebar-collapsed .sidebar-user {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-logo-link {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-header {
+        justify-content: center;
+      }
+      html.sidebar-collapsed #toggle-icon {
+        transform: scaleX(-1);
+      }
+      .ml-sidebar {
+        margin-left: 18rem;
+        transition: margin-left 0.3s ease;
+      }
+      html.sidebar-collapsed .ml-sidebar {
+        margin-left: 4rem;
+      }
+      [data-tip] {
+        position: relative;
+      }
+      #sidebar [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translateY(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      #sidebar [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 5px);
+        transform: translateY(-50%);
+        border: 5px solid transparent;
+        border-right-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-bottom-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      [data-tip]:hover::after,
+      [data-tip]:hover::before {
+        opacity: 1;
+      }
+      .mech-clock {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #4656b8;
+        background: #fff;
+        position: relative;
+        box-shadow:
+          0 4px 12px rgba(70, 86, 184, 0.12),
+          inset 0 1px 3px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .mech-clock::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        background: #4656b8;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+      .mech-hand {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom center;
+        border-radius: 3px;
+      }
+      .mech-hour {
+        width: 3px;
+        height: 9px;
+        background: #31323b;
+        margin-left: -1.5px;
+        z-index: 3;
+      }
+      .mech-minute {
+        width: 2px;
+        height: 14px;
+        background: #5e5e68;
+        margin-left: -1px;
+        z-index: 2;
+      }
+      .mech-second {
+        width: 1.5px;
+        height: 16px;
+        background: #4656b8;
+        margin-left: -0.75px;
+        z-index: 4;
+      }
+      .search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .search-input {
+        width: 0;
+        opacity: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 0.875rem;
+        color: #31323b;
+        transition:
+          width 0.3s ease,
+          opacity 0.3s ease,
+          padding 0.3s ease;
+        pointer-events: none;
+      }
+      .search-wrap.open .search-input {
+        width: 180px;
+        opacity: 1;
+        padding: 0 0.5rem;
+        pointer-events: all;
+      }
+      .search-wrap.open {
+        background: #f5f2fb;
+        border-radius: 9999px;
+        padding: 0.4rem 0.75rem;
+      }
+      .search-wrap:not(.open) {
+        gap: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="h-screen fixed left-0 top-0 bg-[#f5f2fb] dark:bg-slate-900 z-50">
+      <div class="flex flex-col gap-2 p-4 h-full">
+        <div class="sidebar-header mb-8 flex items-center justify-between px-2">
+          <a href="dashboard.html" class="sidebar-logo-link flex items-center gap-3 min-w-0">
+            <img src="assets/image.png" alt="Chronos" class="h-8 w-auto flex-shrink-0" />
+            <div class="sidebar-label min-w-0">
+              <h1
+                class="text-xl font-black text-[#4656b8] dark:text-[#8696fd] font-headline truncate"
+              >
+                Chronos
+              </h1>
+              <p class="font-['Manrope'] text-sm font-semibold text-slate-500 truncate">
+                Personal Space
+              </p>
+            </div>
+          </a>
+          <button
+            id="sidebar-toggle"
+            class="p-2 rounded-xl hover:bg-[#e9e7f1] transition-colors text-slate-500 flex-shrink-0 ml-1"
+            data-tip="Toggle sidebar"
+          >
+            <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
+          </button>
+        </div>
+        <nav class="flex-1 flex flex-col gap-1">
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="dashboard.html"
+            data-tip="Dashboard"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">dashboard</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="open-tasks.html"
+            data-tip="Open Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">check_circle</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
+          </a>
+          <a
+            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            href="finished-tasks.html"
+            data-tip="Closed Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">done_all</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="#"
+            data-tip="Calendar"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">calendar_today</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Calendar</span>
+          </a>
+          <a
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            href="#"
+            data-tip="Archive"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">inventory_2</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Archive</span>
+          </a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-4">
+          <div class="sidebar-label h-px bg-outline-variant/15 mx-2"></div>
+          <div class="sidebar-label px-4 pb-3 flex flex-col items-center gap-0.5">
+            <p class="text-[10px] font-extrabold uppercase tracking-widest text-on-surface/70">
+              App version
+            </p>
+            <p id="app-version" class="text-[10px] text-on-surface-variant/40 font-mono">v—</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="ml-sidebar flex flex-col min-h-screen">
+      <!-- Top Nav Bar -->
+      <header class="bg-[#fbf8fe]/80 backdrop-blur-xl top-0 sticky z-40 h-20">
+        <div class="flex justify-between items-center w-full px-8 h-full max-w-screen-2xl mx-auto">
+          <div class="flex items-center gap-3">
+            <button
+              id="back-btn"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Back"
+            >
+              <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+            </button>
+            <h2 class="text-2xl font-extrabold text-[#4656b8] font-['Manrope'] tracking-tight">
+              Chronos
+            </h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="mech-clock hidden sm:block">
+              <div class="mech-hand mech-hour" id="hand-hour"></div>
+              <div class="mech-hand mech-minute" id="hand-minute"></div>
+              <div class="mech-hand mech-second" id="hand-second"></div>
+            </div>
+            <div class="search-wrap hidden sm:flex" id="search-wrap">
+              <button
+                id="search-btn"
+                class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                data-tip="Search"
+              >
+                <span class="material-symbols-outlined text-[22px]">search</span>
+              </button>
+              <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+            </div>
+            <button
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Notifications"
+            >
+              <span class="material-symbols-outlined text-[22px]">notifications</span>
+            </button>
+            <button
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Settings"
+            >
+              <span class="material-symbols-outlined text-[22px]">settings</span>
+            </button>
+            <a
+              href="logout.html"
+              class="flex items-center justify-center text-slate-500 hover:text-error transition-colors"
+              data-tip="Log out"
+            >
+              <span class="material-symbols-outlined text-[22px]">logout</span>
+            </a>
+            <div
+              class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20 flex-shrink-0"
+              data-tip="Jiří Vondra"
+            >
+              <img
+                alt="Jiří Vondra"
+                class="w-full h-full object-cover"
+                src="assets/avatars/admin.png"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Main Content -->
+      <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
+        <div class="mb-10">
+          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+            <a
+              class="flex items-center hover:text-primary transition-colors"
+              href="dashboard.html"
+              aria-label="Dashboard"
+            >
+              <span class="material-symbols-outlined text-[18px]">home</span>
+            </a>
+            <span class="material-symbols-outlined text-xs">chevron_right</span>
+            <span class="text-on-surface">Closed Tasks</span>
+          </nav>
+          <h1 class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline">
+            Closed Tasks
+          </h1>
+          <p class="text-on-surface-variant mt-2 text-lg">Everything you've already finished.</p>
+        </div>
+        <div id="done-list" class="flex flex-col gap-4">
+          <p class="text-on-surface-variant text-sm">Loading tasks...</p>
+        </div>
+        <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
+      </main>
+    </div>
+
+    <button
+      id="back-to-top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-10 right-10 w-14 h-14 bg-surface-container-highest text-on-surface rounded-full shadow-[0_12px_40px_rgba(49,50,59,0.1)] flex items-center justify-center transition-all duration-300 hover:bg-primary hover:text-on-primary opacity-0 pointer-events-none z-50"
+    >
+      <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+
+    <script>
+      const API = 'http://localhost:8000'
+      const auth = sessionStorage.getItem('auth')
+      if (!auth) window.location.href = 'login.html'
+
+      const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
+
+      function renderTodo(todo) {
+        const div = document.createElement('div')
+        div.className =
+          'group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-container shadow-[0_12px_40px_rgba(49,50,59,0.03)] flex items-start gap-6'
+
+        const checkbox = document.createElement('input')
+        checkbox.type = 'checkbox'
+        checkbox.checked = todo.completed
+        checkbox.className =
+          'w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer'
+        checkbox.dataset.id = todo.id
+
+        const checkboxWrap = document.createElement('div')
+        checkboxWrap.className = 'mt-1'
+        checkboxWrap.appendChild(checkbox)
+
+        const content = document.createElement('div')
+        content.className = 'flex-1 opacity-60'
+
+        const titleRow = document.createElement('div')
+        titleRow.className = 'flex justify-between items-start'
+
+        const title = document.createElement('h4')
+        title.className = 'font-headline text-lg font-bold text-on-surface-variant line-through'
+        title.textContent = todo.title
+
+        const actions = document.createElement('div')
+        actions.className = 'flex items-center gap-1'
+
+        const hoverActions = document.createElement('div')
+        hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+
+        const infoBtn = document.createElement('button')
+        infoBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
+        infoBtn.title = 'Detail'
+        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
+        infoBtn.addEventListener('click', () => {
+          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
+        })
+        hoverActions.appendChild(infoBtn)
+
+        const deleteBtn = document.createElement('button')
+        deleteBtn.className =
+          'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
+        deleteBtn.dataset.id = todo.id
+        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>'
+        hoverActions.appendChild(deleteBtn)
+
+        actions.appendChild(hoverActions)
+
+        titleRow.appendChild(title)
+        titleRow.appendChild(actions)
+        content.appendChild(titleRow)
+
+        if (todo.description) {
+          const p = document.createElement('p')
+          p.className = 'text-on-surface-variant font-body text-sm mt-1'
+          p.textContent = todo.description
+          content.appendChild(p)
+        }
+
+        div.appendChild(checkboxWrap)
+        div.appendChild(content)
+
+        checkbox.addEventListener('change', async (e) => {
+          await fetch(`${API}/todos/${todo.id}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify({ completed: e.target.checked }),
+          })
+          loadTodos()
+        })
+
+        deleteBtn.addEventListener('click', async () => {
+          await fetch(`${API}/todos/${todo.id}`, { method: 'DELETE', headers })
+          loadTodos()
+        })
+
+        return div
+      }
+
+      const PAGE_SIZE = 10
+      const PAGINATOR_BUFFER = 1
+      let allDone = []
+      let currentPage = 1
+
+      function goToPage(page) {
+        currentPage = page
+        renderPage()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+
+      function paginatorArrow(icon, enabled, onClick) {
+        if (!enabled) {
+          const span = document.createElement('span')
+          span.className =
+            'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant/30'
+          span.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
+          return span
+        }
+        const btn = document.createElement('button')
+        btn.className =
+          'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors'
+        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
+        btn.addEventListener('click', onClick)
+        return btn
+      }
+
+      function paginatorPageList(total, current, buffer) {
+        const pages = []
+        for (let i = 1; i <= total; i++) {
+          if (i === 1 || i === total || (i >= current - buffer && i <= current + buffer)) {
+            pages.push(i)
+          } else if (pages[pages.length - 1] !== '…') {
+            pages.push('…')
+          }
+        }
+        return pages
+      }
+
+      function renderPagination(totalPages, totalItems) {
+        const pagination = document.getElementById('pagination')
+        pagination.innerHTML = ''
+
+        if (totalItems < PAGE_SIZE) {
+          pagination.classList.add('hidden')
+          pagination.classList.remove('flex')
+          return
+        }
+        pagination.classList.remove('hidden')
+        pagination.classList.add('flex')
+
+        pagination.appendChild(
+          paginatorArrow('chevron_left', currentPage > 1, () => goToPage(currentPage - 1))
+        )
+
+        paginatorPageList(totalPages, currentPage, PAGINATOR_BUFFER).forEach((page) => {
+          if (page === '…') {
+            const span = document.createElement('span')
+            span.className = 'w-9 h-9 flex items-center justify-center text-on-surface-variant/50'
+            span.textContent = '…'
+            pagination.appendChild(span)
+            return
+          }
+          const btn = document.createElement('button')
+          const active = page === currentPage
+          btn.className = active
+            ? 'w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-sm'
+            : 'w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container text-sm transition-colors'
+          btn.textContent = page
+          if (!active) btn.addEventListener('click', () => goToPage(page))
+          pagination.appendChild(btn)
+        })
+
+        pagination.appendChild(
+          paginatorArrow('chevron_right', currentPage < totalPages, () => goToPage(currentPage + 1))
+        )
+      }
+
+      function renderPage() {
+        const doneList = document.getElementById('done-list')
+        doneList.innerHTML = ''
+
+        if (allDone.length === 0) {
+          doneList.innerHTML =
+            '<p class="text-on-surface-variant text-sm italic opacity-50">No finished tasks yet.</p>'
+          renderPagination(0, 0)
+          return
+        }
+
+        const totalPages = Math.ceil(allDone.length / PAGE_SIZE)
+        currentPage = Math.min(currentPage, totalPages)
+
+        allDone
+          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+          .forEach((todo) => doneList.appendChild(renderTodo(todo)))
+
+        renderPagination(totalPages, allDone.length)
+      }
+
+      async function loadTodos() {
+        let res
+        try {
+          res = await fetch(`${API}/todos`, { headers })
+        } catch {
+          document.getElementById('done-list').innerHTML =
+            '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+          return
+        }
+        if (res.status === 401) {
+          window.location.href = 'login.html'
+          return
+        }
+        const todos = await res.json()
+        allDone = todos.filter((t) => t.completed)
+        renderPage()
+      }
+
+      loadTodos()
+
+      document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = 'dashboard.html'
+      })
+
+      // App version
+      fetch('assets/version.json')
+        .then((r) => r.json())
+        .then((d) => {
+          const el = document.getElementById('app-version')
+          if (el) el.textContent = d.version
+        })
+        .catch(() => {})
+
+      // Mechanical clock
+      ;(function () {
+        function updateClock() {
+          const now = new Date()
+          const sec = now.getSeconds() + now.getMilliseconds() / 1000
+          const min = now.getMinutes() + sec / 60
+          const hour = (now.getHours() % 12) + min / 60
+          document.getElementById('hand-second').style.transform =
+            `translateX(-50%) rotate(${sec * 6}deg)`
+          document.getElementById('hand-minute').style.transform =
+            `translateX(-50%) rotate(${min * 6}deg)`
+          document.getElementById('hand-hour').style.transform =
+            `translateX(-50%) rotate(${hour * 30}deg)`
+        }
+        updateClock()
+        setInterval(updateClock, 1000)
+      })()
+
+      // Back to top
+      window.addEventListener('scroll', () => {
+        const btn = document.getElementById('back-to-top')
+        if (window.scrollY > 100) {
+          btn.classList.remove('opacity-0', 'pointer-events-none')
+        } else {
+          btn.classList.add('opacity-0', 'pointer-events-none')
+        }
+      })
+
+      // Sidebar toggle
+      ;(function () {
+        const html = document.documentElement
+        const collapsed = localStorage.getItem('sidebarCollapsed') === 'true'
+        if (collapsed) html.classList.add('sidebar-collapsed')
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+          const isNowCollapsed = !html.classList.contains('sidebar-collapsed')
+          html.classList.toggle('sidebar-collapsed', isNowCollapsed)
+          localStorage.setItem('sidebarCollapsed', isNowCollapsed)
+        })
+      })()
+
+      // Expandable search
+      ;(function () {
+        const wrap = document.getElementById('search-wrap')
+        const btn = document.getElementById('search-btn')
+        const input = document.getElementById('search-input')
+        btn.addEventListener('click', () => {
+          wrap.classList.toggle('open')
+          if (wrap.classList.contains('open')) {
+            input.focus()
+            btn.removeAttribute('data-tip')
+          } else {
+            input.value = ''
+            btn.setAttribute('data-tip', 'Search')
+          }
+        })
+        input.addEventListener('blur', () => {
+          if (!input.value) {
+            wrap.classList.remove('open')
+            btn.setAttribute('data-tip', 'Search')
+          }
+        })
+      })()
+    </script>
+  </body>
+</html>
