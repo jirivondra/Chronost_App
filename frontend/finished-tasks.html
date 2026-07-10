@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Edit Task - Chronos</title>
+    <title>Closed Tasks - Chronos</title>
     <link rel="icon" type="image/png" href="assets/image.png" />
     <script>
       if (localStorage.getItem('sidebarCollapsed') === 'true')
@@ -128,7 +128,6 @@
       html.sidebar-collapsed .sidebar-user {
         display: none;
       }
-
       html.sidebar-collapsed #sidebar .sidebar-logo-link {
         display: none;
       }
@@ -268,7 +267,6 @@
         margin-left: -0.75px;
         z-index: 4;
       }
-      /* Expandable search */
       .search-wrap {
         position: relative;
         display: flex;
@@ -342,7 +340,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
           </a>
           <a
-            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
             href="open-tasks.html"
             data-tip="Open Tasks"
           >
@@ -350,7 +348,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
           </a>
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
             href="finished-tasks.html"
             data-tip="Closed Tasks"
           >
@@ -454,190 +452,25 @@
         <div class="mb-10">
           <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
             <a
-              id="breadcrumb-back"
               class="flex items-center hover:text-primary transition-colors"
-              href="#"
+              href="dashboard.html"
               aria-label="Dashboard"
             >
               <span class="material-symbols-outlined text-[18px]">home</span>
             </a>
             <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span id="breadcrumb-label" class="text-on-surface">Edit Task</span>
+            <span class="text-on-surface">Closed Tasks</span>
           </nav>
-          <h1
-            id="page-title"
-            class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
-          >
-            Edit Task
+          <h1 class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline">
+            Closed Tasks
           </h1>
-          <p id="page-subtitle" class="text-on-surface-variant mt-2 text-lg">
-            Modify the details of your focus session.
-          </p>
+          <p class="text-on-surface-variant mt-2 text-lg">Everything you've already finished.</p>
         </div>
-        <!-- Task Form Card -->
-        <div
-          class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-12 shadow-sm border border-outline-variant/5"
-        >
-          <form class="space-y-10">
-            <div class="space-y-3">
-              <label
-                class="text-xs font-bold uppercase tracking-widest text-primary ml-1"
-                for="task-title"
-                >Task Title <span class="text-error">*</span></label
-              >
-              <input
-                class="w-full bg-surface-container-low border-none rounded-2xl p-6 text-xl font-semibold text-on-surface focus:ring-2 focus:ring-primary transition-all placeholder:text-outline-variant"
-                id="task-title"
-                placeholder="Enter task title..."
-                type="text"
-                required
-              />
-            </div>
-            <div class="space-y-3">
-              <label
-                class="text-xs font-bold uppercase tracking-widest text-primary ml-1"
-                for="task-desc"
-                >Description</label
-              >
-              <textarea
-                class="w-full bg-surface-container-low border-none rounded-2xl p-6 text-base text-on-surface-variant leading-relaxed focus:ring-2 focus:ring-primary transition-all placeholder:text-outline-variant"
-                id="task-desc"
-                placeholder="Enter task description..."
-                rows="6"
-                maxlength="5000"
-              ></textarea>
-              <p class="text-xs text-on-surface-variant/50 text-right mt-1">
-                <span id="desc-count">0</span> / 5000
-              </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-              <div class="flex items-center justify-between p-6 bg-surface-container rounded-2xl">
-                <div class="flex flex-col">
-                  <span class="font-headline font-bold text-on-surface">Task Completed</span>
-                  <span class="text-xs text-on-surface-variant"
-                    >Mark this objective as achieved</span
-                  >
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input class="sr-only peer" type="checkbox" value="" />
-                  <div
-                    class="w-14 h-8 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"
-                  ></div>
-                </label>
-              </div>
-              <div class="flex items-center gap-4 p-6 bg-tertiary-container/30 rounded-2xl">
-                <div
-                  class="bg-tertiary text-on-tertiary h-12 w-12 rounded-xl flex items-center justify-center"
-                >
-                  <span class="material-symbols-outlined">event</span>
-                </div>
-                <div>
-                  <span class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
-                    >Due Date</span
-                  >
-                  <span class="block font-headline font-bold text-on-surface"
-                    >October 24, 2023</span
-                  >
-                </div>
-              </div>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 border-t border-outline-variant/10"
-            >
-              <button
-                class="w-full sm:w-auto px-10 py-4 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors"
-                type="button"
-              >
-                Cancel
-              </button>
-              <button
-                id="save-btn"
-                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm shadow-xl shadow-primary/20 active:scale-95 transition-transform disabled:opacity-40 disabled:pointer-events-none"
-                type="submit"
-                disabled
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
+        <div id="done-list" class="flex flex-col gap-4">
+          <p class="text-on-surface-variant text-sm">Loading tasks...</p>
         </div>
-        <!-- Contextual Metadata -->
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem] flex flex-col justify-between"
-          >
-            <div>
-              <span
-                class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-                >Project Context</span
-              >
-              <h3 class="text-2xl font-bold font-headline text-on-surface">
-                System Scalability 2024
-              </h3>
-              <p class="text-on-surface-variant mt-2">
-                This task is part of the core infrastructure milestone. Completion affects 4
-                downstream dependencies.
-              </p>
-            </div>
-            <div class="flex -space-x-2 mt-6">
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfzEMCPEyvXU8xOphPFCng44HaMfckdlBX6XWHv1sGQSP80wRVfblBiJsfdk0RQDGfODFGjq7etJNaTie4Xnh3lyv0dGzVyKpSEp7rZZdJWednLu0mR8enDAOTHNIk6NRFZYBe0Qcna0O2Gjs2O1Xr4c8GtBtx-29j7Y2twWBqqj2LhZDYvQW66kDULxok_OrjhrpQciu4zg5QNRPkJv8AEQwtEQ2z3bAU701TLKxKEEMo8OKLG40uq_1_F9BxZH_ZzgTroO3zj3Q-"
-              />
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUU_VgyZcJ6CfoSKr-Mmh1g-8GXZNR0y_bqwpECIY3qAIJv4o1-ElzYE3jyr74_gCM0yd93VweNItVmHCruRDvAReJhuNE3BSu60G6HKbVWuXnjUWo4ANgGs4GZQGqsMJBksEgWzXgXIgxWSH50YqKEyml_20r3ih-ONL4VlRhbEtgx7TKwNm33w8EFjQPCGKqoMnsQwiQj2LySe96l49eXMSCv1X0Ne7xioBqS73FLmBC-wku0Mv76kiqGZUwVb2qwXpeVUEY-vM"
-              />
-              <div
-                class="h-8 w-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant"
-              >
-                +3
-              </div>
-            </div>
-          </div>
-          <div class="bg-surface-variant p-8 rounded-[2rem] relative overflow-hidden group">
-            <div class="relative z-10">
-              <span class="material-symbols-outlined text-primary text-4xl mb-4">history</span>
-              <h4 class="font-headline font-bold text-on-surface">Last Edit</h4>
-              <p class="text-on-surface-variant text-sm mt-1">2 hours ago by Alex Rivers</p>
-            </div>
-            <div
-              class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
-            >
-              <span class="material-symbols-outlined text-9xl">edit_note</span>
-            </div>
-          </div>
-        </div>
+        <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
       </main>
-    </div>
-    <!-- Unsaved Changes Dialog -->
-    <div id="back-dialog" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="dialog-backdrop"></div>
-      <div class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-sm w-full">
-        <div class="flex items-center gap-3 mb-4">
-          <span class="material-symbols-outlined text-error text-2xl">warning</span>
-          <h3 class="font-headline font-bold text-xl text-on-surface">Unsaved Changes</h3>
-        </div>
-        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
-          You have unsaved changes. Would you like to save them before leaving?
-        </p>
-        <div class="flex gap-3 justify-end">
-          <button
-            id="dialog-cancel"
-            class="px-6 py-3 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors rounded-xl"
-          >
-            No
-          </button>
-          <button
-            id="dialog-yes"
-            class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
-          >
-            Yes
-          </button>
-        </div>
-      </div>
     </div>
 
     <button
@@ -647,182 +480,217 @@
     >
       <span class="material-symbols-outlined">arrow_upward</span>
     </button>
-    <!-- Mobile Navigation -->
-    <nav
-      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fbf8fe] border-t border-outline-variant/10 flex justify-around items-center h-20 px-4 z-50"
-    >
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
-      </a>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">check_circle</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
-      </a>
-      <button
-        class="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg -mt-10 border-4 border-background"
-      >
-        <span class="material-symbols-outlined">add</span>
-      </button>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">calendar_today</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
-      </a>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Config</span>
-      </a>
-    </nav>
+
     <script>
       const API = 'http://localhost:8000'
       const auth = sessionStorage.getItem('auth')
       if (!auth) window.location.href = 'login.html'
 
-      function checkForm() {
-        const title = document.getElementById('task-title').value.trim()
-        if (todoId) {
-          document.getElementById('save-btn').disabled = !(title && hasUnsavedChanges())
-        } else {
-          document.getElementById('save-btn').disabled = !title
-        }
-      }
-
-      document.getElementById('task-title').addEventListener('input', checkForm)
-      document.getElementById('task-desc').addEventListener('input', function () {
-        document.getElementById('desc-count').textContent = this.value.length
-        checkForm()
-      })
-      document.querySelector('input[type=checkbox]').addEventListener('change', checkForm)
-
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
-      const params = new URLSearchParams(window.location.search)
-      const todoId = params.get('id')
-      const fromParam = params.get('from')
 
-      // Resolve back destination and breadcrumb label
-      const backSources = {
-        dashboard: { label: 'Dashboard', href: 'dashboard.html' },
-        tasks: { label: 'Tasks', href: 'tasks.html' },
-      }
-      const backSource = backSources[fromParam] || backSources.dashboard
-      const backHref = backSource.href
-      document.getElementById('breadcrumb-back').setAttribute('aria-label', backSource.label)
-      document.getElementById('breadcrumb-back').href = '#'
+      function renderTodo(todo) {
+        const div = document.createElement('div')
+        div.className =
+          'group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-container shadow-[0_12px_40px_rgba(49,50,59,0.03)] flex items-start gap-6'
 
-      // Track original values for change detection (edit mode)
-      let originalTitle = ''
-      let originalDesc = ''
-      let originalCompleted = false
+        const checkbox = document.createElement('input')
+        checkbox.type = 'checkbox'
+        checkbox.checked = todo.completed
+        checkbox.className =
+          'w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer'
+        checkbox.dataset.id = todo.id
 
-      // Nastav titulek stránky podle režimu
-      if (!todoId) {
-        document.getElementById('page-title').textContent = 'Create New Task'
-        document.getElementById('page-subtitle').textContent = 'Define your next focus task.'
-        document.getElementById('breadcrumb-label').textContent = 'New Task'
-        document.getElementById('save-btn').textContent = 'Create Task'
-      }
+        const checkboxWrap = document.createElement('div')
+        checkboxWrap.className = 'mt-1'
+        checkboxWrap.appendChild(checkbox)
 
-      // Načti existující task při editaci
-      if (todoId) {
-        fetch(`${API}/todos/${todoId}`, { headers })
-          .then((r) => r.json())
-          .then((todo) => {
-            document.getElementById('task-title').value = todo.title
-            const desc = todo.description || ''
-            document.getElementById('task-desc').value = desc
-            document.getElementById('desc-count').textContent = desc.length
-            document.querySelector('input[type=checkbox]').checked = todo.completed
-            originalTitle = todo.title
-            originalDesc = desc
-            originalCompleted = todo.completed
-            checkForm()
-          })
-      }
+        const content = document.createElement('div')
+        content.className = 'flex-1 opacity-60'
 
-      function hasUnsavedChanges() {
-        const title = document.getElementById('task-title').value
-        const desc = document.getElementById('task-desc').value
-        const completed = document.querySelector('input[type=checkbox]').checked
-        if (todoId) {
-          return title !== originalTitle || desc !== originalDesc || completed !== originalCompleted
-        } else {
-          return title.trim() !== '' || desc.trim() !== ''
+        const titleRow = document.createElement('div')
+        titleRow.className = 'flex justify-between items-start'
+
+        const title = document.createElement('h4')
+        title.className = 'font-headline text-lg font-bold text-on-surface-variant line-through'
+        title.textContent = todo.title
+
+        const actions = document.createElement('div')
+        actions.className = 'flex items-center gap-1'
+
+        const hoverActions = document.createElement('div')
+        hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
+
+        const infoBtn = document.createElement('button')
+        infoBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
+        infoBtn.title = 'Detail'
+        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
+        infoBtn.addEventListener('click', () => {
+          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
+        })
+        hoverActions.appendChild(infoBtn)
+
+        const deleteBtn = document.createElement('button')
+        deleteBtn.className =
+          'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
+        deleteBtn.dataset.id = todo.id
+        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>'
+        hoverActions.appendChild(deleteBtn)
+
+        actions.appendChild(hoverActions)
+
+        titleRow.appendChild(title)
+        titleRow.appendChild(actions)
+        content.appendChild(titleRow)
+
+        if (todo.description) {
+          const p = document.createElement('p')
+          p.className = 'text-on-surface-variant font-body text-sm mt-1'
+          p.textContent = todo.description
+          content.appendChild(p)
         }
-      }
 
-      async function saveAndLeave() {
-        const body = {
-          title: document.getElementById('task-title').value,
-          description: document.getElementById('task-desc').value,
-          completed: document.querySelector('input[type=checkbox]').checked,
-        }
-        if (todoId) {
-          await fetch(`${API}/todos/${todoId}`, {
+        div.appendChild(checkboxWrap)
+        div.appendChild(content)
+
+        checkbox.addEventListener('change', async (e) => {
+          await fetch(`${API}/todos/${todo.id}`, {
             method: 'PUT',
             headers,
-            body: JSON.stringify(body),
+            body: JSON.stringify({ completed: e.target.checked }),
           })
-        } else {
-          await fetch(`${API}/todos`, { method: 'POST', headers, body: JSON.stringify(body) })
-        }
-        window.location.href = backHref
+          loadTodos()
+        })
+
+        deleteBtn.addEventListener('click', async () => {
+          await fetch(`${API}/todos/${todo.id}`, { method: 'DELETE', headers })
+          loadTodos()
+        })
+
+        return div
       }
 
-      function navigateBack() {
-        if (hasUnsavedChanges()) {
-          document.getElementById('back-dialog').classList.remove('hidden')
-        } else {
-          window.location.href = backHref
-        }
+      const PAGE_SIZE = 10
+      const PAGINATOR_BUFFER = 1
+      let allDone = []
+      let currentPage = 1
+
+      function goToPage(page) {
+        currentPage = page
+        renderPage()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
 
-      // Back button
-      document.getElementById('back-btn').addEventListener('click', navigateBack)
+      function paginatorArrow(icon, enabled, onClick) {
+        if (!enabled) {
+          const span = document.createElement('span')
+          span.className =
+            'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant/30'
+          span.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
+          return span
+        }
+        const btn = document.createElement('button')
+        btn.className =
+          'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors'
+        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
+        btn.addEventListener('click', onClick)
+        return btn
+      }
 
-      // Breadcrumb back link
-      document.getElementById('breadcrumb-back').addEventListener('click', (e) => {
-        e.preventDefault()
-        navigateBack()
-      })
+      function paginatorPageList(total, current, buffer) {
+        const pages = []
+        for (let i = 1; i <= total; i++) {
+          if (i === 1 || i === total || (i >= current - buffer && i <= current + buffer)) {
+            pages.push(i)
+          } else if (pages[pages.length - 1] !== '…') {
+            pages.push('…')
+          }
+        }
+        return pages
+      }
 
-      // Dialog — Yes (save & leave)
-      document.getElementById('dialog-yes').addEventListener('click', saveAndLeave)
+      function renderPagination(totalPages, totalItems) {
+        const pagination = document.getElementById('pagination')
+        pagination.innerHTML = ''
 
-      // Dialog — No (close dialog, stay)
-      document.getElementById('dialog-cancel').addEventListener('click', () => {
-        document.getElementById('back-dialog').classList.add('hidden')
-      })
-      document.getElementById('dialog-backdrop').addEventListener('click', () => {
-        document.getElementById('back-dialog').classList.add('hidden')
-      })
+        if (totalItems < PAGE_SIZE) {
+          pagination.classList.add('hidden')
+          pagination.classList.remove('flex')
+          return
+        }
+        pagination.classList.remove('hidden')
+        pagination.classList.add('flex')
 
-      // Uložení přes form submit
-      document.querySelector('form').addEventListener('submit', async (e) => {
-        e.preventDefault()
-        const body = {
-          title: document.getElementById('task-title').value,
-          description: document.getElementById('task-desc').value,
-          completed: document.querySelector('input[type=checkbox]').checked,
+        pagination.appendChild(
+          paginatorArrow('chevron_left', currentPage > 1, () => goToPage(currentPage - 1))
+        )
+
+        paginatorPageList(totalPages, currentPage, PAGINATOR_BUFFER).forEach((page) => {
+          if (page === '…') {
+            const span = document.createElement('span')
+            span.className = 'w-9 h-9 flex items-center justify-center text-on-surface-variant/50'
+            span.textContent = '…'
+            pagination.appendChild(span)
+            return
+          }
+          const btn = document.createElement('button')
+          const active = page === currentPage
+          btn.className = active
+            ? 'w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-sm'
+            : 'w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container text-sm transition-colors'
+          btn.textContent = page
+          if (!active) btn.addEventListener('click', () => goToPage(page))
+          pagination.appendChild(btn)
+        })
+
+        pagination.appendChild(
+          paginatorArrow('chevron_right', currentPage < totalPages, () => goToPage(currentPage + 1))
+        )
+      }
+
+      function renderPage() {
+        const doneList = document.getElementById('done-list')
+        doneList.innerHTML = ''
+
+        if (allDone.length === 0) {
+          doneList.innerHTML =
+            '<p class="text-on-surface-variant text-sm italic opacity-50">No finished tasks yet.</p>'
+          renderPagination(0, 0)
+          return
         }
 
-        if (todoId) {
-          await fetch(`${API}/todos/${todoId}`, {
-            method: 'PUT',
-            headers,
-            body: JSON.stringify(body),
-          })
-        } else {
-          await fetch(`${API}/todos`, { method: 'POST', headers, body: JSON.stringify(body) })
+        const totalPages = Math.ceil(allDone.length / PAGE_SIZE)
+        currentPage = Math.min(currentPage, totalPages)
+
+        allDone
+          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+          .forEach((todo) => doneList.appendChild(renderTodo(todo)))
+
+        renderPagination(totalPages, allDone.length)
+      }
+
+      async function loadTodos() {
+        let res
+        try {
+          res = await fetch(`${API}/todos`, { headers })
+        } catch {
+          document.getElementById('done-list').innerHTML =
+            '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+          return
         }
-        window.location.href = backHref
-      })
+        if (res.status === 401) {
+          window.location.href = 'login.html'
+          return
+        }
+        const todos = await res.json()
+        allDone = todos.filter((t) => t.completed)
+        renderPage()
+      }
 
-      // Cancel
-      document.querySelector('button[type=button]').addEventListener('click', () => {
-        window.location.href = backHref
-      })
+      loadTodos()
 
-      // Expandable search (edit-task has no search, skip)
+      document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = 'dashboard.html'
+      })
 
       // App version
       fetch('assets/version.json')
@@ -864,11 +732,8 @@
       // Sidebar toggle
       ;(function () {
         const html = document.documentElement
-        const icon = document.getElementById('toggle-icon')
         const collapsed = localStorage.getItem('sidebarCollapsed') === 'true'
-        if (collapsed) {
-          html.classList.add('sidebar-collapsed')
-        }
+        if (collapsed) html.classList.add('sidebar-collapsed')
         document.getElementById('sidebar-toggle').addEventListener('click', () => {
           const isNowCollapsed = !html.classList.contains('sidebar-collapsed')
           html.classList.toggle('sidebar-collapsed', isNowCollapsed)
