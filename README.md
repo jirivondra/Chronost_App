@@ -33,30 +33,30 @@ A full-stack TODO application with a FastAPI backend and a static HTML/CSS front
 
 ```bash
 pip install -r api/requirements.txt
-# nebo pokud pip nefunguje
+# or if pip doesn't work
 pip3 install -r api/requirements.txt
 ```
 
 ### 2. Configure environment
 
-Vytvoř soubor `.env` v adresáři `api/`:
+Create a `.env` file in the `api/` directory:
 
 ```bash
 cp api/.env.example api/.env
 ```
 
-Otevři `api/.env` a nastav přihlašovací údaje:
+Open `api/.env` and set the credentials:
 
 ```
 API_USERNAME=your-username
 API_PASSWORD=your-password
 ```
 
-Soubor `.env` je gitignorován a nikdy se necommituje.
+The `.env` file is gitignored and never committed.
 
 ### 3. Install Task
 
-Projekt používá [Task](https://taskfile.dev) jako task runner. Instalace:
+The project uses [Task](https://taskfile.dev) as a task runner. Installation:
 
 ```bash
 # macOS
@@ -71,21 +71,21 @@ sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/b
 
 ## Running the project
 
-### 1. Spusť API + SOAP service
+### 1. Start the API + SOAP service
 
 ```bash
 task be-up
 ```
 
-REST API běží na `http://localhost:8000`, SOAP Calculator na `http://localhost:8001`.
+The REST API runs on `http://localhost:8000`, the SOAP Calculator on `http://localhost:8001`.
 
-### 2. Spusť frontend
+### 2. Start the frontend
 
 ```bash
 task fe-up
 ```
 
-Frontend běží na `http://localhost:3000`. Dostupné obrazovky:
+The frontend runs on `http://localhost:3000`. Available screens:
 
 ```
 http://localhost:3000/login.html        ← login screen
@@ -95,7 +95,7 @@ http://localhost:3000/task-detail.html  ← task detail (read-only)
 http://localhost:3000/calculator.html   ← SOAP calculator
 ```
 
-### Zastavení API
+### Stopping the API
 
 ```bash
 task be-down
@@ -103,35 +103,35 @@ task be-down
 
 ## Taskfile commands
 
-| Command          | Description                               |
-| ---------------- | ----------------------------------------- |
-| `task be-up`     | Spustí FastAPI backend + SOAP Calculator  |
-| `task be-down`   | Zastaví FastAPI backend + SOAP Calculator |
-| `task soap-up`   | Spustí pouze SOAP Calculator (port 8001)  |
-| `task soap-down` | Zastaví SOAP Calculator                   |
-| `task fe-up`     | Spustí frontend server                    |
-| `task fe-down`   | Zastaví frontend server                   |
-| `task restart`   | Restartuje API (clean + be-up)            |
-| `task clean`     | Smaže Python cache soubory                |
+| Command          | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `task be-up`     | Starts the FastAPI backend + SOAP Calculator |
+| `task be-down`   | Stops the FastAPI backend + SOAP Calculator  |
+| `task soap-up`   | Starts only the SOAP Calculator (port 8001)  |
+| `task soap-down` | Stops the SOAP Calculator                    |
+| `task fe-up`     | Starts the frontend server                   |
+| `task fe-down`   | Stops the frontend server                    |
+| `task restart`   | Restarts the API (clean + be-up)             |
+| `task clean`     | Deletes Python cache files                   |
 
 ## SOAP Calculator service
 
-Projekt obsahuje SOAP 1.1 kalkulačkovou službu postavenou na knihovně [spyne](https://spyne.io). Slouží jako ukázka a testovací prostředí pro SOAP protokol.
+The project includes a SOAP 1.1 calculator service built on the [spyne](https://spyne.io) library. It serves as a demo and testing ground for the SOAP protocol.
 
-**Dostupné operace:** `Add`, `Subtract`, `Multiply`, `Divide` (vstup i výstup: `Float`)
+**Available operations:** `Add`, `Subtract`, `Multiply`, `Divide` (input and output: `Float`)
 
-| URL                           | Popis         |
-| ----------------------------- | ------------- |
-| `http://localhost:8001`       | SOAP endpoint |
-| `http://localhost:8001/?wsdl` | WSDL definice |
+| URL                           | Description     |
+| ----------------------------- | --------------- |
+| `http://localhost:8001`       | SOAP endpoint   |
+| `http://localhost:8001/?wsdl` | WSDL definition |
 
-### Testování v SoapUI
+### Testing in SoapUI
 
-1. Otevři SoapUI → **New SOAP Project**
+1. Open SoapUI → **New SOAP Project**
 2. WSDL: `http://localhost:8001/?wsdl`
-3. Vyber operaci a odešli request
+3. Select an operation and send the request
 
-### Testování v Postman
+### Testing in Postman
 
 1. New request → **POST** `http://localhost:8001`
 2. Header: `Content-Type: text/xml`
@@ -149,42 +149,48 @@ Projekt obsahuje SOAP 1.1 kalkulačkovou službu postavenou na knihovně [spyne]
 </soap-env:Envelope>
 ```
 
-Kalkulačka je také dostupná jako widget na dashboardu a jako plná stránka na `http://localhost:3000/calculator.html`.
+The calculator is also available as a widget on the dashboard and as a full page at `http://localhost:3000/calculator.html`.
 
-## API dokumentace
+## API documentation
 
-Swagger UI je dostupný na `http://localhost:8000/docs` po spuštění API. Je chráněn stejnou Basic Auth jako ostatní endpointy.
+Swagger UI is available at `http://localhost:8000/docs` once the API is running. It is protected by the same Basic Auth as the other endpoints.
 
-## Autentizace
+## Authentication
 
-API používá HTTP Basic Auth. Přihlašovací údaje se nastavují v `api/.env`.
+The API uses HTTP Basic Auth. Credentials are set in `api/.env`.
 
-### Příklad použití
+### Usage example
 
-V Postmanu: záložka **Authorization** → Type: **Basic Auth** → zadej username + password z `.env`.
+In Postman: **Authorization** tab → Type: **Basic Auth** → enter the username + password from `.env`.
 
-Nebo curl:
+Or curl:
 
 ```bash
 curl http://localhost:8000/todos --user 'your-username:your-password'
 ```
 
-## API endpointy
+## API endpoints
 
-Všechny endpointy vyžadují autentizaci.
+All endpoints require authentication.
 
-| Method | Endpoint     | Description        |
-| ------ | ------------ | ------------------ |
-| GET    | `/todos`     | Seznam všech úkolů |
-| POST   | `/todos`     | Vytvoření úkolu    |
-| GET    | `/todos/:id` | Detail úkolu       |
-| PUT    | `/todos/:id` | Aktualizace úkolu  |
-| DELETE | `/todos/:id` | Smazání úkolu      |
+| Method | Endpoint     | Description    |
+| ------ | ------------ | -------------- |
+| GET    | `/todos`     | List all tasks |
+| POST   | `/todos`     | Create a task  |
+| GET    | `/todos/:id` | Task detail    |
+| PUT    | `/todos/:id` | Update a task  |
+| DELETE | `/todos/:id` | Delete a task  |
 
 ## Testing
 
-| Typ       | Nástroj    | Repozitář                                                                              |
+| Type      | Tool       | Repository                                                                             |
 | --------- | ---------- | -------------------------------------------------------------------------------------- |
-| API testy | Jest       | [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing)       |
-| E2E testy | Playwright | [Chronos_Playwright_testing](https://github.com/jirivondra/Chronos_Playwright_testing) |
-| Manuální  | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection)   |
+| API tests | Jest       | [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing)       |
+| E2E tests | Playwright | [Chronos_Playwright_testing](https://github.com/jirivondra/Chronos_Playwright_testing) |
+| Manual    | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection)   |
+
+Code coverage for the API is measured with [Codecov](https://app.codecov.io/github/jirivondra/chronost_app), collected by the `API Coverage` workflow (`.github/workflows/coverage.yml`) and configured via `codecov.yml`.
+
+## Contributing
+
+All code, comments, commit messages, and documentation in this repository must be written in English.
