@@ -526,18 +526,23 @@
                 </label>
               </div>
               <div class="flex items-center gap-4 p-6 bg-tertiary-container/30 rounded-2xl">
-                <div
-                  class="bg-tertiary text-on-tertiary h-12 w-12 rounded-xl flex items-center justify-center"
+                <label
+                  for="task-due-date"
+                  class="bg-tertiary text-on-tertiary h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-tertiary-dim transition-colors"
                 >
                   <span class="material-symbols-outlined">event</span>
-                </div>
-                <div>
-                  <span class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
-                    >Due Date</span
+                </label>
+                <div class="flex-1 min-w-0">
+                  <label
+                    class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
+                    for="task-due-date"
+                    >Due Date</label
                   >
-                  <span class="block font-headline font-bold text-on-surface"
-                    >October 24, 2023</span
-                  >
+                  <input
+                    id="task-due-date"
+                    type="date"
+                    class="block w-full bg-transparent border border-tertiary-dim/30 rounded-lg px-3 py-1.5 font-headline font-bold text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  />
                 </div>
               </div>
             </div>
@@ -563,40 +568,6 @@
         </div>
         <!-- Contextual Metadata -->
         <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem] flex flex-col justify-between"
-          >
-            <div>
-              <span
-                class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-                >Project Context</span
-              >
-              <h3 class="text-2xl font-bold font-headline text-on-surface">
-                System Scalability 2024
-              </h3>
-              <p class="text-on-surface-variant mt-2">
-                This task is part of the core infrastructure milestone. Completion affects 4
-                downstream dependencies.
-              </p>
-            </div>
-            <div class="flex -space-x-2 mt-6">
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfzEMCPEyvXU8xOphPFCng44HaMfckdlBX6XWHv1sGQSP80wRVfblBiJsfdk0RQDGfODFGjq7etJNaTie4Xnh3lyv0dGzVyKpSEp7rZZdJWednLu0mR8enDAOTHNIk6NRFZYBe0Qcna0O2Gjs2O1Xr4c8GtBtx-29j7Y2twWBqqj2LhZDYvQW66kDULxok_OrjhrpQciu4zg5QNRPkJv8AEQwtEQ2z3bAU701TLKxKEEMo8OKLG40uq_1_F9BxZH_ZzgTroO3zj3Q-"
-              />
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUU_VgyZcJ6CfoSKr-Mmh1g-8GXZNR0y_bqwpECIY3qAIJv4o1-ElzYE3jyr74_gCM0yd93VweNItVmHCruRDvAReJhuNE3BSu60G6HKbVWuXnjUWo4ANgGs4GZQGqsMJBksEgWzXgXIgxWSH50YqKEyml_20r3ih-ONL4VlRhbEtgx7TKwNm33w8EFjQPCGKqoMnsQwiQj2LySe96l49eXMSCv1X0Ne7xioBqS73FLmBC-wku0Mv76kiqGZUwVb2qwXpeVUEY-vM"
-              />
-              <div
-                class="h-8 w-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant"
-              >
-                +3
-              </div>
-            </div>
-          </div>
           <div class="bg-surface-variant p-8 rounded-[2rem] relative overflow-hidden group">
             <div class="relative z-10">
               <span class="material-symbols-outlined text-primary text-4xl mb-4">history</span>
@@ -607,6 +578,35 @@
               class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
             >
               <span class="material-symbols-outlined text-9xl">edit_note</span>
+            </div>
+          </div>
+          <div class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem]">
+            <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
+            <div class="flex flex-col gap-6">
+              <div class="flex gap-4">
+                <div
+                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
+                >
+                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
+                  <span class="text-lg font-black text-primary leading-tight">24</span>
+                </div>
+                <div>
+                  <h5 class="text-sm font-bold text-on-surface">Creative Sync</h5>
+                  <p class="text-xs text-on-surface-variant">10:30 AM — Zoom</p>
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div
+                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
+                >
+                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
+                  <span class="text-lg font-black text-primary leading-tight">25</span>
+                </div>
+                <div>
+                  <h5 class="text-sm font-bold text-on-surface">Sprint Retrospective</h5>
+                  <p class="text-xs text-on-surface-variant">02:00 PM — Office</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -694,6 +694,8 @@
       })
       document.querySelector('input[type=checkbox]').addEventListener('change', checkForm)
 
+      document.getElementById('task-due-date').addEventListener('change', checkForm)
+
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
       const params = new URLSearchParams(window.location.search)
       const todoId = params.get('id')
@@ -713,6 +715,7 @@
       let originalTitle = ''
       let originalDesc = ''
       let originalCompleted = false
+      let originalDueDate = ''
 
       // Nastav titulek stránky podle režimu
       if (!todoId) {
@@ -732,9 +735,12 @@
             document.getElementById('task-desc').value = desc
             document.getElementById('desc-count').textContent = desc.length
             document.querySelector('input[type=checkbox]').checked = todo.completed
+            const dueDate = todo.due_date || ''
+            document.getElementById('task-due-date').value = dueDate
             originalTitle = todo.title
             originalDesc = desc
             originalCompleted = todo.completed
+            originalDueDate = dueDate
             checkForm()
           })
       }
@@ -743,10 +749,16 @@
         const title = document.getElementById('task-title').value
         const desc = document.getElementById('task-desc').value
         const completed = document.querySelector('input[type=checkbox]').checked
+        const dueDate = document.getElementById('task-due-date').value
         if (todoId) {
-          return title !== originalTitle || desc !== originalDesc || completed !== originalCompleted
+          return (
+            title !== originalTitle ||
+            desc !== originalDesc ||
+            completed !== originalCompleted ||
+            dueDate !== originalDueDate
+          )
         } else {
-          return title.trim() !== '' || desc.trim() !== ''
+          return title.trim() !== '' || desc.trim() !== '' || dueDate.trim() !== ''
         }
       }
 
@@ -755,6 +767,7 @@
           title: document.getElementById('task-title').value,
           description: document.getElementById('task-desc').value,
           completed: document.querySelector('input[type=checkbox]').checked,
+          due_date: document.getElementById('task-due-date').value,
         }
         if (todoId) {
           await fetch(`${API}/todos/${todoId}`, {
@@ -803,6 +816,7 @@
           title: document.getElementById('task-title').value,
           description: document.getElementById('task-desc').value,
           completed: document.querySelector('input[type=checkbox]').checked,
+          due_date: document.getElementById('task-due-date').value,
         }
 
         if (todoId) {

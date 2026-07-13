@@ -53,12 +53,14 @@ class TodoCreate(BaseModel):
     title: str
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: bool = False
+    due_date: Optional[str] = None
 
 
 class TodoUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: Optional[bool] = None
+    due_date: Optional[str] = None
 
 
 def authenticate(request: Request):

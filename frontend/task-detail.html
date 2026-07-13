@@ -529,8 +529,8 @@
                   <span class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
                     >Due Date</span
                   >
-                  <span class="block font-headline font-bold text-on-surface"
-                    >October 24, 2023</span
+                  <span id="task-due-date" class="block font-headline font-bold text-on-surface"
+                    >No due date</span
                   >
                 </div>
               </div>
@@ -559,40 +559,6 @@
         </div>
         <!-- Contextual Metadata -->
         <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem] flex flex-col justify-between"
-          >
-            <div>
-              <span
-                class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-                >Project Context</span
-              >
-              <h3 class="text-2xl font-bold font-headline text-on-surface">
-                System Scalability 2024
-              </h3>
-              <p class="text-on-surface-variant mt-2">
-                This task is part of the core infrastructure milestone. Completion affects 4
-                downstream dependencies.
-              </p>
-            </div>
-            <div class="flex -space-x-2 mt-6">
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfzEMCPEyvXU8xOphPFCng44HaMfckdlBX6XWHv1sGQSP80wRVfblBiJsfdk0RQDGfODFGjq7etJNaTie4Xnh3lyv0dGzVyKpSEp7rZZdJWednLu0mR8enDAOTHNIk6NRFZYBe0Qcna0O2Gjs2O1Xr4c8GtBtx-29j7Y2twWBqqj2LhZDYvQW66kDULxok_OrjhrpQciu4zg5QNRPkJv8AEQwtEQ2z3bAU701TLKxKEEMo8OKLG40uq_1_F9BxZH_ZzgTroO3zj3Q-"
-              />
-              <img
-                alt="Team member"
-                class="h-8 w-8 rounded-full border-2 border-surface"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUU_VgyZcJ6CfoSKr-Mmh1g-8GXZNR0y_bqwpECIY3qAIJv4o1-ElzYE3jyr74_gCM0yd93VweNItVmHCruRDvAReJhuNE3BSu60G6HKbVWuXnjUWo4ANgGs4GZQGqsMJBksEgWzXgXIgxWSH50YqKEyml_20r3ih-ONL4VlRhbEtgx7TKwNm33w8EFjQPCGKqoMnsQwiQj2LySe96l49eXMSCv1X0Ne7xioBqS73FLmBC-wku0Mv76kiqGZUwVb2qwXpeVUEY-vM"
-              />
-              <div
-                class="h-8 w-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant"
-              >
-                +3
-              </div>
-            </div>
-          </div>
           <div class="bg-surface-variant p-8 rounded-[2rem] relative overflow-hidden group">
             <div class="relative z-10">
               <span class="material-symbols-outlined text-primary text-4xl mb-4">history</span>
@@ -603,6 +569,35 @@
               class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
             >
               <span class="material-symbols-outlined text-9xl">edit_note</span>
+            </div>
+          </div>
+          <div class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem]">
+            <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
+            <div class="flex flex-col gap-6">
+              <div class="flex gap-4">
+                <div
+                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
+                >
+                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
+                  <span class="text-lg font-black text-primary leading-tight">24</span>
+                </div>
+                <div>
+                  <h5 class="text-sm font-bold text-on-surface">Creative Sync</h5>
+                  <p class="text-xs text-on-surface-variant">10:30 AM — Zoom</p>
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <div
+                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
+                >
+                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
+                  <span class="text-lg font-black text-primary leading-tight">25</span>
+                </div>
+                <div>
+                  <h5 class="text-sm font-bold text-on-surface">Sprint Retrospective</h5>
+                  <p class="text-xs text-on-surface-variant">02:00 PM — Office</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -675,6 +670,18 @@
             descEl.textContent = todo.description
           } else {
             descSection.classList.add('hidden')
+          }
+
+          const dueDateEl = document.getElementById('task-due-date')
+          if (todo.due_date) {
+            const [y, m, d] = todo.due_date.split('-').map(Number)
+            dueDateEl.textContent = new Date(y, m - 1, d).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+            })
+          } else {
+            dueDateEl.textContent = 'No due date'
           }
 
           const indicator = document.getElementById('completed-indicator')
