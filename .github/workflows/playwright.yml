@@ -8,7 +8,7 @@ on:
 
 jobs:
   smoke:
-    name: Playwright Smoke Tests
+    name: E2E test
     runs-on: ubuntu-latest
     env:
       API_USERNAME: ${{ secrets.API_USERNAME }}
