@@ -4,10 +4,20 @@ coverage:
       default:
         target: auto
         threshold: 1%
+      api:
+        flags:
+          - api
+        target: auto
+        threshold: 1%
     patch:
       default:
         target: auto
         threshold: 1%
+
+flags:
+  api:
+    paths:
+      - api/
 
 comment:
   layout: 'reach, diff, flags, files'
