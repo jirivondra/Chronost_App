@@ -1,5 +1,7 @@
 # TODO App
 
+[![codecov](https://codecov.io/gh/jirivondra/Chronost_App/branch/main/graph/badge.svg)](https://codecov.io/gh/jirivondra/Chronost_App)
+
 A full-stack TODO application with a FastAPI backend and a static HTML/CSS frontend.
 
 ## Stack
