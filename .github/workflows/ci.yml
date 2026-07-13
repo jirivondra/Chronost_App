@@ -5,7 +5,7 @@ on:
 
 jobs:
   code-quality:
-    name: Code quality (ESLint + Prettier)
+    name: correct code (prettier + lint)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
         run: task format-check
 
   run-tests:
-    name: Tests
+    name: API test
     runs-on: ubuntu-latest
     env:
       API_USERNAME: ${{ secrets.API_USERNAME }}

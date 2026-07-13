@@ -8,7 +8,7 @@ on:
 
 jobs:
   coverage:
-    name: API Coverage
+    name: Code coverage - API
     runs-on: ubuntu-latest
     env:
       API_USERNAME: ${{ secrets.API_USERNAME }}
