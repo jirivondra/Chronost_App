@@ -552,6 +552,36 @@
               </div>
             </div>
           </div>
+          <!-- Calendar Widget -->
+          <div class="bg-surface-container-low p-8 rounded-[2rem]">
+            <div class="flex items-center justify-between mb-6">
+              <button
+                id="cal-prev-btn"
+                class="p-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+              >
+                <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+              </button>
+              <h4 id="cal-month-label" class="font-headline text-base font-bold text-on-surface">
+                &nbsp;
+              </h4>
+              <button
+                id="cal-next-btn"
+                class="p-1.5 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+              >
+                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+              </button>
+            </div>
+            <div class="grid grid-cols-7 gap-y-2 text-center">
+              <span class="text-xs font-bold text-on-surface-variant/50">Mo</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">Tu</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">We</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">Th</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">Fr</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">Sa</span>
+              <span class="text-xs font-bold text-on-surface-variant/50">Su</span>
+            </div>
+            <div id="cal-days" class="grid grid-cols-7 gap-y-2 text-center mt-2"></div>
+          </div>
           <!-- Calculator Widget -->
           <div
             class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-sm border border-outline-variant/5"
@@ -692,20 +722,6 @@
             >
               <span class="material-symbols-outlined text-error text-[18px]">error</span>
               <p id="w-error-msg" class="text-error text-xs font-medium"></p>
-            </div>
-          </div>
-          <!-- Motivational Image Card -->
-          <div class="relative h-64 rounded-[2rem] overflow-hidden group">
-            <img
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOvOEGUbKifo3CYUM-09XgezATnZLW5clQqoH0jqJIrrBj5zjjofk3wiyrG-LCGOEVNfGJGTlCyP4hzcvrCEndEsFr0D6xULSdYKaGNYwHY-PM36JTFzirDKrH92cyEBiGBxeUlGk6jReoTvZ975GIUoG8jvmNasNLK5dkS9nnQhgs1itAphY15E8itSTWQHFdJNyVRVypCxwa2YKA-FPnh_DMxv1BmcE1dM-F4k0k35hGPLpYFrpndTaPg2I0qEXgTw4Fq3_pCwhx"
-              alt="Minimalist modern office interior"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
-            <div class="absolute bottom-6 left-6 right-6">
-              <p class="text-on-primary text-sm font-body italic">
-                "Simplicity is the ultimate sophistication."
-              </p>
             </div>
           </div>
         </div>
@@ -933,6 +949,88 @@
         document.getElementById('new-task-btn').addEventListener('click', () => {
           window.location.href = 'edit-task.html?from=dashboard'
         })
+
+        // Calendar widget
+        ;(function () {
+          const monthLabel = document.getElementById('cal-month-label')
+          const daysEl = document.getElementById('cal-days')
+          const today = new Date()
+          let viewYear = today.getFullYear()
+          let viewMonth = today.getMonth()
+
+          const MONTH_NAMES = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ]
+
+          function renderCalendar() {
+            monthLabel.textContent = `${MONTH_NAMES[viewMonth]} ${viewYear}`
+            daysEl.innerHTML = ''
+
+            const startOffset = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7
+            const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+            const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate()
+
+            const cells = []
+            for (let i = startOffset - 1; i >= 0; i--) {
+              cells.push({ day: daysInPrevMonth - i, muted: true })
+            }
+            for (let d = 1; d <= daysInMonth; d++) {
+              cells.push({ day: d, muted: false })
+            }
+            let trailing = 1
+            while (cells.length % 7 !== 0) {
+              cells.push({ day: trailing++, muted: true })
+            }
+
+            cells.forEach(({ day, muted }) => {
+              const cell = document.createElement('div')
+              const isToday =
+                !muted &&
+                day === today.getDate() &&
+                viewMonth === today.getMonth() &&
+                viewYear === today.getFullYear()
+
+              cell.className = isToday
+                ? 'w-9 h-9 mx-auto flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-sm'
+                : muted
+                  ? 'w-9 h-9 mx-auto flex items-center justify-center rounded-full text-on-surface-variant/30 text-sm'
+                  : 'w-9 h-9 mx-auto flex items-center justify-center rounded-full text-on-surface text-sm font-semibold hover:bg-surface-container-high transition-colors'
+              cell.textContent = day
+              daysEl.appendChild(cell)
+            })
+          }
+
+          document.getElementById('cal-prev-btn').addEventListener('click', () => {
+            viewMonth -= 1
+            if (viewMonth < 0) {
+              viewMonth = 11
+              viewYear -= 1
+            }
+            renderCalendar()
+          })
+
+          document.getElementById('cal-next-btn').addEventListener('click', () => {
+            viewMonth += 1
+            if (viewMonth > 11) {
+              viewMonth = 0
+              viewYear += 1
+            }
+            renderCalendar()
+          })
+
+          renderCalendar()
+        })()
 
         // Sidebar toggle
         ;(function () {
