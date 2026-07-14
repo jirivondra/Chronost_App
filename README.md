@@ -6,11 +6,12 @@ A full-stack TODO application with a FastAPI backend and a static HTML/CSS front
 
 ## Stack
 
-| Layer    | Technology               |
-| -------- | ------------------------ |
-| API      | Python, FastAPI          |
-| SOAP     | Python, spyne (SOAP 1.1) |
-| Frontend | HTML, Tailwind CSS       |
+| Layer        | Technology                                                               |
+| ------------ | ------------------------------------------------------------------------ |
+| API          | Python, FastAPI                                                          |
+| SOAP         | Python, spyne (SOAP 1.1)                                                 |
+| Frontend     | HTML, Tailwind CSS                                                       |
+| Postman sync | Node.js, `openapi-to-postmanv2`, `newman` (see `postman-sync/README.md`) |
 
 ## Project structure
 
