@@ -3,7 +3,7 @@ from fastapi.security import HTTPBasic
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 import uvicorn
 import secrets
@@ -50,6 +50,17 @@ def next_id(todos: dict[int, dict]) -> int:
 
 
 class TodoCreate(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "title": "Buy groceries",
+                "description": "Milk, eggs, bread",
+                "completed": False,
+                "due_date": "2026-07-20",
+            }
+        }
+    )
+
     title: str
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: bool = False
@@ -57,6 +68,17 @@ class TodoCreate(BaseModel):
 
 
 class TodoUpdate(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "title": "Buy groceries",
+                "description": "Milk, eggs, bread",
+                "completed": True,
+                "due_date": "2026-07-20",
+            }
+        }
+    )
+
     title: Optional[str] = None
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: Optional[bool] = None
