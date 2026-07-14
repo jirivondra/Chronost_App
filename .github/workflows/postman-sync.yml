@@ -54,12 +54,13 @@ jobs:
             --current postman-repo/collections/todo-app.postman_collection.json \
             --out postman-repo/collections/todo-app.postman_collection.json
 
-      - name: Check for missing scripts
+      - name: Check for review items
         run: |
           node postman-sync/check-missing-scripts.js \
             --generated postman-sync-tmp/generated \
             --scripts postman-repo/scripts \
             --manifest postman-repo/sync-manifest.json \
+            --current postman-repo/collections/todo-app.postman_collection.json \
             --out missing-scripts.md
 
       - name: Open PR in Postman collection repo
