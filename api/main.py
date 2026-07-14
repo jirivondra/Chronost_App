@@ -5,6 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
+from datetime import date
 import uvicorn
 import secrets
 import os
@@ -124,6 +125,17 @@ def create_todo(todo: TodoCreate, _=Depends(authenticate)):
     todos[new_id] = item
     save_db(todos)
     return item
+
+
+@app.get("/todos/overdue", summary="Get overdue TODOs")
+def get_overdue_todos(_=Depends(authenticate)):
+    today = date.today().isoformat()
+    overdue = [
+        t
+        for t in load_db().values()
+        if t["due_date"] and not t["completed"] and t["due_date"] < today
+    ]
+    return sorted(overdue, key=lambda t: t["due_date"])
 
 
 @app.get("/todos/{todo_id}", summary="Get a TODO by ID")
