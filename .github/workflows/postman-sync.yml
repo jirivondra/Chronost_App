@@ -27,6 +27,9 @@ jobs:
       - name: Export OpenAPI schema
         run: python api/export_openapi.py > openapi.json
 
+      - name: Validate model examples
+        run: python api/validate_examples.py
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -63,6 +66,36 @@ jobs:
             --current postman-repo/collections/todo-app.postman_collection.json \
             --out missing-scripts.md
 
+      - name: Start API for collection run
+        run: |
+          echo "API_USERNAME=admin" > .env
+          echo "API_PASSWORD=secret" >> .env
+          python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 &
+          echo $! > /tmp/api_pid
+          timeout 30 bash -c 'until curl -sf -u admin:secret http://localhost:8000/todos > /dev/null; do sleep 1; done'
+
+      - name: Run collection against the live API
+        id: newman
+        continue-on-error: true
+        run: |
+          npx newman run postman-repo/collections/todo-app.postman_collection.json \
+            -e postman-repo/environments/local.postman_environment.json \
+            --reporters cli,json \
+            --reporter-json-export newman-results.json
+
+      - name: Stop API
+        if: always()
+        run: kill -INT "$(cat /tmp/api_pid)" 2>/dev/null || true
+
+      - name: Summarize collection run
+        run: node postman-sync/summarize-newman.js --results newman-results.json --out newman-summary.md
+
+      - name: Build PR body
+        run: |
+          cat missing-scripts.md > pr-body.md
+          echo "" >> pr-body.md
+          cat newman-summary.md >> pr-body.md
+
       - name: Open PR in Postman collection repo
         uses: peter-evans/create-pull-request@v6
         with:
@@ -71,5 +104,11 @@ jobs:
           branch: sync/openapi-update
           commit-message: 'sync: update collection from OpenAPI spec'
           title: 'Sync Postman collection with API changes'
-          body-path: missing-scripts.md
+          body-path: pr-body.md
           add-paths: collections/todo-app.postman_collection.json
+
+      - name: Fail if the collection run failed
+        if: steps.newman.outcome == 'failure'
+        run: |
+          echo "The collection run against the live API failed — see the 'Run collection against the live API' step output and the opened PR."
+          exit 1
