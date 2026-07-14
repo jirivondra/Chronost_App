@@ -13,6 +13,14 @@ export default [
     },
   },
   {
+    files: ['postman-sync/**/*.js'],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+      },
+    },
+  },
+  {
     files: ['ApiResponse.ts'],
     languageOptions: {
       globals: jestPlugin.environments.globals.globals,
