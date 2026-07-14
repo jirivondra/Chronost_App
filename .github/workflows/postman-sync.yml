@@ -48,6 +48,16 @@ jobs:
       - name: Generate request skeletons from spec
         run: node postman-sync/generate.js --spec openapi.json --out postman-sync-tmp/generated
 
+      - name: Auto-wire new endpoints
+        run: |
+          node postman-sync/auto-wire.js \
+            --generated postman-sync-tmp/generated \
+            --scripts postman-repo/scripts \
+            --manifest postman-repo/sync-manifest.json \
+            --collection postman-repo/collections/todo-app.postman_collection.json \
+            --folder Todos \
+            --report auto-wired.md
+
       - name: Compose collection
         run: |
           node postman-sync/compose.js \
@@ -92,7 +102,9 @@ jobs:
 
       - name: Build PR body
         run: |
-          cat missing-scripts.md > pr-body.md
+          cat auto-wired.md > pr-body.md
+          echo "" >> pr-body.md
+          cat missing-scripts.md >> pr-body.md
           echo "" >> pr-body.md
           cat newman-summary.md >> pr-body.md
 
@@ -105,7 +117,10 @@ jobs:
           commit-message: 'sync: update collection from OpenAPI spec'
           title: 'Sync Postman collection with API changes'
           body-path: pr-body.md
-          add-paths: collections/todo-app.postman_collection.json
+          add-paths: |
+            collections/todo-app.postman_collection.json
+            sync-manifest.json
+            scripts/*.js
 
       - name: Fail if the collection run failed
         if: steps.newman.outcome == 'failure'

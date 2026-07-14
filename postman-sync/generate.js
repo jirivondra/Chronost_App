@@ -21,11 +21,41 @@ function collectRequests(items, out) {
   }
 }
 
+// OpenAPI path params are "{name}"; canonicalKey expects the ":name" convention used elsewhere.
+function specPathSegments(specPath) {
+  return specPath
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => (segment.startsWith('{') ? `:${segment.slice(1, -1)}` : segment))
+}
+
+function successStatus(operation) {
+  const code = Object.keys(operation.responses || {}).find(
+    (status) => !status.startsWith('4') && !status.startsWith('5')
+  )
+  return code ? Number(code) : null
+}
+
+// Maps each endpoint's canonical key to its declared success status code (e.g. 201 for Create,
+// 204 for Delete), read directly from the spec rather than guessed — this drives the minimal
+// test script auto-generated for brand-new, not-yet-wired-up endpoints.
+function successStatusByKey(spec) {
+  const byKey = {}
+  for (const [specPath, methods] of Object.entries(spec.paths || {})) {
+    for (const [method, operation] of Object.entries(methods)) {
+      const key = canonicalKey(method, specPathSegments(specPath))
+      byKey[key] = successStatus(operation)
+    }
+  }
+  return byKey
+}
+
 function main() {
   const argv = process.argv.slice(2)
   const specPath = argFor(argv, '--spec')
   const outDir = argFor(argv, '--out')
   const specData = fs.readFileSync(specPath, 'utf8')
+  const statusByKey = successStatusByKey(JSON.parse(specData))
 
   // Prefer the OpenAPI schema `example` (set via Pydantic model_config in api/main.py) over
   // generic type placeholders like "<string>", so a freshly wired-up request is directly usable.
@@ -50,7 +80,8 @@ function main() {
     fs.mkdirSync(outDir, { recursive: true })
     for (const request of requests) {
       const key = canonicalKey(request.request.method, request.request.url.path)
-      fs.writeFileSync(path.join(outDir, `${key}.json`), JSON.stringify(request, null, 2))
+      const skeleton = { ...request, _meta: { successStatus: statusByKey[key] ?? null } }
+      fs.writeFileSync(path.join(outDir, `${key}.json`), JSON.stringify(skeleton, null, 2))
     }
 
     console.log(`Generated ${requests.length} request skeleton(s) into ${outDir}`)

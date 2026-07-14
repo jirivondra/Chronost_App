@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { buildUrl } from './build-url.js'
 
 function argFor(argv, flag) {
   const index = argv.indexOf(flag)
@@ -23,19 +24,6 @@ function buildEvent(listen, scriptText) {
       requests: {},
     },
   }
-}
-
-// This collection addresses the host via literal variable placeholders baked into the path
-// segments (e.g. "{{todo_id}}"), not Postman's ":param" path-variable feature, and the host
-// array is a single "{{protocol}}{{host}}{{port}}" placeholder — not a real hostname. Only the
-// path *segments* are spec-derived; host/raw prefix always comes from the request being synced,
-// so the sync never depends on a "baseUrl" environment variable this collection doesn't define.
-function buildUrl(currentUrl, skeletonPathSegments) {
-  const path = skeletonPathSegments.map((segment) =>
-    segment.startsWith(':') ? `{{${segment.slice(1)}}}` : segment
-  )
-  const hostPrefix = currentUrl.host.join('')
-  return { raw: `${hostPrefix}/${path.join('/')}`, host: currentUrl.host, path }
 }
 
 async function loadScript(scriptsDir, key) {
