@@ -10,7 +10,12 @@
 // "string"), so leaving it enabled would silently send that placeholder; instead it's added
 // disabled, same convention as hand-maintained runtime-only params like `cursor` on Get Next
 // Page (see chronos_postman_colection's README, "Query Parameters Without Example Data").
-export function buildUrl(currentUrl, skeletonPathSegments, skeletonQuery = [], queryParamsWithExample = {}) {
+export function buildUrl(
+  currentUrl,
+  skeletonPathSegments,
+  skeletonQuery = [],
+  queryParamsWithExample = {}
+) {
   const path = skeletonPathSegments.map((segment) =>
     segment.startsWith(':') ? `{{${segment.slice(1)}}}` : segment
   )
