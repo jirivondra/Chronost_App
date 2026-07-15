@@ -191,7 +191,3 @@ All endpoints require authentication.
 | Manual    | Postman    | [chronos_postman_colection](https://github.com/jirivondra/chronos_postman_colection)   |
 
 Code coverage for the API is measured with [Codecov](https://app.codecov.io/github/jirivondra/chronost_app), collected by the `API Coverage` workflow (`.github/workflows/coverage.yml`) and configured via `codecov.yml`.
-
-## Contributing
-
-All code, comments, commit messages, and documentation in this repository must be written in English.

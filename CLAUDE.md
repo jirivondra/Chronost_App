@@ -35,6 +35,10 @@ task format-check
 task run-test
 ```
 
+## Before pushing
+
+Always run `task lint` and `task format-check` (or `task fix` to auto-fix both) before pushing commits.
+
 ## Architecture
 
 - `api/main.py` — FastAPI TODO REST API.
