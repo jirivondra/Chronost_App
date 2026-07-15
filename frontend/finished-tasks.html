@@ -473,6 +473,37 @@
       </main>
     </div>
 
+    <!-- Delete Task Dialog -->
+    <div
+      id="delete-dialog"
+      class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+    >
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="delete-dialog-backdrop"></div>
+      <div class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-sm w-full">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="material-symbols-outlined text-error text-2xl">warning</span>
+          <h3 class="font-headline font-bold text-xl text-on-surface">Delete Task</h3>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+          Are you sure you want to delete this task? This action cannot be undone.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            id="delete-dialog-cancel"
+            class="px-6 py-3 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors rounded-xl"
+          >
+            Cancel
+          </button>
+          <button
+            id="delete-dialog-confirm"
+            class="px-6 py-3 bg-error text-on-error font-bold text-sm rounded-xl shadow-lg shadow-error/20 active:scale-95 transition-transform"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
     <button
       id="back-to-top"
       onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
@@ -487,6 +518,28 @@
       if (!auth) window.location.href = 'login.html'
 
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
+
+      let pendingDeleteId = null
+      const deleteDialog = document.getElementById('delete-dialog')
+
+      function openDeleteDialog(id) {
+        pendingDeleteId = id
+        deleteDialog.classList.remove('hidden')
+      }
+
+      function closeDeleteDialog() {
+        pendingDeleteId = null
+        deleteDialog.classList.add('hidden')
+      }
+
+      document.getElementById('delete-dialog-cancel').addEventListener('click', closeDeleteDialog)
+      document.getElementById('delete-dialog-backdrop').addEventListener('click', closeDeleteDialog)
+      document.getElementById('delete-dialog-confirm').addEventListener('click', async () => {
+        if (pendingDeleteId == null) return
+        await fetch(`${API}/todos/${pendingDeleteId}`, { method: 'DELETE', headers })
+        closeDeleteDialog()
+        loadTodos()
+      })
 
       function renderTodo(todo) {
         const div = document.createElement('div')
@@ -561,9 +614,8 @@
           loadTodos()
         })
 
-        deleteBtn.addEventListener('click', async () => {
-          await fetch(`${API}/todos/${todo.id}`, { method: 'DELETE', headers })
-          loadTodos()
+        deleteBtn.addEventListener('click', () => {
+          openDeleteDialog(todo.id)
         })
 
         return div
