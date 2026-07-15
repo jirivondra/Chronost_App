@@ -57,7 +57,12 @@ function walkAndSync(items, reverseManifest, generatedDir, scriptModules, warnin
 
     const skeleton = JSON.parse(fs.readFileSync(skeletonPath, 'utf8'))
     item.request.method = skeleton.request.method
-    item.request.url = buildUrl(item.request.url, skeleton.request.url.path)
+    item.request.url = buildUrl(
+      item.request.url,
+      skeleton.request.url.path,
+      skeleton.request.url.query,
+      skeleton._meta?.queryParamsWithExample
+    )
 
     const events = []
     const scriptModule = scriptModules.get(key)

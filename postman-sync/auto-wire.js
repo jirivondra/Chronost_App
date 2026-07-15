@@ -95,7 +95,12 @@ function main() {
         method: skeleton.request.method,
         header: skeleton.request.header,
         body: skeleton.request.body,
-        url: buildUrl(referenceUrl, skeleton.request.url.path),
+        url: buildUrl(
+          referenceUrl,
+          skeleton.request.url.path,
+          skeleton.request.url.query,
+          skeleton._meta?.queryParamsWithExample
+        ),
         description: skeleton.request.description,
       },
       response: [],
