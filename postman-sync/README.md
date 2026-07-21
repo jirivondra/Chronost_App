@@ -19,10 +19,14 @@ sequenceDiagram
     CI->>Repo: Checkout (scripts/, sync-manifest.json, collections/*.json)
     CI->>CI: compose.js (skeletons + scripts + manifest -> new collection.json)
     CI->>CI: check-missing-scripts.js -> checklist
-    CI->>Repo: Open PR (branch sync/openapi-update)
-    Repo-->>Rev: PR with updated collection + checklist
+    CI->>CI: append source commit link to checklist
+    CI->>Repo: Open PR (branch sync/openapi-update, body links back to the commit)
+    CI->>App: Comment on the commit with a link to the new sync PR
+    Repo-->>Rev: PR with updated collection + checklist + source link
     Rev->>Repo: Review & merge (or add missing scripts/manifest entries first)
 ```
+
+The sync PR and its triggering commit link to each other, so you can jump from one to the other: the PR body ends with a `Source: <commit>` line, and the commit gets a comment with the PR URL as soon as it's opened.
 
 ## Files
 

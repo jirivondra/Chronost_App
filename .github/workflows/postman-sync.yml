@@ -11,6 +11,8 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Chronost_App
@@ -63,7 +65,16 @@ jobs:
             --current postman-repo/collections/todo-app.postman_collection.json \
             --out missing-scripts.md
 
+      - name: Add source commit link to PR body
+        run: |
+          {
+            echo ""
+            echo "---"
+            echo "Source: [\`${GITHUB_SHA::7}\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) in Chronost_App"
+          } >> missing-scripts.md
+
       - name: Open PR in Postman collection repo
+        id: open-pr
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.POSTMAN_REPO_TOKEN }}
@@ -73,3 +84,11 @@ jobs:
           title: 'Sync Postman collection with API changes'
           body-path: missing-scripts.md
           add-paths: collections/todo-app.postman_collection.json
+
+      - name: Link the sync PR back to the triggering commit
+        if: steps.open-pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" \
+            -f body="Postman collection sync opened: ${{ steps.open-pr.outputs.pull-request-url }}"
