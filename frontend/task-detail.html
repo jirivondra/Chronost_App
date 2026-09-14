@@ -398,7 +398,7 @@
         border: none;
         outline: none;
         font-size: 0.875rem;
-        color: #31323b;
+        color: rgb(var(--color-on-surface) / 1);
         transition:
           width 0.3s ease,
           opacity 0.3s ease,
@@ -412,9 +412,10 @@
         pointer-events: all;
       }
       .search-wrap.open {
-        background: #f5f2fb;
+        background: rgb(var(--color-surface-container-low) / 1);
         border-radius: 9999px;
         padding: 0.4rem 0.75rem;
+        gap: 0.25rem;
       }
       .search-wrap:not(.open) {
         gap: 0;
@@ -524,6 +525,13 @@
                 <span class="material-symbols-outlined text-[22px]">search</span>
               </button>
               <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+              <button
+                id="search-close-btn"
+                class="hidden items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                data-tip="Close"
+              >
+                <span class="material-symbols-outlined text-[18px]">close</span>
+              </button>
             </div>
             <div id="theme-toggle" class="flex items-center">
               <button
@@ -567,7 +575,7 @@
                 <button
                   type="button"
                   id="theme-toggle-close"
-                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-error transition-colors"
+                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-primary transition-colors"
                   data-tip="Close"
                 >
                   <span class="material-symbols-outlined text-[18px]">close</span>
@@ -582,7 +590,7 @@
             </button>
             <a
               href="logout.html"
-              class="flex items-center justify-center text-slate-500 hover:text-error transition-colors"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
               data-tip="Log out"
             >
               <span class="material-symbols-outlined text-[22px]">logout</span>
@@ -1006,20 +1014,37 @@
         const wrap = document.getElementById('search-wrap')
         const btn = document.getElementById('search-btn')
         const input = document.getElementById('search-input')
+        const closeBtn = document.getElementById('search-close-btn')
+
+        function openSearch() {
+          wrap.classList.add('open')
+          closeBtn.classList.remove('hidden')
+          closeBtn.classList.add('flex')
+          input.focus()
+          btn.removeAttribute('data-tip')
+        }
+
+        function closeSearch() {
+          wrap.classList.remove('open')
+          closeBtn.classList.add('hidden')
+          closeBtn.classList.remove('flex')
+          input.value = ''
+          btn.setAttribute('data-tip', 'Search')
+        }
+
         btn.addEventListener('click', () => {
-          wrap.classList.toggle('open')
           if (wrap.classList.contains('open')) {
-            input.focus()
-            btn.removeAttribute('data-tip')
+            closeSearch()
           } else {
-            input.value = ''
-            btn.setAttribute('data-tip', 'Search')
+            openSearch()
           }
         })
+
+        closeBtn.addEventListener('click', closeSearch)
+
         input.addEventListener('blur', () => {
           if (!input.value) {
-            wrap.classList.remove('open')
-            btn.setAttribute('data-tip', 'Search')
+            closeSearch()
           }
         })
       })()
