@@ -54,6 +54,7 @@ jobs:
         run: |
           echo "BASE_URL=http://localhost:8000" > mocha-tests/.env
           echo "SOAP_URL=http://localhost:8001" >> mocha-tests/.env
+          echo "WIREMOCK_URL=http://localhost:8080" >> mocha-tests/.env
           echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> mocha-tests/.env
           echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> mocha-tests/.env
 
