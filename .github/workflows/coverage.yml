@@ -37,6 +37,10 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Configure GitHub Packages auth
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> .npmrc
+        working-directory: mocha-tests
+
       - name: Install test dependencies
         run: npm ci
         working-directory: mocha-tests
@@ -50,6 +54,7 @@ jobs:
         run: |
           echo "BASE_URL=http://localhost:8000" > mocha-tests/.env
           echo "SOAP_URL=http://localhost:8001" >> mocha-tests/.env
+          echo "WIREMOCK_URL=http://localhost:8080" >> mocha-tests/.env
           echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> mocha-tests/.env
           echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> mocha-tests/.env
 
@@ -75,6 +80,13 @@ jobs:
           timeout 30 bash -c \
             'until curl -sf http://localhost:8001/?wsdl > /dev/null; do sleep 1; done'
 
+      - name: Start WireMock
+        run: |
+          docker compose up -d wiremock
+          timeout 30 bash -c \
+            'until curl -sf http://localhost:8080/__admin/mappings > /dev/null; do sleep 1; done'
+        working-directory: mocha-tests
+
       - name: Run Mocha tests
         run: npm test
         working-directory: mocha-tests
@@ -85,6 +97,11 @@ jobs:
           kill -INT "$(cat /tmp/rest_pid)" 2>/dev/null || true
           kill -INT "$(cat /tmp/soap_pid)" 2>/dev/null || true
           sleep 3
+
+      - name: Stop WireMock
+        if: always()
+        run: docker compose down
+        working-directory: mocha-tests
 
       - name: Generate coverage report
         run: |
