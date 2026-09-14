@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Task Detail - Chronos</title>
+    <title>Calendar - Chronos</title>
     <link rel="icon" type="image/png" href="assets/image.png" />
     <script>
       if (localStorage.getItem('sidebarCollapsed') === 'true')
@@ -302,11 +302,6 @@
       .search-wrap:not(.open) {
         gap: 0;
       }
-      .readonly-field {
-        cursor: default;
-        user-select: text;
-        pointer-events: none;
-      }
     </style>
   </head>
   <body class="bg-background text-on-background min-h-screen">
@@ -345,7 +340,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
           </a>
           <a
-            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
             href="open-tasks.html"
             data-tip="Open Tasks"
           >
@@ -361,7 +356,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
           </a>
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
             href="calendar.html"
             data-tip="Calendar"
           >
@@ -453,155 +448,154 @@
         </div>
       </header>
       <!-- Main Content -->
-      <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
-        <div class="mb-10">
-          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-            <a
-              id="breadcrumb-back"
-              class="flex items-center hover:text-primary transition-colors"
-              href="dashboard.html"
-              aria-label="Dashboard"
-            >
-              <span class="material-symbols-outlined text-[18px]">home</span>
-            </a>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-on-surface">Task Detail</span>
-          </nav>
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h1
-                class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
+      <main class="flex-1 p-8 md:p-12 max-w-7xl mx-auto w-full">
+        <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+              <a
+                class="flex items-center hover:text-primary transition-colors"
+                href="dashboard.html"
+                aria-label="Dashboard"
               >
-                Task Detail
-              </h1>
-              <p class="text-on-surface-variant mt-2 text-lg">View the details of this task.</p>
-            </div>
-            <span
-              id="status-badge"
-              class="hidden mt-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
-            ></span>
+                <span class="material-symbols-outlined text-[18px]">home</span>
+              </a>
+              <span class="material-symbols-outlined text-xs">chevron_right</span>
+              <span class="text-on-surface">Calendar</span>
+            </nav>
+            <h1
+              class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
+            >
+              Calendar
+            </h1>
+            <p class="text-on-surface-variant mt-2 text-lg">
+              Every task, laid out by the day it's due.
+            </p>
           </div>
+          <a
+            href="edit-task.html?from=calendar"
+            class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          >
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            New Task
+          </a>
         </div>
-        <!-- Detail Card -->
-        <div
-          class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-12 shadow-sm border border-outline-variant/5"
-        >
-          <div class="space-y-10">
-            <!-- Title -->
-            <div class="space-y-3">
-              <p class="text-xs font-bold uppercase tracking-widest text-primary ml-1">
-                Task Title
-              </p>
-              <div
-                class="w-full bg-surface-container-low rounded-2xl p-6 text-xl font-semibold text-on-surface"
-                id="task-title"
-              ></div>
-            </div>
-            <!-- Description -->
-            <div class="space-y-3" id="desc-section">
-              <p class="text-xs font-bold uppercase tracking-widest text-primary ml-1">
-                Description
-              </p>
-              <div
-                class="w-full bg-surface-container-low rounded-2xl p-6 text-base text-on-surface-variant leading-relaxed min-h-[9rem] whitespace-pre-wrap"
-                id="task-desc"
-              ></div>
-            </div>
-            <!-- Status row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-              <div class="flex items-center justify-between p-6 bg-surface-container rounded-2xl">
-                <div class="flex flex-col">
-                  <span class="font-headline font-bold text-on-surface">Task Completed</span>
-                  <span class="text-xs text-on-surface-variant">Status of this objective</span>
-                </div>
-                <div id="completed-indicator" class="flex items-center gap-2 text-sm font-semibold">
-                  <span class="material-symbols-outlined text-[20px]">radio_button_unchecked</span>
-                  <span>Open</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-4 p-6 bg-tertiary-container/30 rounded-2xl">
-                <div
-                  class="bg-tertiary text-on-tertiary h-12 w-12 rounded-xl flex items-center justify-center"
-                >
-                  <span class="material-symbols-outlined">event</span>
-                </div>
-                <div>
-                  <span class="block text-xs font-bold text-tertiary-dim uppercase tracking-wider"
-                    >Due Date</span
-                  >
-                  <span id="task-due-date" class="block font-headline font-bold text-on-surface"
-                    >No due date</span
-                  >
-                </div>
-              </div>
-            </div>
-            <!-- Action buttons -->
-            <div
-              class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 border-t border-outline-variant/10"
-            >
+
+        <div class="bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
               <button
-                id="close-btn"
-                class="w-full sm:w-auto px-10 py-4 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors"
-                type="button"
+                id="cal-prev-btn"
+                class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                data-tip="Previous month"
               >
-                Close
+                <span class="material-symbols-outlined text-[22px]">chevron_left</span>
               </button>
               <button
-                id="edit-btn"
-                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm shadow-xl shadow-primary/20 active:scale-95 transition-transform flex items-center gap-2 justify-center"
-                type="button"
+                id="cal-next-btn"
+                class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                data-tip="Next month"
               >
-                <span class="material-symbols-outlined text-[18px]">edit</span>
-                Edit Task
+                <span class="material-symbols-outlined text-[22px]">chevron_right</span>
+              </button>
+              <button
+                id="cal-today-btn"
+                class="ml-2 px-4 py-2 rounded-full text-sm font-bold text-primary hover:bg-surface-container-high transition-colors"
+              >
+                Today
               </button>
             </div>
-          </div>
-        </div>
-        <!-- Contextual Metadata -->
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-surface-variant p-8 rounded-[2rem] relative overflow-hidden group">
-            <div class="relative z-10">
-              <span class="material-symbols-outlined text-primary text-4xl mb-4">history</span>
-              <h4 class="font-headline font-bold text-on-surface">Last Edit</h4>
-              <p class="text-on-surface-variant text-sm mt-1">2 hours ago by Alex Rivers</p>
-            </div>
-            <div
-              class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
+            <h2
+              id="cal-month-label"
+              class="font-headline text-xl md:text-2xl font-black text-on-surface"
             >
-              <span class="material-symbols-outlined text-9xl">edit_note</span>
+              &nbsp;
+            </h2>
+            <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-error"></span>
+                Overdue
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                Upcoming
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span>
+                Done
+              </span>
             </div>
           </div>
-          <div class="md:col-span-2 bg-surface-container-low p-8 rounded-[2rem]">
-            <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
-            <div class="flex flex-col gap-6">
-              <div class="flex gap-4">
-                <div
-                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
-                >
-                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
-                  <span class="text-lg font-black text-primary leading-tight">24</span>
-                </div>
-                <div>
-                  <h5 class="text-sm font-bold text-on-surface">Creative Sync</h5>
-                  <p class="text-xs text-on-surface-variant">10:30 AM — Zoom</p>
-                </div>
-              </div>
-              <div class="flex gap-4">
-                <div
-                  class="w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm"
-                >
-                  <span class="text-[10px] font-bold text-on-surface-variant uppercase">Oct</span>
-                  <span class="text-lg font-black text-primary leading-tight">25</span>
-                </div>
-                <div>
-                  <h5 class="text-sm font-bold text-on-surface">Sprint Retrospective</h5>
-                  <p class="text-xs text-on-surface-variant">02:00 PM — Office</p>
-                </div>
-              </div>
-            </div>
+
+          <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2">
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Mon</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Tue</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Wed</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Thu</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Fri</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sat</span>
+            <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sun</span>
           </div>
+          <div id="cal-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
         </div>
       </main>
+
+      <!-- Day Detail Panel -->
+      <div id="day-panel" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="day-panel-backdrop"></div>
+        <div
+          class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-lg w-full max-h-[80vh] flex flex-col"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <h3 id="day-panel-title" class="font-headline font-bold text-xl text-on-surface"></h3>
+            <button
+              id="day-panel-close"
+              class="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
+            >
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+          <div id="day-panel-list" class="flex flex-col gap-3 overflow-y-auto"></div>
+          <a
+            id="day-panel-add"
+            href="#"
+            class="mt-6 flex items-center justify-center gap-2 px-6 py-3 bg-surface-container text-primary font-bold text-sm rounded-xl hover:bg-surface-container-high transition-colors"
+          >
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            Add task for this day
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Task Dialog -->
+    <div
+      id="delete-dialog"
+      class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+    >
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="delete-dialog-backdrop"></div>
+      <div class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-sm w-full">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="material-symbols-outlined text-error text-2xl">warning</span>
+          <h3 class="font-headline font-bold text-xl text-on-surface">Delete Task</h3>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+          Are you sure you want to delete this task? You can restore it later from Archive.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            id="delete-dialog-cancel"
+            class="px-6 py-3 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors rounded-xl"
+          >
+            Cancel
+          </button>
+          <button
+            id="delete-dialog-confirm"
+            class="px-6 py-3 bg-error text-on-error font-bold text-sm rounded-xl shadow-lg shadow-error/20 active:scale-95 transition-transform"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
 
     <button
@@ -612,111 +606,310 @@
       <span class="material-symbols-outlined">arrow_upward</span>
     </button>
 
-    <!-- Mobile Navigation -->
-    <nav
-      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fbf8fe] border-t border-outline-variant/10 flex justify-around items-center h-20 px-4 z-50"
-    >
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
-      </a>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">check_circle</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
-      </a>
-      <button
-        class="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg -mt-10 border-4 border-background"
-      >
-        <span class="material-symbols-outlined">add</span>
-      </button>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">calendar_today</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
-      </a>
-      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
-        <span class="material-symbols-outlined">settings</span>
-        <span class="text-[10px] font-bold uppercase tracking-tighter">Config</span>
-      </a>
-    </nav>
-
     <script>
       const API = 'http://localhost:8000'
       const auth = sessionStorage.getItem('auth')
       if (!auth) window.location.href = 'login.html'
 
-      const headers = { Authorization: `Basic ${auth}` }
-      const params = new URLSearchParams(window.location.search)
-      const todoId = params.get('id')
-      const fromParam = params.get('from')
+      const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
 
-      const backHref = fromParam === 'tasks' ? 'tasks.html' : 'dashboard.html'
-      document.getElementById('breadcrumb-back').href = backHref
+      let pendingDeleteId = null
+      const deleteDialog = document.getElementById('delete-dialog')
 
-      if (!todoId) {
-        window.location.href = backHref
+      function openDeleteDialog(id) {
+        pendingDeleteId = id
+        deleteDialog.classList.remove('hidden')
       }
 
-      fetch(`${API}/todos/${todoId}`, { headers })
-        .then((r) => {
-          if (r.status === 401) window.location.href = 'login.html'
-          return r.json()
+      function closeDeleteDialog() {
+        pendingDeleteId = null
+        deleteDialog.classList.add('hidden')
+      }
+
+      document.getElementById('delete-dialog-cancel').addEventListener('click', closeDeleteDialog)
+      document.getElementById('delete-dialog-backdrop').addEventListener('click', closeDeleteDialog)
+      document.getElementById('delete-dialog-confirm').addEventListener('click', async () => {
+        if (pendingDeleteId == null) return
+        await fetch(`${API}/todos/${pendingDeleteId}/archive`, { method: 'POST', headers })
+        closeDeleteDialog()
+        closeDayPanel()
+        loadTodos()
+      })
+
+      const today = new Date()
+      let viewYear = today.getFullYear()
+      let viewMonth = today.getMonth()
+      let allTodos = []
+
+      const MONTH_NAMES = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
+
+      function toDateKey(d) {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+      }
+
+      const todayKey = toDateKey(today)
+
+      function tasksByDate() {
+        const map = {}
+        allTodos.forEach((t) => {
+          if (!t.due_date) return
+          if (!map[t.due_date]) map[t.due_date] = []
+          map[t.due_date].push(t)
         })
-        .then((todo) => {
-          document.getElementById('task-title').textContent = todo.title
+        return map
+      }
 
-          const descSection = document.getElementById('desc-section')
-          const descEl = document.getElementById('task-desc')
-          if (todo.description) {
-            descEl.textContent = todo.description
-          } else {
-            descSection.classList.add('hidden')
+      function taskDotClass(todo) {
+        if (todo.completed) return 'bg-on-surface-variant/40'
+        if (todo.due_date < todayKey) return 'bg-error'
+        return 'bg-primary'
+      }
+
+      function renderCalendar() {
+        const monthLabel = document.getElementById('cal-month-label')
+        const grid = document.getElementById('cal-grid')
+        monthLabel.textContent = `${MONTH_NAMES[viewMonth]} ${viewYear}`
+        grid.innerHTML = ''
+
+        const byDate = tasksByDate()
+        const startOffset = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+        const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate()
+
+        const cells = []
+        for (let i = startOffset - 1; i >= 0; i--) {
+          cells.push({ day: daysInPrevMonth - i, muted: true, month: viewMonth - 1 })
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          cells.push({ day: d, muted: false, month: viewMonth })
+        }
+        let trailing = 1
+        while (cells.length % 7 !== 0) {
+          cells.push({ day: trailing++, muted: true, month: viewMonth + 1 })
+        }
+
+        cells.forEach(({ day, muted, month }) => {
+          let cellYear = viewYear
+          let cellMonth = month
+          if (cellMonth < 0) {
+            cellMonth = 11
+            cellYear -= 1
           }
-
-          const dueDateEl = document.getElementById('task-due-date')
-          if (todo.due_date) {
-            const [y, m, d] = todo.due_date.split('-').map(Number)
-            dueDateEl.textContent = new Date(y, m - 1, d).toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })
-          } else {
-            dueDateEl.textContent = 'No due date'
+          if (cellMonth > 11) {
+            cellMonth = 0
+            cellYear += 1
           }
+          const dateKey = toDateKey(new Date(cellYear, cellMonth, day))
+          const isToday = dateKey === todayKey
+          const dayTasks = byDate[dateKey] || []
 
-          const indicator = document.getElementById('completed-indicator')
-          if (todo.completed) {
-            indicator.innerHTML = `
-              <span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">check_circle</span>
-              <span class="text-primary">Completed</span>`
+          const cell = document.createElement('button')
+          cell.type = 'button'
+          cell.className = muted
+            ? 'min-h-[92px] md:min-h-[120px] p-2 rounded-xl text-left flex flex-col gap-1 bg-surface-container-low/40 text-on-surface-variant/30 transition-colors'
+            : 'min-h-[92px] md:min-h-[120px] p-2 rounded-xl text-left flex flex-col gap-1 bg-surface-container-low hover:bg-surface-container-high transition-colors'
 
-            const badge = document.getElementById('status-badge')
-            badge.textContent = 'Completed'
-            badge.classList.remove('hidden')
-            badge.classList.add('bg-primary/10', 'text-primary')
+          const dayNum = document.createElement('span')
+          dayNum.className = isToday
+            ? 'w-6 h-6 flex items-center justify-center rounded-full bg-primary text-on-primary text-xs font-bold'
+            : muted
+              ? 'text-xs font-semibold'
+              : 'text-xs font-semibold text-on-surface'
+          dayNum.textContent = day
+          cell.appendChild(dayNum)
 
-            document.getElementById('edit-btn').classList.add('hidden')
-          } else {
-            const badge = document.getElementById('status-badge')
-            badge.textContent = 'Open'
-            badge.classList.remove('hidden')
-            badge.classList.add('bg-surface-container', 'text-on-surface-variant')
+          const chipsWrap = document.createElement('div')
+          chipsWrap.className = 'flex flex-col gap-1 mt-1'
+          dayTasks.slice(0, 3).forEach((t) => {
+            const chip = document.createElement('div')
+            chip.className = 'flex items-center gap-1 text-[11px] font-semibold min-w-0'
+
+            const dot = document.createElement('span')
+            dot.className = `w-1.5 h-1.5 rounded-full flex-shrink-0 ${taskDotClass(t)}`
+
+            const label = document.createElement('span')
+            label.className = `truncate ${t.completed ? 'line-through text-on-surface-variant/50' : 'text-on-surface-variant'}`
+            label.textContent = t.title
+
+            chip.appendChild(dot)
+            chip.appendChild(label)
+            chipsWrap.appendChild(chip)
+          })
+          if (dayTasks.length > 3) {
+            const more = document.createElement('span')
+            more.className = 'text-[11px] font-bold text-on-surface-variant/50'
+            more.textContent = `+${dayTasks.length - 3} more`
+            chipsWrap.appendChild(more)
           }
+          cell.appendChild(chipsWrap)
+
+          cell.addEventListener('click', () => openDayPanel(dateKey))
+          grid.appendChild(cell)
         })
-        .catch(() => {
-          window.location.href = backHref
+      }
+
+      document.getElementById('cal-prev-btn').addEventListener('click', () => {
+        viewMonth -= 1
+        if (viewMonth < 0) {
+          viewMonth = 11
+          viewYear -= 1
+        }
+        renderCalendar()
+      })
+
+      document.getElementById('cal-next-btn').addEventListener('click', () => {
+        viewMonth += 1
+        if (viewMonth > 11) {
+          viewMonth = 0
+          viewYear += 1
+        }
+        renderCalendar()
+      })
+
+      document.getElementById('cal-today-btn').addEventListener('click', () => {
+        viewYear = today.getFullYear()
+        viewMonth = today.getMonth()
+        renderCalendar()
+      })
+
+      const dayPanel = document.getElementById('day-panel')
+      const dayPanelTitle = document.getElementById('day-panel-title')
+      const dayPanelList = document.getElementById('day-panel-list')
+      const dayPanelAdd = document.getElementById('day-panel-add')
+
+      function formatDayLabel(dateKey) {
+        const [y, m, d] = dateKey.split('-').map(Number)
+        return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         })
+      }
+
+      let openDayKey = null
+
+      function openDayPanel(dateKey) {
+        openDayKey = dateKey
+        dayPanelTitle.textContent = formatDayLabel(dateKey)
+        dayPanelAdd.href = `edit-task.html?from=calendar&due_date=${dateKey}`
+        renderDayPanelList(tasksByDate()[dateKey] || [])
+        dayPanel.classList.remove('hidden')
+      }
+
+      function closeDayPanel() {
+        openDayKey = null
+        dayPanel.classList.add('hidden')
+      }
+
+      document.getElementById('day-panel-close').addEventListener('click', closeDayPanel)
+      document.getElementById('day-panel-backdrop').addEventListener('click', closeDayPanel)
+
+      function renderDayPanelList(dayTasks) {
+        dayPanelList.innerHTML = ''
+        if (dayTasks.length === 0) {
+          dayPanelList.innerHTML =
+            '<p class="text-on-surface-variant text-sm italic opacity-50">No tasks due this day.</p>'
+          return
+        }
+        dayTasks.forEach((todo) => dayPanelList.appendChild(renderDayTask(todo)))
+      }
+
+      function renderDayTask(todo) {
+        const div = document.createElement('div')
+        div.className = 'group flex items-start gap-3 bg-surface-container-low p-4 rounded-xl'
+
+        const checkbox = document.createElement('input')
+        checkbox.type = 'checkbox'
+        checkbox.checked = todo.completed
+        checkbox.className =
+          'mt-1 w-5 h-5 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 cursor-pointer flex-shrink-0'
+        checkbox.addEventListener('change', async (e) => {
+          await fetch(`${API}/todos/${todo.id}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify({ completed: e.target.checked }),
+          })
+          loadTodos()
+        })
+
+        const content = document.createElement('div')
+        content.className = 'flex-1 min-w-0'
+
+        const title = document.createElement('p')
+        title.className = `font-headline text-sm font-bold ${todo.completed ? 'line-through text-on-surface-variant' : 'text-on-surface'}`
+        title.textContent = todo.title
+        content.appendChild(title)
+
+        if (todo.description) {
+          const p = document.createElement('p')
+          p.className = 'text-on-surface-variant text-xs mt-1'
+          p.textContent = todo.description
+          content.appendChild(p)
+        }
+
+        const actions = document.createElement('div')
+        actions.className =
+          'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'
+
+        const infoBtn = document.createElement('button')
+        infoBtn.className = 'p-1.5 text-on-surface-variant hover:text-primary transition-colors'
+        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">info</span>'
+        infoBtn.addEventListener('click', () => {
+          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
+        })
+        actions.appendChild(infoBtn)
+
+        const deleteBtn = document.createElement('button')
+        deleteBtn.className = 'p-1.5 text-on-surface-variant hover:text-error transition-colors'
+        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">delete</span>'
+        deleteBtn.addEventListener('click', () => openDeleteDialog(todo.id))
+        actions.appendChild(deleteBtn)
+
+        div.appendChild(checkbox)
+        div.appendChild(content)
+        div.appendChild(actions)
+
+        return div
+      }
+
+      async function loadTodos() {
+        let res
+        try {
+          res = await fetch(`${API}/todos`, { headers })
+        } catch {
+          document.getElementById('cal-grid').innerHTML =
+            '<p class="col-span-7 text-error text-sm p-4">Cannot connect to API. Make sure the backend is running.</p>'
+          return
+        }
+        if (res.status === 401) {
+          window.location.href = 'login.html'
+          return
+        }
+        allTodos = await res.json()
+        renderCalendar()
+        if (openDayKey) {
+          renderDayPanelList(tasksByDate()[openDayKey] || [])
+        }
+      }
+
+      loadTodos()
 
       document.getElementById('back-btn').addEventListener('click', () => {
-        window.location.href = backHref
-      })
-
-      document.getElementById('close-btn').addEventListener('click', () => {
-        window.location.href = backHref
-      })
-
-      document.getElementById('edit-btn').addEventListener('click', () => {
-        window.location.href = `edit-task.html?id=${todoId}&from=dashboard`
+        window.location.href = 'dashboard.html'
       })
 
       // App version
