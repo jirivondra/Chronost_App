@@ -848,8 +848,12 @@
         const diffDays = Math.round((new Date(dateKey) - new Date(todayKey)) / 86400000)
         if (diffDays === 0) return 'Today'
         if (diffDays === 1) return 'Tomorrow'
-        const [y, m, d] = dateKey.split('-').map(Number)
-        return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long' })
+        if (diffDays > 1) {
+          const [y, m, d] = dateKey.split('-').map(Number)
+          return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long' })
+        }
+        const daysOverdue = -diffDays
+        return daysOverdue === 1 ? 'Overdue by 1 day' : `Overdue by ${daysOverdue} days`
       }
 
       function renderUpcoming() {
@@ -857,10 +861,7 @@
         list.innerHTML = ''
 
         const upcoming = allTodos
-          .filter(
-            (t) =>
-              !t.completed && t.due_date && t.due_date >= todayKey && t.due_date <= weekAheadKey
-          )
+          .filter((t) => !t.completed && t.due_date && t.due_date <= weekAheadKey)
           .sort((a, b) => (a.due_date < b.due_date ? -1 : a.due_date > b.due_date ? 1 : 0))
 
         if (upcoming.length === 0) {
@@ -871,25 +872,25 @@
 
         upcoming.forEach((t) => {
           const [, m, d] = t.due_date.split('-').map(Number)
+          const isOverdue = t.due_date < todayKey
 
           const row = document.createElement('button')
           row.type = 'button'
           row.className = 'flex gap-4 text-left w-full hover:opacity-80 transition-opacity'
 
           const badge = document.createElement('div')
-          badge.className =
-            'w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
-          badge.innerHTML = `<span class="text-[10px] font-bold text-on-surface-variant uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-primary leading-tight">${d}</span>`
+          badge.className = `w-12 h-12 rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0 ${isOverdue ? 'bg-error-container' : 'bg-white'}`
+          badge.innerHTML = `<span class="text-[10px] font-bold uppercase ${isOverdue ? 'text-on-error-container' : 'text-on-surface-variant'}">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black leading-tight ${isOverdue ? 'text-on-error-container' : 'text-primary'}">${d}</span>`
 
           const info = document.createElement('div')
           info.className = 'min-w-0'
 
           const title = document.createElement('h5')
-          title.className = 'text-sm font-bold text-on-surface truncate'
+          title.className = `text-sm font-bold truncate ${isOverdue ? 'text-error' : 'text-on-surface'}`
           title.textContent = t.title
 
           const sub = document.createElement('p')
-          sub.className = 'text-xs text-on-surface-variant'
+          sub.className = `text-xs ${isOverdue ? 'text-error font-semibold' : 'text-on-surface-variant'}`
           sub.textContent = relativeDayLabel(t.due_date)
 
           info.appendChild(title)
