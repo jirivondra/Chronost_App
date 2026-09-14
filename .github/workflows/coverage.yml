@@ -37,6 +37,10 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Configure GitHub Packages auth
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> .npmrc
+        working-directory: mocha-tests
+
       - name: Install test dependencies
         run: npm ci
         working-directory: mocha-tests
