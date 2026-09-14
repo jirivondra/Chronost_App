@@ -363,14 +363,6 @@
             <span class="material-symbols-outlined flex-shrink-0">calendar_today</span>
             <span class="sidebar-label font-headline text-sm font-semibold">Calendar</span>
           </a>
-          <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
-            href="archive.html"
-            data-tip="Archive"
-          >
-            <span class="material-symbols-outlined flex-shrink-0">inventory_2</span>
-            <span class="sidebar-label font-headline text-sm font-semibold">Archive</span>
-          </a>
         </nav>
         <div class="mt-auto flex flex-col gap-4">
           <div class="sidebar-label h-px bg-outline-variant/15 mx-2"></div>
@@ -485,7 +477,7 @@
           <h3 class="font-headline font-bold text-xl text-on-surface">Delete Task</h3>
         </div>
         <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
-          Are you sure you want to delete this task? You can restore it later from Archive.
+          Are you sure you want to delete this task? This action cannot be undone.
         </p>
         <div class="flex gap-3 justify-end">
           <button
@@ -536,7 +528,7 @@
       document.getElementById('delete-dialog-backdrop').addEventListener('click', closeDeleteDialog)
       document.getElementById('delete-dialog-confirm').addEventListener('click', async () => {
         if (pendingDeleteId == null) return
-        await fetch(`${API}/todos/${pendingDeleteId}/archive`, { method: 'POST', headers })
+        await fetch(`${API}/todos/${pendingDeleteId}`, { method: 'DELETE', headers })
         closeDeleteDialog()
         loadTodos()
       })

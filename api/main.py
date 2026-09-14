@@ -5,7 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from datetime import date, datetime, timezone
+from datetime import date
 import uvicorn
 import secrets
 import os
@@ -114,15 +114,14 @@ def get_openapi_schema(_=Depends(authenticate)):
 
 @app.get("/todos", summary="Get all TODOs")
 def get_todos(_=Depends(authenticate)):
-    active = [t for t in load_db().values() if not t.get("archived", False)]
-    return sorted(active, key=lambda t: t["id"], reverse=True)
+    return sorted(load_db().values(), key=lambda t: t["id"], reverse=True)
 
 
 @app.post("/todos", status_code=201, summary="Create a TODO")
 def create_todo(todo: TodoCreate, _=Depends(authenticate)):
     todos = load_db()
     new_id = next_id(todos)
-    item = {"id": new_id, **todo.model_dump(), "archived": False, "archived_at": None}
+    item = {"id": new_id, **todo.model_dump()}
     todos[new_id] = item
     save_db(todos)
     return item
@@ -134,18 +133,9 @@ def get_overdue_todos(_=Depends(authenticate)):
     overdue = [
         t
         for t in load_db().values()
-        if t.get("due_date")
-        and not t["completed"]
-        and not t.get("archived", False)
-        and t["due_date"] < today
+        if t.get("due_date") and not t["completed"] and t["due_date"] < today
     ]
     return sorted(overdue, key=lambda t: t["due_date"])
-
-
-@app.get("/todos/archived", summary="Get archived TODOs")
-def get_archived_todos(_=Depends(authenticate)):
-    archived = [t for t in load_db().values() if t.get("archived", False)]
-    return sorted(archived, key=lambda t: t.get("archived_at") or "", reverse=True)
 
 
 @app.get("/todos/{todo_id}", summary="Get a TODO by ID")
@@ -162,28 +152,6 @@ def update_todo(todo_id: int, todo: TodoUpdate, _=Depends(authenticate)):
     if todo_id not in todos:
         raise HTTPException(status_code=404, detail="TODO not found")
     todos[todo_id].update(todo.model_dump(exclude_unset=True))
-    save_db(todos)
-    return todos[todo_id]
-
-
-@app.post("/todos/{todo_id}/archive", summary="Archive a TODO")
-def archive_todo(todo_id: int, _=Depends(authenticate)):
-    todos = load_db()
-    if todo_id not in todos:
-        raise HTTPException(status_code=404, detail="TODO not found")
-    todos[todo_id]["archived"] = True
-    todos[todo_id]["archived_at"] = datetime.now(timezone.utc).isoformat()
-    save_db(todos)
-    return todos[todo_id]
-
-
-@app.post("/todos/{todo_id}/restore", summary="Restore an archived TODO")
-def restore_todo(todo_id: int, _=Depends(authenticate)):
-    todos = load_db()
-    if todo_id not in todos:
-        raise HTTPException(status_code=404, detail="TODO not found")
-    todos[todo_id]["archived"] = False
-    todos[todo_id]["archived_at"] = None
     save_db(todos)
     return todos[todo_id]
 
