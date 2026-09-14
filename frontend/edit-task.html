@@ -698,6 +698,7 @@
               class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 border-t border-outline-variant/10"
             >
               <button
+                id="cancel-btn"
                 class="w-full sm:w-auto px-10 py-4 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors"
                 type="button"
               >
@@ -986,7 +987,7 @@
       })
 
       // Cancel
-      document.querySelector('button[type=button]').addEventListener('click', () => {
+      document.getElementById('cancel-btn').addEventListener('click', () => {
         window.location.href = backHref
       })
 
