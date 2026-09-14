@@ -46,6 +46,14 @@ Always run `task lint` and `task format-check` (or `task fix` to auto-fix both) 
 - `frontend/` — static HTML/Tailwind CSS screens (login, dashboard, edit-task, task-detail, calculator).
 - `schemas/schemas.ts` — shared Joi schemas used by the test suites.
 
+## UI conventions
+
+The frontend has no shared component system — each screen is a standalone HTML file, so a recurring UI block (e.g. a "component") is duplicated markup/JS across files rather than an actual shared include.
+
+When a block appears on more than one screen, treat it as one component with multiple copies: it must look and behave identically everywhere it appears (same data/filtering logic, same visuals, same empty state, same interactions). When you change one occurrence, find and update the others in the same change — don't let copies drift.
+
+Example: the "Upcoming" box (next 7 days of non-completed tasks, date badge + relative day label, click-through) appears on both `dashboard.html` and `calendar.html`. Their `renderUpcoming` implementations are intentionally near-identical; if the behavior changes on one, mirror it on the other.
+
 ## Testing
 
 - API integration tests live in a separate repo: [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing).

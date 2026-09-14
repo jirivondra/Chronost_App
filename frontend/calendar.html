@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Open Tasks - Chronos</title>
+    <title>Calendar - Chronos</title>
     <link rel="icon" type="image/png" href="assets/image.png" />
     <script>
       if (localStorage.getItem('sidebarCollapsed') === 'true')
@@ -340,7 +340,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
           </a>
           <a
-            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
             href="open-tasks.html"
             data-tip="Open Tasks"
           >
@@ -356,7 +356,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
           </a>
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
             href="calendar.html"
             data-tip="Calendar"
           >
@@ -440,31 +440,130 @@
         </div>
       </header>
       <!-- Main Content -->
-      <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
-        <div class="mb-10">
-          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-            <a
-              class="flex items-center hover:text-primary transition-colors"
-              href="dashboard.html"
-              aria-label="Dashboard"
+      <main class="flex-1 p-8 md:p-12 max-w-7xl mx-auto w-full">
+        <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+              <a
+                class="flex items-center hover:text-primary transition-colors"
+                href="dashboard.html"
+                aria-label="Dashboard"
+              >
+                <span class="material-symbols-outlined text-[18px]">home</span>
+              </a>
+              <span class="material-symbols-outlined text-xs">chevron_right</span>
+              <span class="text-on-surface">Calendar</span>
+            </nav>
+            <h1
+              class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
             >
-              <span class="material-symbols-outlined text-[18px]">home</span>
-            </a>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-on-surface">Open Tasks</span>
-          </nav>
-          <h1 class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline">
-            Open Tasks
-          </h1>
-          <p class="text-on-surface-variant mt-2 text-lg">
-            Everything that still needs your focus.
-          </p>
+              Calendar
+            </h1>
+            <p class="text-on-surface-variant mt-2 text-lg">
+              Every task, laid out by the day it's due.
+            </p>
+          </div>
+          <a
+            href="edit-task.html?from=calendar"
+            class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          >
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            New Task
+          </a>
         </div>
-        <div id="open-list" class="flex flex-col gap-4">
-          <p class="text-on-surface-variant text-sm">Loading tasks...</p>
+
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-8 items-start">
+          <div class="bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-2">
+                <button
+                  id="cal-prev-btn"
+                  class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                  data-tip="Previous month"
+                >
+                  <span class="material-symbols-outlined text-[22px]">chevron_left</span>
+                </button>
+                <button
+                  id="cal-next-btn"
+                  class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                  data-tip="Next month"
+                >
+                  <span class="material-symbols-outlined text-[22px]">chevron_right</span>
+                </button>
+                <button
+                  id="cal-today-btn"
+                  class="ml-2 px-4 py-2 rounded-full text-sm font-bold text-primary hover:bg-surface-container-high transition-colors"
+                >
+                  Today
+                </button>
+              </div>
+              <h2
+                id="cal-month-label"
+                class="font-headline text-xl md:text-2xl font-black text-on-surface"
+              >
+                &nbsp;
+              </h2>
+              <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-error"></span>
+                  Overdue
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-primary"></span>
+                  Upcoming
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span>
+                  Done
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2">
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Mon</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Tue</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Wed</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Thu</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Fri</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sat</span>
+              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sun</span>
+            </div>
+            <div id="cal-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+          </div>
+
+          <div class="bg-surface-container-low p-8 rounded-[2rem]">
+            <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
+            <div id="upcoming-list" class="flex flex-col gap-6"></div>
+          </div>
         </div>
-        <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
       </main>
+
+      <!-- Day Detail Panel -->
+      <div id="day-panel" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="day-panel-backdrop"></div>
+        <div
+          class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-lg w-full max-h-[80vh] flex flex-col"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <h3 id="day-panel-title" class="font-headline font-bold text-xl text-on-surface"></h3>
+            <button
+              id="day-panel-close"
+              class="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
+            >
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+          <div id="day-panel-list" class="flex flex-col gap-3 overflow-y-auto"></div>
+          <a
+            id="day-panel-add"
+            href="#"
+            class="mt-6 flex items-center justify-center gap-2 px-6 py-3 bg-surface-container text-primary font-bold text-sm rounded-xl hover:bg-surface-container-high transition-colors"
+          >
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            Add task for this day
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Delete Task Dialog -->
@@ -532,106 +631,287 @@
         if (pendingDeleteId == null) return
         await fetch(`${API}/todos/${pendingDeleteId}`, { method: 'DELETE', headers })
         closeDeleteDialog()
+        closeDayPanel()
         loadTodos()
       })
 
-      function renderTodo(todo) {
+      const today = new Date()
+      let viewYear = today.getFullYear()
+      let viewMonth = today.getMonth()
+      let allTodos = []
+
+      const MONTH_NAMES = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
+
+      const MONTH_SHORT = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+
+      function toDateKey(d) {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+      }
+
+      const todayKey = toDateKey(today)
+
+      const weekAheadDate = new Date(today)
+      weekAheadDate.setDate(weekAheadDate.getDate() + 7)
+      const weekAheadKey = toDateKey(weekAheadDate)
+
+      function relativeDayLabel(dateKey) {
+        const diffDays = Math.round((new Date(dateKey) - new Date(todayKey)) / 86400000)
+        if (diffDays === 0) return 'Today'
+        if (diffDays === 1) return 'Tomorrow'
+        const [y, m, d] = dateKey.split('-').map(Number)
+        return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long' })
+      }
+
+      function renderUpcoming() {
+        const list = document.getElementById('upcoming-list')
+        list.innerHTML = ''
+
+        const upcoming = allTodos
+          .filter(
+            (t) =>
+              !t.completed && t.due_date && t.due_date >= todayKey && t.due_date <= weekAheadKey
+          )
+          .sort((a, b) => (a.due_date < b.due_date ? -1 : a.due_date > b.due_date ? 1 : 0))
+
+        if (upcoming.length === 0) {
+          list.innerHTML =
+            '<p class="text-on-surface-variant text-sm italic opacity-50">Nothing due in the next 7 days.</p>'
+          return
+        }
+
+        upcoming.forEach((t) => {
+          const [, m, d] = t.due_date.split('-').map(Number)
+
+          const row = document.createElement('button')
+          row.type = 'button'
+          row.className = 'flex gap-4 text-left w-full hover:opacity-80 transition-opacity'
+
+          const badge = document.createElement('div')
+          badge.className =
+            'w-12 h-12 bg-white rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
+          badge.innerHTML = `<span class="text-[10px] font-bold text-on-surface-variant uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-primary leading-tight">${d}</span>`
+
+          const info = document.createElement('div')
+          info.className = 'min-w-0'
+
+          const title = document.createElement('h5')
+          title.className = 'text-sm font-bold text-on-surface truncate'
+          title.textContent = t.title
+
+          const sub = document.createElement('p')
+          sub.className = 'text-xs text-on-surface-variant'
+          sub.textContent = relativeDayLabel(t.due_date)
+
+          info.appendChild(title)
+          info.appendChild(sub)
+          row.appendChild(badge)
+          row.appendChild(info)
+          row.addEventListener('click', () => openDayPanel(t.due_date))
+          list.appendChild(row)
+        })
+      }
+
+      function tasksByDate() {
+        const map = {}
+        allTodos.forEach((t) => {
+          if (!t.due_date) return
+          if (!map[t.due_date]) map[t.due_date] = []
+          map[t.due_date].push(t)
+        })
+        return map
+      }
+
+      function taskDotClass(todo) {
+        if (todo.completed) return 'bg-on-surface-variant/40'
+        if (todo.due_date < todayKey) return 'bg-error'
+        return 'bg-primary'
+      }
+
+      function renderCalendar() {
+        const monthLabel = document.getElementById('cal-month-label')
+        const grid = document.getElementById('cal-grid')
+        monthLabel.textContent = `${MONTH_NAMES[viewMonth]} ${viewYear}`
+        grid.innerHTML = ''
+
+        const byDate = tasksByDate()
+        const startOffset = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate()
+        const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate()
+
+        const cells = []
+        for (let i = startOffset - 1; i >= 0; i--) {
+          cells.push({ day: daysInPrevMonth - i, muted: true, month: viewMonth - 1 })
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          cells.push({ day: d, muted: false, month: viewMonth })
+        }
+        let trailing = 1
+        while (cells.length % 7 !== 0) {
+          cells.push({ day: trailing++, muted: true, month: viewMonth + 1 })
+        }
+
+        cells.forEach(({ day, muted, month }) => {
+          let cellYear = viewYear
+          let cellMonth = month
+          if (cellMonth < 0) {
+            cellMonth = 11
+            cellYear -= 1
+          }
+          if (cellMonth > 11) {
+            cellMonth = 0
+            cellYear += 1
+          }
+          const dateKey = toDateKey(new Date(cellYear, cellMonth, day))
+          const isToday = dateKey === todayKey
+          const dayTasks = byDate[dateKey] || []
+
+          const cell = document.createElement('button')
+          cell.type = 'button'
+          cell.className = muted
+            ? 'min-h-[92px] md:min-h-[120px] p-2 rounded-xl text-left flex flex-col gap-1 bg-surface-container-low/40 text-on-surface-variant/30 transition-colors'
+            : 'min-h-[92px] md:min-h-[120px] p-2 rounded-xl text-left flex flex-col gap-1 bg-surface-container-low hover:bg-surface-container-high transition-colors'
+
+          const dayNum = document.createElement('span')
+          dayNum.className = isToday
+            ? 'w-6 h-6 flex items-center justify-center rounded-full bg-primary text-on-primary text-xs font-bold'
+            : muted
+              ? 'text-xs font-semibold'
+              : 'text-xs font-semibold text-on-surface'
+          dayNum.textContent = day
+          cell.appendChild(dayNum)
+
+          const chipsWrap = document.createElement('div')
+          chipsWrap.className = 'flex flex-col gap-1 mt-1'
+          dayTasks.slice(0, 3).forEach((t) => {
+            const chip = document.createElement('div')
+            chip.className = 'flex items-center gap-1 text-[11px] font-semibold min-w-0'
+
+            const dot = document.createElement('span')
+            dot.className = `w-1.5 h-1.5 rounded-full flex-shrink-0 ${taskDotClass(t)}`
+
+            const label = document.createElement('span')
+            label.className = `truncate ${t.completed ? 'line-through text-on-surface-variant/50' : 'text-on-surface-variant'}`
+            label.textContent = t.title
+
+            chip.appendChild(dot)
+            chip.appendChild(label)
+            chipsWrap.appendChild(chip)
+          })
+          if (dayTasks.length > 3) {
+            const more = document.createElement('span')
+            more.className = 'text-[11px] font-bold text-on-surface-variant/50'
+            more.textContent = `+${dayTasks.length - 3} more`
+            chipsWrap.appendChild(more)
+          }
+          cell.appendChild(chipsWrap)
+
+          cell.addEventListener('click', () => openDayPanel(dateKey))
+          grid.appendChild(cell)
+        })
+      }
+
+      document.getElementById('cal-prev-btn').addEventListener('click', () => {
+        viewMonth -= 1
+        if (viewMonth < 0) {
+          viewMonth = 11
+          viewYear -= 1
+        }
+        renderCalendar()
+      })
+
+      document.getElementById('cal-next-btn').addEventListener('click', () => {
+        viewMonth += 1
+        if (viewMonth > 11) {
+          viewMonth = 0
+          viewYear += 1
+        }
+        renderCalendar()
+      })
+
+      document.getElementById('cal-today-btn').addEventListener('click', () => {
+        viewYear = today.getFullYear()
+        viewMonth = today.getMonth()
+        renderCalendar()
+      })
+
+      const dayPanel = document.getElementById('day-panel')
+      const dayPanelTitle = document.getElementById('day-panel-title')
+      const dayPanelList = document.getElementById('day-panel-list')
+      const dayPanelAdd = document.getElementById('day-panel-add')
+
+      function formatDayLabel(dateKey) {
+        const [y, m, d] = dateKey.split('-').map(Number)
+        return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      }
+
+      let openDayKey = null
+
+      function openDayPanel(dateKey) {
+        openDayKey = dateKey
+        dayPanelTitle.textContent = formatDayLabel(dateKey)
+        dayPanelAdd.href = `edit-task.html?from=calendar&due_date=${dateKey}`
+        renderDayPanelList(tasksByDate()[dateKey] || [])
+        dayPanel.classList.remove('hidden')
+      }
+
+      function closeDayPanel() {
+        openDayKey = null
+        dayPanel.classList.add('hidden')
+      }
+
+      document.getElementById('day-panel-close').addEventListener('click', closeDayPanel)
+      document.getElementById('day-panel-backdrop').addEventListener('click', closeDayPanel)
+
+      function renderDayPanelList(dayTasks) {
+        dayPanelList.innerHTML = ''
+        if (dayTasks.length === 0) {
+          dayPanelList.innerHTML =
+            '<p class="text-on-surface-variant text-sm italic opacity-50">No tasks due this day.</p>'
+          return
+        }
+        dayTasks.forEach((todo) => dayPanelList.appendChild(renderDayTask(todo)))
+      }
+
+      function renderDayTask(todo) {
         const div = document.createElement('div')
-        div.className =
-          'group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-container shadow-[0_12px_40px_rgba(49,50,59,0.03)] flex items-start gap-6'
+        div.className = 'group flex items-start gap-3 bg-surface-container-low p-4 rounded-xl'
 
         const checkbox = document.createElement('input')
         checkbox.type = 'checkbox'
         checkbox.checked = todo.completed
         checkbox.className =
-          'w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer'
-        checkbox.dataset.id = todo.id
-
-        const checkboxWrap = document.createElement('div')
-        checkboxWrap.className = 'mt-1'
-        checkboxWrap.appendChild(checkbox)
-
-        const content = document.createElement('div')
-        content.className = 'flex-1'
-
-        const titleRow = document.createElement('div')
-        titleRow.className = 'flex justify-between items-start'
-
-        const title = document.createElement('h4')
-        title.className = 'font-headline text-lg font-bold text-on-surface'
-        title.textContent = todo.title
-
-        const actions = document.createElement('div')
-        actions.className = 'flex items-center gap-1'
-
-        const hoverActions = document.createElement('div')
-        hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
-
-        const infoBtn = document.createElement('button')
-        infoBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
-        infoBtn.title = 'Detail'
-        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
-        infoBtn.addEventListener('click', () => {
-          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
-        })
-        hoverActions.appendChild(infoBtn)
-
-        const editBtn = document.createElement('button')
-        editBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
-        editBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">edit</span>'
-        editBtn.addEventListener('click', () => {
-          window.location.href = `edit-task.html?id=${todo.id}&from=dashboard`
-        })
-        hoverActions.appendChild(editBtn)
-
-        const deleteBtn = document.createElement('button')
-        deleteBtn.className =
-          'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
-        deleteBtn.dataset.id = todo.id
-        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>'
-        hoverActions.appendChild(deleteBtn)
-
-        actions.appendChild(hoverActions)
-
-        titleRow.appendChild(title)
-        titleRow.appendChild(actions)
-        content.appendChild(titleRow)
-
-        if (todo.description) {
-          const wrapper = document.createElement('div')
-          wrapper.style.position = 'relative'
-          wrapper.style.height = '2.5rem'
-          wrapper.style.overflow = 'hidden'
-          wrapper.style.marginTop = '0.25rem'
-
-          const p = document.createElement('p')
-          p.className = 'text-on-surface-variant font-body text-sm'
-          p.textContent = todo.description
-
-          const gradient = document.createElement('div')
-          gradient.style.position = 'absolute'
-          gradient.style.bottom = '0'
-          gradient.style.left = '0'
-          gradient.style.right = '0'
-          gradient.style.height = '1.5rem'
-          gradient.style.background = 'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
-          gradient.style.pointerEvents = 'none'
-
-          wrapper.appendChild(p)
-          wrapper.appendChild(gradient)
-          content.appendChild(wrapper)
-
-          div.addEventListener('mouseenter', () => {
-            gradient.style.background = 'linear-gradient(to bottom,rgba(239,237,246,0),#efedf6)'
-          })
-          div.addEventListener('mouseleave', () => {
-            gradient.style.background = 'linear-gradient(to bottom,rgba(255,255,255,0),#ffffff)'
-          })
-        }
-
-        div.appendChild(checkboxWrap)
-        div.appendChild(content)
-
+          'mt-1 w-5 h-5 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 cursor-pointer flex-shrink-0'
         checkbox.addEventListener('change', async (e) => {
           await fetch(`${API}/todos/${todo.id}`, {
             method: 'PUT',
@@ -641,110 +921,44 @@
           loadTodos()
         })
 
-        deleteBtn.addEventListener('click', () => {
-          openDeleteDialog(todo.id)
+        const content = document.createElement('div')
+        content.className = 'flex-1 min-w-0'
+
+        const title = document.createElement('p')
+        title.className = `font-headline text-sm font-bold ${todo.completed ? 'line-through text-on-surface-variant' : 'text-on-surface'}`
+        title.textContent = todo.title
+        content.appendChild(title)
+
+        if (todo.description) {
+          const p = document.createElement('p')
+          p.className = 'text-on-surface-variant text-xs mt-1'
+          p.textContent = todo.description
+          content.appendChild(p)
+        }
+
+        const actions = document.createElement('div')
+        actions.className =
+          'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0'
+
+        const infoBtn = document.createElement('button')
+        infoBtn.className = 'p-1.5 text-on-surface-variant hover:text-primary transition-colors'
+        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">info</span>'
+        infoBtn.addEventListener('click', () => {
+          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
         })
+        actions.appendChild(infoBtn)
+
+        const deleteBtn = document.createElement('button')
+        deleteBtn.className = 'p-1.5 text-on-surface-variant hover:text-error transition-colors'
+        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">delete</span>'
+        deleteBtn.addEventListener('click', () => openDeleteDialog(todo.id))
+        actions.appendChild(deleteBtn)
+
+        div.appendChild(checkbox)
+        div.appendChild(content)
+        div.appendChild(actions)
 
         return div
-      }
-
-      const PAGE_SIZE = 10
-      const PAGINATOR_BUFFER = 1
-      let allOpen = []
-      let currentPage = 1
-
-      function goToPage(page) {
-        currentPage = page
-        renderPage()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-
-      function paginatorArrow(icon, enabled, onClick) {
-        if (!enabled) {
-          const span = document.createElement('span')
-          span.className =
-            'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant/30'
-          span.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
-          return span
-        }
-        const btn = document.createElement('button')
-        btn.className =
-          'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors'
-        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
-        btn.addEventListener('click', onClick)
-        return btn
-      }
-
-      function paginatorPageList(total, current, buffer) {
-        const pages = []
-        for (let i = 1; i <= total; i++) {
-          if (i === 1 || i === total || (i >= current - buffer && i <= current + buffer)) {
-            pages.push(i)
-          } else if (pages[pages.length - 1] !== '…') {
-            pages.push('…')
-          }
-        }
-        return pages
-      }
-
-      function renderPagination(totalPages, totalItems) {
-        const pagination = document.getElementById('pagination')
-        pagination.innerHTML = ''
-
-        if (totalItems < PAGE_SIZE) {
-          pagination.classList.add('hidden')
-          pagination.classList.remove('flex')
-          return
-        }
-        pagination.classList.remove('hidden')
-        pagination.classList.add('flex')
-
-        pagination.appendChild(
-          paginatorArrow('chevron_left', currentPage > 1, () => goToPage(currentPage - 1))
-        )
-
-        paginatorPageList(totalPages, currentPage, PAGINATOR_BUFFER).forEach((page) => {
-          if (page === '…') {
-            const span = document.createElement('span')
-            span.className = 'w-9 h-9 flex items-center justify-center text-on-surface-variant/50'
-            span.textContent = '…'
-            pagination.appendChild(span)
-            return
-          }
-          const btn = document.createElement('button')
-          const active = page === currentPage
-          btn.className = active
-            ? 'w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-sm'
-            : 'w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container text-sm transition-colors'
-          btn.textContent = page
-          if (!active) btn.addEventListener('click', () => goToPage(page))
-          pagination.appendChild(btn)
-        })
-
-        pagination.appendChild(
-          paginatorArrow('chevron_right', currentPage < totalPages, () => goToPage(currentPage + 1))
-        )
-      }
-
-      function renderPage() {
-        const openList = document.getElementById('open-list')
-        openList.innerHTML = ''
-
-        if (allOpen.length === 0) {
-          openList.innerHTML =
-            '<p class="text-on-surface-variant text-sm italic opacity-50">No open tasks. Create one with + New Task.</p>'
-          renderPagination(0, 0)
-          return
-        }
-
-        const totalPages = Math.ceil(allOpen.length / PAGE_SIZE)
-        currentPage = Math.min(currentPage, totalPages)
-
-        allOpen
-          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-          .forEach((todo) => openList.appendChild(renderTodo(todo)))
-
-        renderPagination(totalPages, allOpen.length)
       }
 
       async function loadTodos() {
@@ -752,17 +966,20 @@
         try {
           res = await fetch(`${API}/todos`, { headers })
         } catch {
-          document.getElementById('open-list').innerHTML =
-            '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+          document.getElementById('cal-grid').innerHTML =
+            '<p class="col-span-7 text-error text-sm p-4">Cannot connect to API. Make sure the backend is running.</p>'
           return
         }
         if (res.status === 401) {
           window.location.href = 'login.html'
           return
         }
-        const todos = await res.json()
-        allOpen = todos.filter((t) => !t.completed)
-        renderPage()
+        allTodos = await res.json()
+        renderCalendar()
+        renderUpcoming()
+        if (openDayKey) {
+          renderDayPanelList(tasksByDate()[openDayKey] || [])
+        }
       }
 
       loadTodos()

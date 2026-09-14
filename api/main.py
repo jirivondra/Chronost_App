@@ -133,7 +133,7 @@ def get_overdue_todos(_=Depends(authenticate)):
     overdue = [
         t
         for t in load_db().values()
-        if t["due_date"] and not t["completed"] and t["due_date"] < today
+        if t.get("due_date") and not t["completed"] and t["due_date"] < today
     ]
     return sorted(overdue, key=lambda t: t["due_date"])
 
