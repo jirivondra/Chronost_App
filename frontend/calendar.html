@@ -684,6 +684,10 @@
 
       const todayKey = toDateKey(today)
 
+      const weekAheadDate = new Date(today)
+      weekAheadDate.setDate(weekAheadDate.getDate() + 7)
+      const weekAheadKey = toDateKey(weekAheadDate)
+
       function relativeDayLabel(dateKey) {
         const diffDays = Math.round((new Date(dateKey) - new Date(todayKey)) / 86400000)
         if (diffDays === 0) return 'Today'
@@ -697,13 +701,15 @@
         list.innerHTML = ''
 
         const upcoming = allTodos
-          .filter((t) => !t.completed && t.due_date && t.due_date >= todayKey)
+          .filter(
+            (t) =>
+              !t.completed && t.due_date && t.due_date >= todayKey && t.due_date <= weekAheadKey
+          )
           .sort((a, b) => (a.due_date < b.due_date ? -1 : a.due_date > b.due_date ? 1 : 0))
-          .slice(0, 5)
 
         if (upcoming.length === 0) {
           list.innerHTML =
-            '<p class="text-on-surface-variant text-sm italic opacity-50">Nothing coming up.</p>'
+            '<p class="text-on-surface-variant text-sm italic opacity-50">Nothing due in the next 7 days.</p>'
           return
         }
 
