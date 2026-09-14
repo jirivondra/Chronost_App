@@ -9,6 +9,12 @@
     <script>
       if (localStorage.getItem('sidebarCollapsed') === 'true')
         document.documentElement.classList.add('sidebar-collapsed')
+      ;(function () {
+        const storedTheme = localStorage.getItem('theme')
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const isDark = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark)
+        document.documentElement.classList.toggle('dark', isDark)
+      })()
     </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
@@ -25,57 +31,62 @@
         theme: {
           extend: {
             colors: {
-              'tertiary-fixed': '#f1cefc',
-              'secondary-dim': '#3d5762',
-              'on-primary-container': '#00116a',
-              'tertiary-fixed-dim': '#e2c0ee',
-              'on-primary-fixed-variant': '#011882',
-              'error-dim': '#6b0221',
-              outline: '#7a7a84',
-              'on-secondary-container': '#3c5561',
-              'secondary-fixed-dim': '#bdd9e6',
-              'on-tertiary': '#fff7fc',
-              'primary-container': '#8696fd',
-              background: '#fbf8fe',
-              'secondary-container': '#cbe7f5',
-              tertiary: '#71557c',
-              'tertiary-container': '#f1cefc',
-              primary: '#4656b8',
-              'on-surface': '#31323b',
-              'on-primary-fixed': '#000000',
-              'surface-tint': '#4656b8',
-              'on-surface-variant': '#5e5e68',
-              error: '#a8364b',
-              'primary-dim': '#3949ab',
-              'tertiary-dim': '#64496f',
-              'surface-variant': '#e3e1ed',
-              'surface-bright': '#fbf8fe',
-              'on-secondary-fixed': '#29434e',
-              'inverse-on-surface': '#9e9ca2',
-              'primary-fixed-dim': '#7989ee',
-              'on-secondary': '#f2faff',
-              'error-container': '#f97386',
-              'on-secondary-fixed-variant': '#455f6b',
-              'surface-container-high': '#e9e7f1',
-              'primary-fixed': '#8696fd',
-              'on-tertiary-container': '#5d4368',
-              'surface-container-lowest': '#ffffff',
-              'surface-container': '#efedf6',
-              'surface-container-highest': '#e3e1ed',
-              'on-background': '#31323b',
-              'inverse-surface': '#0d0e12',
-              secondary: '#49636f',
-              'on-primary': '#faf8ff',
-              'on-error': '#fff7f7',
-              'on-error-container': '#6e0523',
-              'secondary-fixed': '#cbe7f5',
-              'on-tertiary-fixed-variant': '#674c72',
-              surface: '#fbf8fe',
-              'surface-dim': '#dad9e4',
-              'inverse-primary': '#8696fd',
-              'surface-container-low': '#f5f2fb',
-              'outline-variant': '#b2b1bc',
-              'on-tertiary-fixed': '#493055',
+              'tertiary-fixed': 'rgb(var(--color-tertiary-fixed) / <alpha-value>)',
+              'secondary-dim': 'rgb(var(--color-secondary-dim) / <alpha-value>)',
+              'on-primary-container': 'rgb(var(--color-on-primary-container) / <alpha-value>)',
+              'tertiary-fixed-dim': 'rgb(var(--color-tertiary-fixed-dim) / <alpha-value>)',
+              'on-primary-fixed-variant':
+                'rgb(var(--color-on-primary-fixed-variant) / <alpha-value>)',
+              'error-dim': 'rgb(var(--color-error-dim) / <alpha-value>)',
+              outline: 'rgb(var(--color-outline) / <alpha-value>)',
+              'on-secondary-container': 'rgb(var(--color-on-secondary-container) / <alpha-value>)',
+              'secondary-fixed-dim': 'rgb(var(--color-secondary-fixed-dim) / <alpha-value>)',
+              'on-tertiary': 'rgb(var(--color-on-tertiary) / <alpha-value>)',
+              'primary-container': 'rgb(var(--color-primary-container) / <alpha-value>)',
+              background: 'rgb(var(--color-background) / <alpha-value>)',
+              'secondary-container': 'rgb(var(--color-secondary-container) / <alpha-value>)',
+              tertiary: 'rgb(var(--color-tertiary) / <alpha-value>)',
+              'tertiary-container': 'rgb(var(--color-tertiary-container) / <alpha-value>)',
+              primary: 'rgb(var(--color-primary) / <alpha-value>)',
+              'on-surface': 'rgb(var(--color-on-surface) / <alpha-value>)',
+              'on-primary-fixed': 'rgb(var(--color-on-primary-fixed) / <alpha-value>)',
+              'surface-tint': 'rgb(var(--color-surface-tint) / <alpha-value>)',
+              'on-surface-variant': 'rgb(var(--color-on-surface-variant) / <alpha-value>)',
+              error: 'rgb(var(--color-error) / <alpha-value>)',
+              'primary-dim': 'rgb(var(--color-primary-dim) / <alpha-value>)',
+              'tertiary-dim': 'rgb(var(--color-tertiary-dim) / <alpha-value>)',
+              'surface-variant': 'rgb(var(--color-surface-variant) / <alpha-value>)',
+              'surface-bright': 'rgb(var(--color-surface-bright) / <alpha-value>)',
+              'on-secondary-fixed': 'rgb(var(--color-on-secondary-fixed) / <alpha-value>)',
+              'inverse-on-surface': 'rgb(var(--color-inverse-on-surface) / <alpha-value>)',
+              'primary-fixed-dim': 'rgb(var(--color-primary-fixed-dim) / <alpha-value>)',
+              'on-secondary': 'rgb(var(--color-on-secondary) / <alpha-value>)',
+              'error-container': 'rgb(var(--color-error-container) / <alpha-value>)',
+              'on-secondary-fixed-variant':
+                'rgb(var(--color-on-secondary-fixed-variant) / <alpha-value>)',
+              'surface-container-high': 'rgb(var(--color-surface-container-high) / <alpha-value>)',
+              'primary-fixed': 'rgb(var(--color-primary-fixed) / <alpha-value>)',
+              'on-tertiary-container': 'rgb(var(--color-on-tertiary-container) / <alpha-value>)',
+              'surface-container-lowest':
+                'rgb(var(--color-surface-container-lowest) / <alpha-value>)',
+              'surface-container': 'rgb(var(--color-surface-container) / <alpha-value>)',
+              'surface-container-highest':
+                'rgb(var(--color-surface-container-highest) / <alpha-value>)',
+              'on-background': 'rgb(var(--color-on-background) / <alpha-value>)',
+              'inverse-surface': 'rgb(var(--color-inverse-surface) / <alpha-value>)',
+              secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+              'on-primary': 'rgb(var(--color-on-primary) / <alpha-value>)',
+              'on-error': 'rgb(var(--color-on-error) / <alpha-value>)',
+              'on-error-container': 'rgb(var(--color-on-error-container) / <alpha-value>)',
+              'secondary-fixed': 'rgb(var(--color-secondary-fixed) / <alpha-value>)',
+              'on-tertiary-fixed-variant':
+                'rgb(var(--color-on-tertiary-fixed-variant) / <alpha-value>)',
+              surface: 'rgb(var(--color-surface) / <alpha-value>)',
+              'surface-dim': 'rgb(var(--color-surface-dim) / <alpha-value>)',
+              'inverse-primary': 'rgb(var(--color-inverse-primary) / <alpha-value>)',
+              'surface-container-low': 'rgb(var(--color-surface-container-low) / <alpha-value>)',
+              'outline-variant': 'rgb(var(--color-outline-variant) / <alpha-value>)',
+              'on-tertiary-fixed': 'rgb(var(--color-on-tertiary-fixed) / <alpha-value>)',
             },
             borderRadius: {
               DEFAULT: '0.125rem',
@@ -93,6 +104,112 @@
       }
     </script>
     <style>
+      :root {
+        --color-tertiary-fixed: 241 206 252;
+        --color-secondary-dim: 61 87 98;
+        --color-on-primary-container: 0 17 106;
+        --color-tertiary-fixed-dim: 226 192 238;
+        --color-on-primary-fixed-variant: 1 24 130;
+        --color-error-dim: 107 2 33;
+        --color-outline: 122 122 132;
+        --color-on-secondary-container: 60 85 97;
+        --color-secondary-fixed-dim: 189 217 230;
+        --color-on-tertiary: 255 247 252;
+        --color-primary-container: 134 150 253;
+        --color-background: 251 248 254;
+        --color-secondary-container: 203 231 245;
+        --color-tertiary: 113 85 124;
+        --color-tertiary-container: 241 206 252;
+        --color-primary: 70 86 184;
+        --color-on-surface: 49 50 59;
+        --color-on-primary-fixed: 0 0 0;
+        --color-surface-tint: 70 86 184;
+        --color-on-surface-variant: 94 94 104;
+        --color-error: 168 54 75;
+        --color-primary-dim: 57 73 171;
+        --color-tertiary-dim: 100 73 111;
+        --color-surface-variant: 227 225 237;
+        --color-surface-bright: 251 248 254;
+        --color-on-secondary-fixed: 41 67 78;
+        --color-inverse-on-surface: 158 156 162;
+        --color-primary-fixed-dim: 121 137 238;
+        --color-on-secondary: 242 250 255;
+        --color-error-container: 249 115 134;
+        --color-on-secondary-fixed-variant: 69 95 107;
+        --color-surface-container-high: 233 231 241;
+        --color-primary-fixed: 134 150 253;
+        --color-on-tertiary-container: 93 67 104;
+        --color-surface-container-lowest: 255 255 255;
+        --color-surface-container: 239 237 246;
+        --color-surface-container-highest: 227 225 237;
+        --color-on-background: 49 50 59;
+        --color-inverse-surface: 13 14 18;
+        --color-secondary: 73 99 111;
+        --color-on-primary: 250 248 255;
+        --color-on-error: 255 247 247;
+        --color-on-error-container: 110 5 35;
+        --color-secondary-fixed: 203 231 245;
+        --color-on-tertiary-fixed-variant: 103 76 114;
+        --color-surface: 251 248 254;
+        --color-surface-dim: 218 217 228;
+        --color-inverse-primary: 134 150 253;
+        --color-surface-container-low: 245 242 251;
+        --color-outline-variant: 178 177 188;
+        --color-on-tertiary-fixed: 73 48 85;
+      }
+      .dark {
+        --color-tertiary-fixed: 241 206 252;
+        --color-secondary-dim: 61 87 98;
+        --color-on-primary-container: 222 224 255;
+        --color-tertiary-fixed-dim: 226 192 238;
+        --color-on-primary-fixed-variant: 1 24 130;
+        --color-error-dim: 107 2 33;
+        --color-outline: 144 144 154;
+        --color-on-secondary-container: 204 231 245;
+        --color-secondary-fixed-dim: 189 217 230;
+        --color-on-tertiary: 51 47 51;
+        --color-primary-container: 43 60 159;
+        --color-background: 19 19 23;
+        --color-secondary-container: 48 74 86;
+        --color-tertiary: 221 187 232;
+        --color-tertiary-container: 87 61 98;
+        --color-primary: 187 195 255;
+        --color-on-surface: 226 225 237;
+        --color-on-primary-fixed: 0 0 0;
+        --color-surface-tint: 187 195 255;
+        --color-on-surface-variant: 199 197 209;
+        --color-error: 255 178 186;
+        --color-primary-dim: 57 73 171;
+        --color-tertiary-dim: 100 73 111;
+        --color-surface-variant: 70 70 79;
+        --color-surface-bright: 57 57 61;
+        --color-on-secondary-fixed: 41 67 78;
+        --color-inverse-on-surface: 48 48 53;
+        --color-primary-fixed-dim: 121 137 238;
+        --color-on-secondary: 42 50 53;
+        --color-error-container: 135 28 51;
+        --color-on-secondary-fixed-variant: 69 95 107;
+        --color-surface-container-high: 41 41 49;
+        --color-primary-fixed: 134 150 253;
+        --color-on-tertiary-container: 247 217 255;
+        --color-surface-container-lowest: 12 15 15;
+        --color-surface-container: 30 31 37;
+        --color-surface-container-highest: 52 52 61;
+        --color-on-background: 226 225 237;
+        --color-inverse-surface: 227 226 231;
+        --color-secondary: 175 203 216;
+        --color-on-primary: 47 48 53;
+        --color-on-error: 51 47 48;
+        --color-on-error-container: 255 218 220;
+        --color-secondary-fixed: 203 231 245;
+        --color-on-tertiary-fixed-variant: 103 76 114;
+        --color-surface: 19 19 23;
+        --color-surface-dim: 18 19 26;
+        --color-inverse-primary: 69 85 184;
+        --color-surface-container-low: 27 27 33;
+        --color-outline-variant: 70 70 79;
+        --color-on-tertiary-fixed: 73 48 85;
+      }
       body {
         font-family: 'Inter', sans-serif;
       }
@@ -306,17 +423,13 @@
   </head>
   <body class="bg-background text-on-background min-h-screen">
     <!-- Sidebar -->
-    <aside id="sidebar" class="h-screen fixed left-0 top-0 bg-[#f5f2fb] dark:bg-slate-900 z-50">
+    <aside id="sidebar" class="h-screen fixed left-0 top-0 bg-surface-container-low z-50">
       <div class="flex flex-col gap-2 p-4 h-full">
         <div class="sidebar-header mb-8 flex items-center justify-between px-2">
           <a href="dashboard.html" class="sidebar-logo-link flex items-center gap-3 min-w-0">
             <img src="assets/image.png" alt="Chronos" class="h-8 w-auto flex-shrink-0" />
             <div class="sidebar-label min-w-0">
-              <h1
-                class="text-xl font-black text-[#4656b8] dark:text-[#8696fd] font-headline truncate"
-              >
-                Chronos
-              </h1>
+              <h1 class="text-xl font-black text-primary font-headline truncate">Chronos</h1>
               <p class="font-['Manrope'] text-sm font-semibold text-slate-500 truncate">
                 Personal Space
               </p>
@@ -324,7 +437,7 @@
           </a>
           <button
             id="sidebar-toggle"
-            class="p-2 rounded-xl hover:bg-[#e9e7f1] transition-colors text-slate-500 flex-shrink-0 ml-1"
+            class="p-2 rounded-xl hover:bg-surface-container-high transition-colors text-slate-500 flex-shrink-0 ml-1"
             data-tip="Toggle sidebar"
           >
             <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
@@ -332,7 +445,7 @@
         </div>
         <nav class="flex-1 flex flex-col gap-1">
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
             href="dashboard.html"
             data-tip="Dashboard"
           >
@@ -340,7 +453,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
           </a>
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
             href="open-tasks.html"
             data-tip="Open Tasks"
           >
@@ -348,7 +461,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
           </a>
           <a
-            class="bg-[#efedf6] dark:bg-slate-800 text-[#4656b8] dark:text-[#8696fd] rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            class="bg-surface-container text-primary rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
             href="finished-tasks.html"
             data-tip="Closed Tasks"
           >
@@ -356,7 +469,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
           </a>
           <a
-            class="text-slate-500 dark:text-slate-400 px-4 py-3 flex items-center gap-3 hover:bg-[#e9e7f1] dark:hover:bg-slate-700 transition-colors duration-200 rounded-xl"
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
             href="calendar.html"
             data-tip="Calendar"
           >
@@ -377,7 +490,7 @@
     </aside>
     <div class="ml-sidebar flex flex-col min-h-screen">
       <!-- Top Nav Bar -->
-      <header class="bg-[#fbf8fe]/80 backdrop-blur-xl top-0 sticky z-40 h-20">
+      <header class="bg-surface/80 backdrop-blur-xl top-0 sticky z-40 h-20">
         <div class="flex justify-between items-center w-full px-8 h-full max-w-screen-2xl mx-auto">
           <div class="flex items-center gap-3">
             <button
@@ -387,7 +500,7 @@
             >
               <span class="material-symbols-outlined text-[22px]">arrow_back</span>
             </button>
-            <h2 class="text-2xl font-extrabold text-[#4656b8] font-['Manrope'] tracking-tight">
+            <h2 class="text-2xl font-extrabold text-primary font-['Manrope'] tracking-tight">
               Chronos
             </h2>
           </div>
@@ -407,12 +520,55 @@
               </button>
               <input id="search-input" class="search-input" placeholder="Search..." type="text" />
             </div>
-            <button
-              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
-              data-tip="Notifications"
-            >
-              <span class="material-symbols-outlined text-[22px]">notifications</span>
-            </button>
+            <div id="theme-toggle" class="flex items-center">
+              <button
+                type="button"
+                id="theme-toggle-trigger"
+                class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                data-tip="Match system"
+              >
+                <span class="material-symbols-outlined text-[22px]" id="theme-toggle-trigger-icon"
+                  >desktop_windows</span
+                >
+              </button>
+              <div
+                id="theme-toggle-panel"
+                class="hidden items-center gap-0.5 bg-surface-container rounded-full p-1"
+              >
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="dark"
+                  data-tip="Dark mode"
+                >
+                  <span class="material-symbols-outlined text-[18px]">dark_mode</span>
+                </button>
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="system"
+                  data-tip="Match system"
+                >
+                  <span class="material-symbols-outlined text-[18px]">desktop_windows</span>
+                </button>
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="light"
+                  data-tip="Light mode"
+                >
+                  <span class="material-symbols-outlined text-[18px]">light_mode</span>
+                </button>
+                <button
+                  type="button"
+                  id="theme-toggle-close"
+                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-error transition-colors"
+                  data-tip="Close"
+                >
+                  <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              </div>
+            </div>
             <button
               class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
               data-tip="Settings"
@@ -783,6 +939,91 @@
           html.classList.toggle('sidebar-collapsed', isNowCollapsed)
           localStorage.setItem('sidebarCollapsed', isNowCollapsed)
         })
+      })()
+
+      // Theme toggle (light / dark / system)
+      ;(function () {
+        const html = document.documentElement
+        const buttons = document.querySelectorAll('.theme-toggle-btn')
+        const container = document.getElementById('theme-toggle')
+        const trigger = document.getElementById('theme-toggle-trigger')
+        const triggerIcon = document.getElementById('theme-toggle-trigger-icon')
+        const panel = document.getElementById('theme-toggle-panel')
+        const closeBtn = document.getElementById('theme-toggle-close')
+
+        const CHOICE_META = {
+          dark: { icon: 'dark_mode', tip: 'Dark mode' },
+          light: { icon: 'light_mode', tip: 'Light mode' },
+          system: { icon: 'desktop_windows', tip: 'Match system' },
+        }
+
+        function systemPrefersDark() {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches
+        }
+
+        function currentChoice() {
+          const stored = localStorage.getItem('theme')
+          return stored === 'dark' || stored === 'light' ? stored : 'system'
+        }
+
+        function updateActiveButton(choice) {
+          buttons.forEach((btn) => {
+            const active = btn.dataset.themeChoice === choice
+            btn.classList.toggle('bg-surface-container-lowest', active)
+            btn.classList.toggle('shadow-sm', active)
+            btn.classList.toggle('text-primary', active)
+            btn.classList.toggle('text-on-surface-variant', !active)
+          })
+        }
+
+        function updateTrigger(choice) {
+          const meta = CHOICE_META[choice]
+          triggerIcon.textContent = meta.icon
+          trigger.setAttribute('data-tip', meta.tip)
+        }
+
+        function applyTheme(choice) {
+          if (choice === 'system') {
+            localStorage.removeItem('theme')
+            html.classList.toggle('dark', systemPrefersDark())
+          } else {
+            localStorage.setItem('theme', choice)
+            html.classList.toggle('dark', choice === 'dark')
+          }
+          updateActiveButton(choice)
+          updateTrigger(choice)
+        }
+
+        function expandPanel() {
+          trigger.classList.add('hidden')
+          panel.classList.remove('hidden')
+          panel.classList.add('flex')
+        }
+
+        function collapsePanel() {
+          panel.classList.add('hidden')
+          panel.classList.remove('flex')
+          trigger.classList.remove('hidden')
+        }
+
+        trigger.addEventListener('click', expandPanel)
+        closeBtn.addEventListener('click', collapsePanel)
+
+        buttons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            applyTheme(btn.dataset.themeChoice)
+            collapsePanel()
+          })
+        })
+
+        document.addEventListener('click', (e) => {
+          if (!panel.classList.contains('hidden') && !container.contains(e.target)) {
+            collapsePanel()
+          }
+        })
+
+        updateActiveButton(currentChoice())
+        updateTrigger(currentChoice())
       })()
 
       // Expandable search
