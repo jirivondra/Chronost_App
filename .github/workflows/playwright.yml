@@ -1,4 +1,4 @@
-name: Playwright Smoke Tests
+name: Playwright Regression
 
 on:
   push:
@@ -7,10 +7,101 @@ on:
   workflow_dispatch:
 
 jobs:
-  smoke:
-    name: E2E test
+  api-regression:
+    name: API regression
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
+      BASE_URL: http://localhost:8000
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v4
+
+      - name: Checkout Mocha API tests
+        uses: actions/checkout@v4
+        with:
+          repository: jirivondra/mocha_api_soap_testing
+          path: mocha-api-tests
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install API dependencies
+        run: pip install -r api/requirements.txt
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: https://npm.pkg.github.com
+          scope: '@jirivondra'
+
+      - name: Start API
+        run: uvicorn api.main:app --host 0.0.0.0 --port 8000 &
+
+      - name: Wait for API
+        run: |
+          timeout 30 bash -c \
+            'until curl -sf -u "$API_USERNAME:$API_PASSWORD" http://localhost:8000/todos > /dev/null; do sleep 1; done'
+
+      - name: Install dependencies and run Mocha REST regression suite
+        working-directory: mocha-api-tests
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+        run: |
+          set -o pipefail
+          { npm ci && npm run test:regression; } 2>&1 | tee mocha-output.log
+
+      - name: Upload Mocha output
+        id: upload-output
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mocha-output
+          path: mocha-api-tests/mocha-output.log
+          retention-days: 30
+
+      - name: Summarize Mocha results
+        if: ${{ !cancelled() }}
+        working-directory: mocha-api-tests
+        env:
+          OUTPUT_URL: ${{ steps.upload-output.outputs.artifact-url }}
+        run: |
+          {
+            echo '### Mocha REST regression'
+            echo
+            if [ -f mocha-output.log ]; then
+              grep -E '^\s+[0-9]+ (passing|failing|pending)' mocha-output.log || true
+              echo
+              echo '<details><summary>Output (last 300 lines)</summary>'
+              echo
+              echo '```'
+              tail -n 300 mocha-output.log
+              echo '```'
+              echo
+              echo '</details>'
+              echo
+              if [ -n "$OUTPUT_URL" ]; then
+                echo "[Download the full output]($OUTPUT_URL)"
+              fi
+            else
+              echo 'No output was produced — see the step logs.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  e2e-regression:
+    name: E2E regression
+    needs: api-regression
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: http://localhost:3000
+      API_BASE_URL: http://localhost:8000
       API_USERNAME: ${{ secrets.API_USERNAME }}
       API_PASSWORD: ${{ secrets.API_PASSWORD }}
 
@@ -35,27 +126,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: lts/*
 
       - name: Install Playwright test dependencies
         run: npm ci
         working-directory: playwright-tests
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          npx playwright install --with-deps
+          npx playwright install chrome
         working-directory: playwright-tests
-
-      - name: Create API .env
-        run: |
-          echo "API_USERNAME=${{ secrets.API_USERNAME }}" > .env
-          echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> .env
-
-      - name: Create Playwright .env
-        run: |
-          echo "BASE_URL=http://localhost:3000" > playwright-tests/.env
-          echo "API_BASE_URL=http://localhost:8000" >> playwright-tests/.env
-          echo "API_USERNAME=${{ secrets.API_USERNAME }}" >> playwright-tests/.env
-          echo "API_PASSWORD=${{ secrets.API_PASSWORD }}" >> playwright-tests/.env
 
       - name: Start API
         run: uvicorn api.main:app --host 0.0.0.0 --port 8000 &
@@ -73,14 +154,51 @@ jobs:
           timeout 30 bash -c \
             'until curl -sf http://localhost:3000/login.html > /dev/null; do sleep 1; done'
 
-      - name: Run Playwright smoke tests
-        run: npx playwright test tests/smoke --project=chromium
+      # Full suite, including visual tests. If a UI change here legitimately alters a
+      # screenshot, run the "Update Playwright Snapshots" workflow on the PR branch and merge
+      # the baseline PR it opens in the Playwright repo, then re-run this job.
+      - name: Run Playwright regression suite
+        run: npx playwright test --reporter=list,html,json
         working-directory: playwright-tests
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
 
       - name: Upload Playwright report
+        id: upload-report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-tests/playwright-report/
           retention-days: 30
+
+      - name: Summarize Playwright results
+        if: ${{ !cancelled() }}
+        working-directory: playwright-tests
+        env:
+          REPORT_URL: ${{ steps.upload-report.outputs.artifact-url }}
+        run: |
+          node - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs')
+          const lines = ['### Playwright regression', '']
+          if (!fs.existsSync('results.json')) {
+            lines.push('No results were produced — see the step logs.')
+          } else {
+            const { stats, suites } = JSON.parse(fs.readFileSync('results.json', 'utf8'))
+            const failed = []
+            const walk = (suite) => {
+              for (const spec of suite.specs ?? [])
+                for (const t of spec.tests)
+                  if (t.status === 'unexpected') failed.push(`${t.projectName} › ${spec.file} › ${spec.title}`)
+              for (const child of suite.suites ?? []) walk(child)
+            }
+            suites.forEach(walk)
+            const seconds = Math.round(stats.duration / 1000)
+            lines.push(`Passed: ${stats.expected} · Failed: ${stats.unexpected} · Flaky: ${stats.flaky} · Skipped: ${stats.skipped} · Duration: ${seconds} s`, '')
+            if (failed.length) lines.push('**Failed tests**', '', ...failed.map((f) => `- ${f}`), '')
+          }
+          if (process.env.REPORT_URL) {
+            lines.push(`[Download the HTML report](${process.env.REPORT_URL}) — unzip it and run "npx playwright show-report <folder>".`)
+          }
+          console.log(lines.join('\n'))
+          EOF
