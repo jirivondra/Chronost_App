@@ -105,7 +105,7 @@ jobs:
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             Review the image diffs before merging — this workflow accepts whatever rendered, it doesn't judge correctness.
-          add-paths: tests/regression/*.spec.ts-snapshots
+          add-paths: tests/regression/*.spec.ts-snapshots/**
 
       - name: No changes found
         if: steps.changes.outputs.has_changes == 'false'
