@@ -87,6 +87,10 @@
               'surface-container-low': 'rgb(var(--color-surface-container-low) / <alpha-value>)',
               'outline-variant': 'rgb(var(--color-outline-variant) / <alpha-value>)',
               'on-tertiary-fixed': 'rgb(var(--color-on-tertiary-fixed) / <alpha-value>)',
+              warning: 'rgb(var(--color-warning) / <alpha-value>)',
+              'on-warning': 'rgb(var(--color-on-warning) / <alpha-value>)',
+              'warning-container': 'rgb(var(--color-warning-container) / <alpha-value>)',
+              'on-warning-container': 'rgb(var(--color-on-warning-container) / <alpha-value>)',
             },
             borderRadius: {
               DEFAULT: '0.125rem',
@@ -156,6 +160,10 @@
         --color-surface-container-low: 245 242 251;
         --color-outline-variant: 178 177 188;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 133 77 0;
+        --color-on-warning: 255 255 255;
+        --color-warning-container: 255 214 138;
+        --color-on-warning-container: 43 30 0;
       }
       .dark {
         --color-tertiary-fixed: 241 206 252;
@@ -209,6 +217,10 @@
         --color-surface-container-low: 27 27 33;
         --color-outline-variant: 70 70 79;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 255 186 77;
+        --color-on-warning: 69 47 0;
+        --color-warning-container: 92 63 0;
+        --color-on-warning-container: 255 214 138;
       }
       body {
         font-family: 'Inter', sans-serif;
@@ -669,7 +681,7 @@
               </h2>
               <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
                 <span class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-error"></span>
+                  <span class="w-2 h-2 rounded-full bg-warning"></span>
                   Overdue
                 </span>
                 <span class="flex items-center gap-1.5">
@@ -697,9 +709,9 @@
 
           <div
             id="overdue-box"
-            class="hidden bg-error-container/15 border border-error/20 p-8 rounded-[2rem]"
+            class="hidden bg-warning-container/15 border border-warning/20 p-8 rounded-[2rem]"
           >
-            <h4 class="font-headline text-lg font-bold text-error mb-6 flex items-center gap-2">
+            <h4 class="font-headline text-lg font-bold text-warning mb-6 flex items-center gap-2">
               <span class="material-symbols-outlined text-[20px]">warning</span>
               Overdue
             </h4>
@@ -941,18 +953,18 @@
 
           const badge = document.createElement('div')
           badge.className =
-            'w-12 h-12 bg-error-container rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
-          badge.innerHTML = `<span class="text-[10px] font-bold text-on-error-container uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-on-error-container leading-tight">${d}</span>`
+            'w-12 h-12 bg-warning-container rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
+          badge.innerHTML = `<span class="text-[10px] font-bold text-on-warning-container uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-on-warning-container leading-tight">${d}</span>`
 
           const info = document.createElement('div')
           info.className = 'min-w-0'
 
           const title = document.createElement('h5')
-          title.className = 'text-sm font-bold text-error truncate'
+          title.className = 'text-sm font-bold text-warning truncate'
           title.textContent = t.title
 
           const sub = document.createElement('p')
-          sub.className = 'text-xs text-error font-semibold'
+          sub.className = 'text-xs text-warning font-semibold'
           sub.textContent = relativeOverdueLabel(t.due_date)
 
           info.appendChild(title)
@@ -976,7 +988,7 @@
 
       function taskDotClass(todo) {
         if (todo.completed) return 'bg-on-surface-variant/40'
-        if (todo.due_date < todayKey) return 'bg-error'
+        if (todo.due_date < todayKey) return 'bg-warning'
         return 'bg-primary'
       }
 
