@@ -634,7 +634,7 @@
     <!-- Main Content Canvas -->
     <main class="ml-sidebar min-h-screen p-12">
       <!-- Bento Layout Dashboard -->
-      <div class="editorial-grid">
+      <div id="dashboard-content" class="editorial-grid">
         <!-- Main Tasks Column (8/12) -->
         <div class="col-span-8 flex flex-col gap-10">
           <!-- Open Tasks -->
@@ -898,6 +898,30 @@
           </div>
         </div>
       </div>
+      <!-- Backend Unreachable -->
+      <div id="be-down" class="hidden max-w-md mx-auto text-center py-24">
+        <div
+          class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-error-container/15 border border-error/20 flex items-center justify-center"
+        >
+          <span class="material-symbols-outlined text-error text-[40px]">dns</span>
+        </div>
+        <p class="font-headline text-6xl font-black text-error mb-2">518</p>
+        <h2 class="font-headline text-xl font-bold text-on-surface mb-3">Can't Reach the Server</h2>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-1">
+          The backend isn't responding. Make sure it's running (<code class="text-primary font-mono"
+            >task be-up</code
+          >), then try again.
+        </p>
+        <p class="text-on-surface-variant/50 text-xs italic mb-8">
+          (Not a real HTTP status — we made it up. The backend never got a chance to answer.)
+        </p>
+        <button
+          id="be-down-retry"
+          class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+        >
+          Try Again
+        </button>
+      </div>
     </main>
     <!-- Delete Task Dialog -->
     <div
@@ -945,6 +969,14 @@
         window.location.href = 'login.html'
       } else {
         const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
+
+        function showBackendDown() {
+          document.getElementById('dashboard-content').classList.add('hidden')
+          document.getElementById('be-down').classList.remove('hidden')
+        }
+        document
+          .getElementById('be-down-retry')
+          .addEventListener('click', () => window.location.reload())
 
         let pendingDeleteId = null
         const deleteDialog = document.getElementById('delete-dialog')
@@ -1252,8 +1284,7 @@
           try {
             res = await fetch(`${API}/todos`, { headers })
           } catch {
-            document.getElementById('open-list').innerHTML =
-              '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+            showBackendDown()
             return
           }
           if (res.status === 401) {

@@ -605,27 +605,58 @@
       </header>
       <!-- Main Content -->
       <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
-        <div class="mb-10">
-          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-            <a
-              class="flex items-center hover:text-primary transition-colors"
-              href="dashboard.html"
-              aria-label="Dashboard"
+        <div id="finished-tasks-content">
+          <div class="mb-10">
+            <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+              <a
+                class="flex items-center hover:text-primary transition-colors"
+                href="dashboard.html"
+                aria-label="Dashboard"
+              >
+                <span class="material-symbols-outlined text-[18px]">home</span>
+              </a>
+              <span class="material-symbols-outlined text-xs">chevron_right</span>
+              <span class="text-on-surface">Closed Tasks</span>
+            </nav>
+            <h1
+              class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
             >
-              <span class="material-symbols-outlined text-[18px]">home</span>
-            </a>
-            <span class="material-symbols-outlined text-xs">chevron_right</span>
-            <span class="text-on-surface">Closed Tasks</span>
-          </nav>
-          <h1 class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline">
-            Closed Tasks
-          </h1>
-          <p class="text-on-surface-variant mt-2 text-lg">Everything you've already finished.</p>
+              Closed Tasks
+            </h1>
+            <p class="text-on-surface-variant mt-2 text-lg">Everything you've already finished.</p>
+          </div>
+          <div id="done-list" class="flex flex-col gap-4">
+            <p class="text-on-surface-variant text-sm">Loading tasks...</p>
+          </div>
+          <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
         </div>
-        <div id="done-list" class="flex flex-col gap-4">
-          <p class="text-on-surface-variant text-sm">Loading tasks...</p>
+        <!-- Backend Unreachable -->
+        <div id="be-down" class="hidden max-w-md mx-auto text-center py-24">
+          <div
+            class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-error-container/15 border border-error/20 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-error text-[40px]">dns</span>
+          </div>
+          <p class="font-headline text-6xl font-black text-error mb-2">518</p>
+          <h2 class="font-headline text-xl font-bold text-on-surface mb-3">
+            Can't Reach the Server
+          </h2>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-1">
+            The backend isn't responding. Make sure it's running (<code
+              class="text-primary font-mono"
+              >task be-up</code
+            >), then try again.
+          </p>
+          <p class="text-on-surface-variant/50 text-xs italic mb-8">
+            (Not a real HTTP status — we made it up. The backend never got a chance to answer.)
+          </p>
+          <button
+            id="be-down-retry"
+            class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          >
+            Try Again
+          </button>
         </div>
-        <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
       </main>
     </div>
 
@@ -674,6 +705,14 @@
       if (!auth) window.location.href = 'login.html'
 
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
+
+      function showBackendDown() {
+        document.getElementById('finished-tasks-content').classList.add('hidden')
+        document.getElementById('be-down').classList.remove('hidden')
+      }
+      document
+        .getElementById('be-down-retry')
+        .addEventListener('click', () => window.location.reload())
 
       let pendingDeleteId = null
       const deleteDialog = document.getElementById('delete-dialog')
@@ -881,8 +920,7 @@
         try {
           res = await fetch(`${API}/todos`, { headers })
         } catch {
-          document.getElementById('done-list').innerHTML =
-            '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+          showBackendDown()
           return
         }
         if (res.status === 401) {
