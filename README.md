@@ -119,7 +119,7 @@ task be-down
 
 The project includes a SOAP 1.1 calculator service built on the [spyne](https://spyne.io) library. It serves as a demo and testing ground for the SOAP protocol.
 
-**Available operations:** `Add`, `Subtract`, `Multiply`, `Divide` (input and output: `Float`)
+**Available operations:** `Add`, `Subtract`, `Multiply`, `Divide` (input and output: `Double`)
 
 | URL                           | Description     |
 | ----------------------------- | --------------- |

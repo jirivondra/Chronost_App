@@ -1,23 +1,23 @@
-from spyne import Application, Fault, Float, ServiceBase, rpc
+from spyne import Application, Double, Fault, ServiceBase, rpc
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
 from wsgiref.simple_server import make_server
 
 
 class CalculatorService(ServiceBase):
-    @rpc(Float, Float, _returns=Float)
+    @rpc(Double, Double, _returns=Double)
     def Add(ctx, a, b):
         return a + b
 
-    @rpc(Float, Float, _returns=Float)
+    @rpc(Double, Double, _returns=Double)
     def Subtract(ctx, a, b):
         return a - b
 
-    @rpc(Float, Float, _returns=Float)
+    @rpc(Double, Double, _returns=Double)
     def Multiply(ctx, a, b):
         return a * b
 
-    @rpc(Float, Float, _returns=Float)
+    @rpc(Double, Double, _returns=Double)
     def Divide(ctx, a, b):
         if b == 0:
             raise Fault(faultcode="Client", faultstring="Division by zero is not allowed")
