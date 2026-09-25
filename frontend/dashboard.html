@@ -1518,7 +1518,7 @@
           btn.addEventListener('click', () => {
             const d = btn.dataset.digit
             if (justCalculated) {
-              entryA = d === '0' ? '' : d
+              entryA = d
               entryB = ''
               currentOp = null
               activeEntry = 'a'
@@ -1528,10 +1528,10 @@
               errorEl.classList.add('hidden')
             } else if (activeEntry === 'a') {
               if (entryA.length >= 10) return
-              entryA = entryA === '' && d === '0' ? '' : entryA + d
+              entryA = entryA === '0' ? d : entryA + d
             } else {
               if (entryB.length >= 10) return
-              entryB = entryB === '' && d === '0' ? '' : entryB + d
+              entryB = entryB === '0' ? d : entryB + d
             }
             updateDisplay()
           })
@@ -1600,6 +1600,10 @@
               activeEntry = 'a'
               justCalculated = true
               highlightOp(null)
+            } else {
+              document.getElementById('w-error-msg').textContent =
+                'Unexpected response from the SOAP service.'
+              errorEl.classList.remove('hidden')
             }
           } catch {
             document.getElementById('w-error-msg').textContent =
