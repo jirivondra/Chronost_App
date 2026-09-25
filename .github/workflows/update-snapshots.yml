@@ -1,0 +1,120 @@
+# Regenerates the Playwright visual regression baselines against THIS repo's UI (whatever
+# ref the workflow is dispatched on, e.g. a PR branch that changes how a page looks) on a
+# real Linux runner, and opens a PR with the result in the Playwright repo, where the
+# baselines live.
+#
+# Requires, once: the PLAYWRIGHT_REPO_TOKEN secret — a PAT with Contents + Pull requests
+# write access to jirivondra/Chronos_Playwright_testing (GITHUB_TOKEN can't write to
+# another repo).
+name: Update Playwright Snapshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-snapshots:
+    name: Update visual snapshots
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: http://localhost:3000
+      API_BASE_URL: http://localhost:8000
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v4
+
+      - name: Checkout Playwright tests
+        uses: actions/checkout@v4
+        with:
+          repository: jirivondra/Chronos_Playwright_testing
+          path: playwright-tests
+          token: ${{ secrets.PLAYWRIGHT_REPO_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install API dependencies
+        run: pip install -r api/requirements.txt
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Playwright test dependencies
+        run: npm ci
+        working-directory: playwright-tests
+
+      - name: Install Playwright browsers
+        run: |
+          npx playwright install --with-deps
+          npx playwright install chrome
+        working-directory: playwright-tests
+
+      - name: Start API
+        run: uvicorn api.main:app --host 0.0.0.0 --port 8000 &
+
+      - name: Start frontend
+        run: python3 -m http.server 3000 --directory frontend &
+
+      - name: Wait for API
+        run: |
+          timeout 30 bash -c \
+            'until curl -sf -u "$API_USERNAME:$API_PASSWORD" http://localhost:8000/todos > /dev/null; do sleep 1; done'
+
+      - name: Wait for frontend
+        run: |
+          timeout 30 bash -c \
+            'until curl -sf http://localhost:3000/login.html > /dev/null; do sleep 1; done'
+
+      - name: Update visual snapshots
+        run: npx playwright test --grep "Visual Tests" --update-snapshots
+        working-directory: playwright-tests
+
+      - name: Check for snapshot changes
+        id: changes
+        working-directory: playwright-tests
+        run: |
+          if git diff --quiet -- tests/regression/*.spec.ts-snapshots; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No snapshot changes detected"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            git status --porcelain -- tests/regression/*.spec.ts-snapshots
+          fi
+
+      - name: Open PR in Playwright repo
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.PLAYWRIGHT_REPO_TOKEN }}
+          path: playwright-tests
+          branch: update-snapshots-${{ github.run_number }}
+          delete-branch: true
+          commit-message: 'chore: update visual regression snapshots'
+          title: 'Update Playwright visual snapshots (Chronost_App ${{ github.ref_name }})'
+          body: |
+            Baseline PNGs regenerated on a Linux GitHub Actions runner via `--update-snapshots`,
+            against Chronost_App `${{ github.ref_name }}` (${{ github.sha }}).
+
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Review the image diffs before merging — this workflow accepts whatever rendered, it doesn't judge correctness.
+          add-paths: tests/regression/*.spec.ts-snapshots/**
+
+      - name: No changes found
+        if: steps.changes.outputs.has_changes == 'false'
+        run: echo "No snapshot changes were needed — visual baselines are already up to date."
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-tests/playwright-report/
+          retention-days: 7

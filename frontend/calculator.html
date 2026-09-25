@@ -656,12 +656,24 @@
                 class="text-xs font-bold uppercase tracking-widest text-primary ml-1 block mb-2"
                 >Číslo A</label
               >
-              <input
-                id="num-a"
-                type="number"
-                value="10"
-                class="w-full bg-surface-container-low border-none rounded-2xl p-5 text-2xl font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all text-center"
-              />
+              <div class="flex items-stretch gap-2">
+                <input
+                  id="num-a"
+                  type="text"
+                  inputmode="decimal"
+                  value="10"
+                  class="w-full bg-surface-container-low border-none rounded-2xl p-5 text-2xl font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all text-center"
+                />
+                <button
+                  type="button"
+                  id="decimal-a"
+                  data-target="num-a"
+                  aria-label="Insert decimal point"
+                  class="decimal-btn flex-shrink-0 w-14 flex items-center justify-center rounded-2xl bg-surface-container-low text-2xl font-bold text-on-surface hover:bg-surface-container-high transition-all"
+                >
+                  .
+                </button>
+              </div>
             </div>
             <div id="op-symbol" class="text-3xl font-black text-primary-dim mt-6">+</div>
             <div class="flex-1">
@@ -669,18 +681,31 @@
                 class="text-xs font-bold uppercase tracking-widest text-primary ml-1 block mb-2"
                 >Číslo B</label
               >
-              <input
-                id="num-b"
-                type="number"
-                value="5"
-                class="w-full bg-surface-container-low border-none rounded-2xl p-5 text-2xl font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all text-center"
-              />
+              <div class="flex items-stretch gap-2">
+                <input
+                  id="num-b"
+                  type="text"
+                  inputmode="decimal"
+                  value="5"
+                  class="w-full bg-surface-container-low border-none rounded-2xl p-5 text-2xl font-bold text-on-surface focus:ring-2 focus:ring-primary transition-all text-center"
+                />
+                <button
+                  type="button"
+                  id="decimal-b"
+                  data-target="num-b"
+                  aria-label="Insert decimal point"
+                  class="decimal-btn flex-shrink-0 w-14 flex items-center justify-center rounded-2xl bg-surface-container-low text-2xl font-bold text-on-surface hover:bg-surface-container-high transition-all"
+                >
+                  .
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Operation buttons -->
           <div class="grid grid-cols-4 gap-3 mb-8">
             <button
+              id="op-add"
               data-op="Add"
               data-symbol="+"
               class="op-btn active-op py-4 rounded-2xl font-headline font-bold text-xl transition-all bg-primary text-on-primary shadow-lg shadow-primary/20"
@@ -688,6 +713,7 @@
               +
             </button>
             <button
+              id="op-subtract"
               data-op="Subtract"
               data-symbol="−"
               class="op-btn py-4 rounded-2xl font-headline font-bold text-xl transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
@@ -695,6 +721,7 @@
               −
             </button>
             <button
+              id="op-multiply"
               data-op="Multiply"
               data-symbol="×"
               class="op-btn py-4 rounded-2xl font-headline font-bold text-xl transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
@@ -702,6 +729,7 @@
               ×
             </button>
             <button
+              id="op-divide"
               data-op="Divide"
               data-symbol="÷"
               class="op-btn py-4 rounded-2xl font-headline font-bold text-xl transition-all bg-surface-container text-on-surface hover:bg-surface-container-high"
@@ -823,7 +851,7 @@
             <ul class="space-y-2 text-sm text-on-surface-variant">
               <li class="flex items-center gap-2">
                 <span class="text-primary font-bold font-mono w-20">Add</span>
-                <span>Sečte dvě čísla (Float)</span>
+                <span>Sečte dvě čísla (Double)</span>
               </li>
               <li class="flex items-center gap-2">
                 <span class="text-primary font-bold font-mono w-20">Subtract</span>
@@ -880,6 +908,20 @@
           )
           activeOp = btn.dataset.op
           document.getElementById('op-symbol').textContent = btn.dataset.symbol
+        })
+      })
+
+      // Decimal point buttons
+      document.querySelectorAll('.decimal-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const input = document.getElementById(btn.dataset.target)
+          if (input.value.includes('.')) {
+            input.focus()
+            return
+          }
+          input.value =
+            input.value === '' || input.value === '-' ? `${input.value}0.` : `${input.value}.`
+          input.focus()
         })
       })
 
@@ -966,6 +1008,8 @@
             if (resultNode) {
               const num = parseFloat(resultNode.textContent)
               showResult(Number.isInteger(num) ? num : num.toFixed(10).replace(/\.?0+$/, ''))
+            } else {
+              showError('Neočekávaná odpověď od SOAP service.')
             }
           }
         } catch {
