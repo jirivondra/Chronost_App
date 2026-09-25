@@ -62,7 +62,7 @@ class TodoCreate(BaseModel):
         }
     )
 
-    title: str
+    title: str = Field(min_length=1)
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: bool = False
     due_date: Optional[str] = None
@@ -80,7 +80,7 @@ class TodoUpdate(BaseModel):
         }
     )
 
-    title: Optional[str] = None
+    title: Optional[str] = Field(default=None, min_length=1)
     description: Optional[str] = Field(default=None, max_length=5000)
     completed: Optional[bool] = None
     due_date: Optional[str] = None

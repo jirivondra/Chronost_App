@@ -87,6 +87,10 @@
               'surface-container-low': 'rgb(var(--color-surface-container-low) / <alpha-value>)',
               'outline-variant': 'rgb(var(--color-outline-variant) / <alpha-value>)',
               'on-tertiary-fixed': 'rgb(var(--color-on-tertiary-fixed) / <alpha-value>)',
+              warning: 'rgb(var(--color-warning) / <alpha-value>)',
+              'on-warning': 'rgb(var(--color-on-warning) / <alpha-value>)',
+              'warning-container': 'rgb(var(--color-warning-container) / <alpha-value>)',
+              'on-warning-container': 'rgb(var(--color-on-warning-container) / <alpha-value>)',
             },
             borderRadius: {
               DEFAULT: '0.125rem',
@@ -156,6 +160,10 @@
         --color-surface-container-low: 245 242 251;
         --color-outline-variant: 178 177 188;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 133 77 0;
+        --color-on-warning: 255 255 255;
+        --color-warning-container: 255 214 138;
+        --color-on-warning-container: 43 30 0;
       }
       .dark {
         --color-tertiary-fixed: 241 206 252;
@@ -209,6 +217,10 @@
         --color-surface-container-low: 27 27 33;
         --color-outline-variant: 70 70 79;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 255 186 77;
+        --color-on-warning: 69 47 0;
+        --color-warning-container: 92 63 0;
+        --color-on-warning-container: 255 214 138;
       }
       body {
         font-family: 'Inter', sans-serif;
@@ -389,7 +401,7 @@
         display: flex;
         align-items: center;
       }
-      .search-input {
+      input.search-input {
         width: 0;
         opacity: 0;
         padding: 0;
@@ -398,7 +410,7 @@
         border: none;
         outline: none;
         font-size: 0.875rem;
-        color: #31323b;
+        color: rgb(var(--color-on-surface) / 1);
         transition:
           width 0.3s ease,
           opacity 0.3s ease,
@@ -412,9 +424,10 @@
         pointer-events: all;
       }
       .search-wrap.open {
-        background: #f5f2fb;
+        background: rgb(var(--color-surface-container-low) / 1);
         border-radius: 9999px;
         padding: 0.4rem 0.75rem;
+        gap: 0.25rem;
       }
       .search-wrap:not(.open) {
         gap: 0;
@@ -519,6 +532,13 @@
                 <span class="material-symbols-outlined text-[22px]">search</span>
               </button>
               <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+              <button
+                id="search-close-btn"
+                class="hidden items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                data-tip="Close"
+              >
+                <span class="material-symbols-outlined text-[18px]">close</span>
+              </button>
             </div>
             <div id="theme-toggle" class="flex items-center">
               <button
@@ -562,7 +582,7 @@
                 <button
                   type="button"
                   id="theme-toggle-close"
-                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-error transition-colors"
+                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-primary transition-colors"
                   data-tip="Close"
                 >
                   <span class="material-symbols-outlined text-[18px]">close</span>
@@ -577,7 +597,7 @@
             </button>
             <a
               href="logout.html"
-              class="flex items-center justify-center text-slate-500 hover:text-error transition-colors"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
               data-tip="Log out"
             >
               <span class="material-symbols-outlined text-[22px]">logout</span>
@@ -597,100 +617,140 @@
       </header>
       <!-- Main Content -->
       <main class="flex-1 p-8 md:p-12 max-w-7xl mx-auto w-full">
-        <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-              <a
-                class="flex items-center hover:text-primary transition-colors"
-                href="dashboard.html"
-                aria-label="Dashboard"
+        <div id="calendar-content">
+          <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+                <a
+                  class="flex items-center hover:text-primary transition-colors"
+                  href="dashboard.html"
+                  aria-label="Dashboard"
+                >
+                  <span class="material-symbols-outlined text-[18px]">home</span>
+                </a>
+                <span class="material-symbols-outlined text-xs">chevron_right</span>
+                <span class="text-on-surface">Calendar</span>
+              </nav>
+              <h1
+                class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
               >
-                <span class="material-symbols-outlined text-[18px]">home</span>
-              </a>
-              <span class="material-symbols-outlined text-xs">chevron_right</span>
-              <span class="text-on-surface">Calendar</span>
-            </nav>
-            <h1
-              class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
+                Calendar
+              </h1>
+              <p class="text-on-surface-variant mt-2 text-lg">
+                Every task, laid out by the day it's due.
+              </p>
+            </div>
+            <a
+              href="edit-task.html?from=calendar"
+              class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
             >
-              Calendar
-            </h1>
-            <p class="text-on-surface-variant mt-2 text-lg">
-              Every task, laid out by the day it's due.
-            </p>
+              <span class="material-symbols-outlined text-[20px]">add</span>
+              New Task
+            </a>
           </div>
-          <a
-            href="edit-task.html?from=calendar"
-            class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
-          >
-            <span class="material-symbols-outlined text-[20px]">add</span>
-            New Task
-          </a>
+
+          <div class="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-8 items-start">
+            <div class="bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-sm">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                  <button
+                    id="cal-prev-btn"
+                    class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                    data-tip="Previous month"
+                  >
+                    <span class="material-symbols-outlined text-[22px]">chevron_left</span>
+                  </button>
+                  <button
+                    id="cal-next-btn"
+                    class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
+                    data-tip="Next month"
+                  >
+                    <span class="material-symbols-outlined text-[22px]">chevron_right</span>
+                  </button>
+                  <button
+                    id="cal-today-btn"
+                    class="ml-2 px-4 py-2 rounded-full text-sm font-bold text-primary hover:bg-surface-container-high transition-colors"
+                  >
+                    Today
+                  </button>
+                </div>
+                <h2
+                  id="cal-month-label"
+                  class="font-headline text-xl md:text-2xl font-black text-on-surface"
+                >
+                  &nbsp;
+                </h2>
+                <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-warning"></span>
+                    Overdue
+                  </span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                    Upcoming
+                  </span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span>
+                    Done
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2">
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Mon</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Tue</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Wed</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Thu</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Fri</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sat</span>
+                <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sun</span>
+              </div>
+              <div id="cal-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+            </div>
+
+            <div
+              id="overdue-box"
+              class="hidden bg-warning-container/15 border border-warning/20 p-8 rounded-[2rem]"
+            >
+              <h4 class="font-headline text-lg font-bold text-warning mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">warning</span>
+                Overdue
+              </h4>
+              <div id="overdue-list" class="flex flex-col gap-6"></div>
+            </div>
+
+            <div class="bg-surface-container-low p-8 rounded-[2rem]">
+              <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
+              <div id="upcoming-list" class="flex flex-col gap-6"></div>
+            </div>
+          </div>
         </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-8 items-start">
-          <div class="bg-surface-container-lowest rounded-[2rem] p-6 md:p-8 shadow-sm">
-            <div class="flex items-center justify-between mb-6">
-              <div class="flex items-center gap-2">
-                <button
-                  id="cal-prev-btn"
-                  class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
-                  data-tip="Previous month"
-                >
-                  <span class="material-symbols-outlined text-[22px]">chevron_left</span>
-                </button>
-                <button
-                  id="cal-next-btn"
-                  class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors"
-                  data-tip="Next month"
-                >
-                  <span class="material-symbols-outlined text-[22px]">chevron_right</span>
-                </button>
-                <button
-                  id="cal-today-btn"
-                  class="ml-2 px-4 py-2 rounded-full text-sm font-bold text-primary hover:bg-surface-container-high transition-colors"
-                >
-                  Today
-                </button>
-              </div>
-              <h2
-                id="cal-month-label"
-                class="font-headline text-xl md:text-2xl font-black text-on-surface"
-              >
-                &nbsp;
-              </h2>
-              <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
-                <span class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-error"></span>
-                  Overdue
-                </span>
-                <span class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-primary"></span>
-                  Upcoming
-                </span>
-                <span class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span>
-                  Done
-                </span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-2">
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Mon</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Tue</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Wed</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Thu</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Fri</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sat</span>
-              <span class="text-xs font-bold text-on-surface-variant/50 py-2">Sun</span>
-            </div>
-            <div id="cal-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+        <!-- Backend Unreachable -->
+        <div id="be-down" class="hidden max-w-md mx-auto text-center py-24">
+          <div
+            class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-error-container/15 border border-error/20 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-error text-[40px]">dns</span>
           </div>
-
-          <div class="bg-surface-container-low p-8 rounded-[2rem]">
-            <h4 class="font-headline text-lg font-bold text-on-surface mb-6">Upcoming</h4>
-            <div id="upcoming-list" class="flex flex-col gap-6"></div>
-          </div>
+          <p class="font-headline text-6xl font-black text-error mb-2">518</p>
+          <h2 class="font-headline text-xl font-bold text-on-surface mb-3">
+            Can't Reach the Server
+          </h2>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-1">
+            The backend isn't responding. Make sure it's running (<code
+              class="text-primary font-mono"
+              >task be-up</code
+            >), then try again.
+          </p>
+          <p class="text-on-surface-variant/50 text-xs italic mb-8">
+            (Not a real HTTP status — we made it up. The backend never got a chance to answer.)
+          </p>
+          <button
+            id="be-down-retry"
+            class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          >
+            Try Again
+          </button>
         </div>
       </main>
 
@@ -768,6 +828,14 @@
 
       const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
 
+      function showBackendDown() {
+        document.getElementById('calendar-content').classList.add('hidden')
+        document.getElementById('be-down').classList.remove('hidden')
+      }
+      document
+        .getElementById('be-down-retry')
+        .addEventListener('click', () => window.location.reload())
+
       let pendingDeleteId = null
       const deleteDialog = document.getElementById('delete-dialog')
 
@@ -844,6 +912,11 @@
         return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long' })
       }
 
+      function relativeOverdueLabel(dateKey) {
+        const daysOverdue = Math.round((new Date(todayKey) - new Date(dateKey)) / 86400000)
+        return daysOverdue === 1 ? 'Overdue by 1 day' : `Overdue by ${daysOverdue} days`
+      }
+
       function renderUpcoming() {
         const list = document.getElementById('upcoming-list')
         list.innerHTML = ''
@@ -893,6 +966,53 @@
         })
       }
 
+      function renderOverdue() {
+        const box = document.getElementById('overdue-box')
+        const list = document.getElementById('overdue-list')
+        list.innerHTML = ''
+
+        const overdue = allTodos
+          .filter((t) => !t.completed && t.due_date && t.due_date < todayKey)
+          .sort((a, b) => (a.due_date < b.due_date ? -1 : a.due_date > b.due_date ? 1 : 0))
+
+        if (overdue.length === 0) {
+          box.classList.add('hidden')
+          return
+        }
+        box.classList.remove('hidden')
+
+        overdue.forEach((t) => {
+          const [, m, d] = t.due_date.split('-').map(Number)
+
+          const row = document.createElement('button')
+          row.type = 'button'
+          row.className = 'flex gap-4 text-left w-full hover:opacity-80 transition-opacity'
+
+          const badge = document.createElement('div')
+          badge.className =
+            'w-12 h-12 bg-warning-container rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
+          badge.innerHTML = `<span class="text-[10px] font-bold text-on-warning-container uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-on-warning-container leading-tight">${d}</span>`
+
+          const info = document.createElement('div')
+          info.className = 'min-w-0'
+
+          const title = document.createElement('h5')
+          title.className = 'text-sm font-bold text-warning truncate'
+          title.textContent = t.title
+
+          const sub = document.createElement('p')
+          sub.className = 'text-xs text-warning font-semibold'
+          sub.textContent = relativeOverdueLabel(t.due_date)
+
+          info.appendChild(title)
+          info.appendChild(sub)
+          row.appendChild(badge)
+          row.appendChild(info)
+          row.addEventListener('click', () => openDayPanel(t.due_date))
+          list.appendChild(row)
+        })
+      }
+
       function tasksByDate() {
         const map = {}
         allTodos.forEach((t) => {
@@ -905,7 +1025,7 @@
 
       function taskDotClass(todo) {
         if (todo.completed) return 'bg-on-surface-variant/40'
-        if (todo.due_date < todayKey) return 'bg-error'
+        if (todo.due_date < todayKey) return 'bg-warning'
         return 'bg-primary'
       }
 
@@ -1122,8 +1242,7 @@
         try {
           res = await fetch(`${API}/todos`, { headers })
         } catch {
-          document.getElementById('cal-grid').innerHTML =
-            '<p class="col-span-7 text-error text-sm p-4">Cannot connect to API. Make sure the backend is running.</p>'
+          showBackendDown()
           return
         }
         if (res.status === 401) {
@@ -1133,6 +1252,7 @@
         allTodos = await res.json()
         renderCalendar()
         renderUpcoming()
+        renderOverdue()
         if (openDayKey) {
           renderDayPanelList(tasksByDate()[openDayKey] || [])
         }
@@ -1283,20 +1403,37 @@
         const wrap = document.getElementById('search-wrap')
         const btn = document.getElementById('search-btn')
         const input = document.getElementById('search-input')
+        const closeBtn = document.getElementById('search-close-btn')
+
+        function openSearch() {
+          wrap.classList.add('open')
+          closeBtn.classList.remove('hidden')
+          closeBtn.classList.add('flex')
+          input.focus()
+          btn.removeAttribute('data-tip')
+        }
+
+        function closeSearch() {
+          wrap.classList.remove('open')
+          closeBtn.classList.add('hidden')
+          closeBtn.classList.remove('flex')
+          input.value = ''
+          btn.setAttribute('data-tip', 'Search')
+        }
+
         btn.addEventListener('click', () => {
-          wrap.classList.toggle('open')
           if (wrap.classList.contains('open')) {
-            input.focus()
-            btn.removeAttribute('data-tip')
+            closeSearch()
           } else {
-            input.value = ''
-            btn.setAttribute('data-tip', 'Search')
+            openSearch()
           }
         })
+
+        closeBtn.addEventListener('click', closeSearch)
+
         input.addEventListener('blur', () => {
           if (!input.value) {
-            wrap.classList.remove('open')
-            btn.setAttribute('data-tip', 'Search')
+            closeSearch()
           }
         })
       })()

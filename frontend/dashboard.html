@@ -87,6 +87,10 @@
               'surface-container-low': 'rgb(var(--color-surface-container-low) / <alpha-value>)',
               'outline-variant': 'rgb(var(--color-outline-variant) / <alpha-value>)',
               'on-tertiary-fixed': 'rgb(var(--color-on-tertiary-fixed) / <alpha-value>)',
+              warning: 'rgb(var(--color-warning) / <alpha-value>)',
+              'on-warning': 'rgb(var(--color-on-warning) / <alpha-value>)',
+              'warning-container': 'rgb(var(--color-warning-container) / <alpha-value>)',
+              'on-warning-container': 'rgb(var(--color-on-warning-container) / <alpha-value>)',
             },
             borderRadius: {
               DEFAULT: '0.125rem',
@@ -170,6 +174,10 @@
         --color-surface-container-low: 245 242 251;
         --color-outline-variant: 178 177 188;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 133 77 0;
+        --color-on-warning: 255 255 255;
+        --color-warning-container: 255 214 138;
+        --color-on-warning-container: 43 30 0;
       }
       .dark {
         --color-tertiary-fixed: 241 206 252;
@@ -223,6 +231,10 @@
         --color-surface-container-low: 27 27 33;
         --color-outline-variant: 70 70 79;
         --color-on-tertiary-fixed: 73 48 85;
+        --color-warning: 255 186 77;
+        --color-on-warning: 69 47 0;
+        --color-warning-container: 92 63 0;
+        --color-on-warning-container: 255 214 138;
       }
       .material-symbols-outlined {
         font-variation-settings:
@@ -356,7 +368,7 @@
         display: flex;
         align-items: center;
       }
-      .search-input {
+      input.search-input {
         width: 0;
         opacity: 0;
         padding: 0;
@@ -365,7 +377,7 @@
         border: none;
         outline: none;
         font-size: 0.875rem;
-        color: #31323b;
+        color: rgb(var(--color-on-surface) / 1);
         transition:
           width 0.3s ease,
           opacity 0.3s ease,
@@ -379,9 +391,10 @@
         pointer-events: all;
       }
       .search-wrap.open {
-        background: #f5f2fb;
+        background: rgb(var(--color-surface-container-low) / 1);
         border-radius: 9999px;
         padding: 0.4rem 0.75rem;
+        gap: 0.25rem;
       }
       .search-wrap:not(.open) {
         gap: 0;
@@ -535,6 +548,13 @@
               <span class="material-symbols-outlined text-[22px]">search</span>
             </button>
             <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+            <button
+              id="search-close-btn"
+              class="hidden items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+              data-tip="Close"
+            >
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
           </div>
           <div id="theme-toggle" class="flex items-center">
             <button
@@ -578,7 +598,7 @@
               <button
                 type="button"
                 id="theme-toggle-close"
-                class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-error transition-colors"
+                class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-primary transition-colors"
                 data-tip="Close"
               >
                 <span class="material-symbols-outlined text-[18px]">close</span>
@@ -593,7 +613,7 @@
           </button>
           <a
             href="logout.html"
-            class="flex items-center justify-center text-slate-500 hover:text-error transition-colors"
+            class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
             data-tip="Log out"
           >
             <span class="material-symbols-outlined text-[22px]">logout</span>
@@ -614,7 +634,7 @@
     <!-- Main Content Canvas -->
     <main class="ml-sidebar min-h-screen p-12">
       <!-- Bento Layout Dashboard -->
-      <div class="editorial-grid">
+      <div id="dashboard-content" class="editorial-grid">
         <!-- Main Tasks Column (8/12) -->
         <div class="col-span-8 flex flex-col gap-10">
           <!-- Open Tasks -->
@@ -681,6 +701,17 @@
             <div
               class="absolute -right-10 -bottom-10 w-40 h-40 bg-primary-container rounded-full opacity-20 blur-3xl"
             ></div>
+          </div>
+          <!-- Overdue -->
+          <div
+            id="overdue-box"
+            class="hidden bg-warning-container/15 border border-warning/20 p-8 rounded-[2rem]"
+          >
+            <h4 class="font-headline text-lg font-bold text-warning mb-6 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[20px]">warning</span>
+              Overdue
+            </h4>
+            <div id="overdue-list" class="flex flex-col gap-6"></div>
           </div>
           <!-- Calendar Peek -->
           <div class="bg-surface-container-low p-8 rounded-[2rem]">
@@ -867,6 +898,30 @@
           </div>
         </div>
       </div>
+      <!-- Backend Unreachable -->
+      <div id="be-down" class="hidden max-w-md mx-auto text-center py-24">
+        <div
+          class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-error-container/15 border border-error/20 flex items-center justify-center"
+        >
+          <span class="material-symbols-outlined text-error text-[40px]">dns</span>
+        </div>
+        <p class="font-headline text-6xl font-black text-error mb-2">518</p>
+        <h2 class="font-headline text-xl font-bold text-on-surface mb-3">Can't Reach the Server</h2>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-1">
+          The backend isn't responding. Make sure it's running (<code class="text-primary font-mono"
+            >task be-up</code
+          >), then try again.
+        </p>
+        <p class="text-on-surface-variant/50 text-xs italic mb-8">
+          (Not a real HTTP status — we made it up. The backend never got a chance to answer.)
+        </p>
+        <button
+          id="be-down-retry"
+          class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+        >
+          Try Again
+        </button>
+      </div>
     </main>
     <!-- Delete Task Dialog -->
     <div
@@ -914,6 +969,14 @@
         window.location.href = 'login.html'
       } else {
         const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
+
+        function showBackendDown() {
+          document.getElementById('dashboard-content').classList.add('hidden')
+          document.getElementById('be-down').classList.remove('hidden')
+        }
+        document
+          .getElementById('be-down-retry')
+          .addEventListener('click', () => window.location.reload())
 
         let pendingDeleteId = null
         const deleteDialog = document.getElementById('delete-dialog')
@@ -1095,6 +1158,13 @@
           return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long' })
         }
 
+        function relativeOverdueLabel(dateKey) {
+          const daysOverdue = Math.round(
+            (new Date(upcomingTodayKey) - new Date(dateKey)) / 86400000
+          )
+          return daysOverdue === 1 ? 'Overdue by 1 day' : `Overdue by ${daysOverdue} days`
+        }
+
         function renderUpcoming(todos) {
           const list = document.getElementById('upcoming-list')
           list.innerHTML = ''
@@ -1149,6 +1219,55 @@
           })
         }
 
+        function renderOverdue(todos) {
+          const box = document.getElementById('overdue-box')
+          const list = document.getElementById('overdue-list')
+          list.innerHTML = ''
+
+          const overdue = todos
+            .filter((t) => !t.completed && t.due_date && t.due_date < upcomingTodayKey)
+            .sort((a, b) => (a.due_date < b.due_date ? -1 : a.due_date > b.due_date ? 1 : 0))
+
+          if (overdue.length === 0) {
+            box.classList.add('hidden')
+            return
+          }
+          box.classList.remove('hidden')
+
+          overdue.forEach((t) => {
+            const [, m, d] = t.due_date.split('-').map(Number)
+
+            const row = document.createElement('button')
+            row.type = 'button'
+            row.className = 'flex gap-4 text-left w-full hover:opacity-80 transition-opacity'
+
+            const badge = document.createElement('div')
+            badge.className =
+              'w-12 h-12 bg-warning-container rounded-2xl flex flex-col items-center justify-center shadow-sm flex-shrink-0'
+            badge.innerHTML = `<span class="text-[10px] font-bold text-on-warning-container uppercase">${MONTH_SHORT[m - 1]}</span><span class="text-lg font-black text-on-warning-container leading-tight">${d}</span>`
+
+            const info = document.createElement('div')
+            info.className = 'min-w-0'
+
+            const title = document.createElement('h5')
+            title.className = 'text-sm font-bold text-warning truncate'
+            title.textContent = t.title
+
+            const sub = document.createElement('p')
+            sub.className = 'text-xs text-warning font-semibold'
+            sub.textContent = relativeOverdueLabel(t.due_date)
+
+            info.appendChild(title)
+            info.appendChild(sub)
+            row.appendChild(badge)
+            row.appendChild(info)
+            row.addEventListener('click', () => {
+              window.location.href = `task-detail.html?id=${t.id}&from=dashboard`
+            })
+            list.appendChild(row)
+          })
+        }
+
         function renderShowAllBtn(label, href) {
           const btn = document.createElement('button')
           btn.className =
@@ -1165,8 +1284,7 @@
           try {
             res = await fetch(`${API}/todos`, { headers })
           } catch {
-            document.getElementById('open-list').innerHTML =
-              '<p class="text-error text-sm">Cannot connect to API. Make sure the backend is running.</p>'
+            showBackendDown()
             return
           }
           if (res.status === 401) {
@@ -1175,6 +1293,7 @@
           }
           const todos = await res.json()
           renderUpcoming(todos)
+          renderOverdue(todos)
 
           const openList = document.getElementById('open-list')
           const doneList = document.getElementById('done-list')
@@ -1414,20 +1533,37 @@
           const wrap = document.getElementById('search-wrap')
           const btn = document.getElementById('search-btn')
           const input = document.getElementById('search-input')
+          const closeBtn = document.getElementById('search-close-btn')
+
+          function openSearch() {
+            wrap.classList.add('open')
+            closeBtn.classList.remove('hidden')
+            closeBtn.classList.add('flex')
+            input.focus()
+            btn.removeAttribute('data-tip')
+          }
+
+          function closeSearch() {
+            wrap.classList.remove('open')
+            closeBtn.classList.add('hidden')
+            closeBtn.classList.remove('flex')
+            input.value = ''
+            btn.setAttribute('data-tip', 'Search')
+          }
+
           btn.addEventListener('click', () => {
-            wrap.classList.toggle('open')
             if (wrap.classList.contains('open')) {
-              input.focus()
-              btn.removeAttribute('data-tip')
+              closeSearch()
             } else {
-              input.value = ''
-              btn.setAttribute('data-tip', 'Search')
+              openSearch()
             }
           })
+
+          closeBtn.addEventListener('click', closeSearch)
+
           input.addEventListener('blur', () => {
             if (!input.value) {
-              wrap.classList.remove('open')
-              btn.setAttribute('data-tip', 'Search')
+              closeSearch()
             }
           })
         })()

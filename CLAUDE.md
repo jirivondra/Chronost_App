@@ -54,6 +54,16 @@ When a block appears on more than one screen, treat it as one component with mul
 
 Example: the "Upcoming" box (next 7 days of non-completed tasks, date badge + relative day label, click-through) appears on both `dashboard.html` and `calendar.html`. Their `renderUpcoming` implementations are intentionally near-identical; if the behavior changes on one, mirror it on the other.
 
+## Theming (light/dark mode)
+
+Every color is a Material 3 token resolved through a CSS custom property, never a hardcoded hex or `rgba(...)`. Each screen's `tailwind-config` script maps every token (`primary`, `surface`, `on-surface`, etc.) to `rgb(var(--color-<token>) / <alpha-value>)`; the actual RGB triplets are defined once in that screen's `<style>` block as `:root { --color-<token>: r g b; ... }` and again under `.dark { ... }`. Toggling the `dark` class on `<html>` switches every `bg-surface-*`/`text-on-*`/etc. utility already in use at once — no per-element `dark:` classes needed. If a rule needs a color outside a Tailwind utility (e.g. a `background` in a `<style>` block), use `rgb(var(--color-<token>) / <alpha>)` the same way — a hardcoded value there is exactly the kind of bug that shows up as a stray wrong-theme patch once `.dark` is toggled (it happened twice: a task-description fade gradient and the login page's glass-panel background).
+
+The `dark` class is set by an inline `<script>` in `<head>`, before the Tailwind CDN `<script>` tag, so it applies before first paint (no flash of the wrong theme): it reads `localStorage.theme` (`'dark'` / `'light'` / absent = follow `prefers-color-scheme`). Any new screen with a header must copy this script plus the `colors`/`:root`/`.dark` blocks from an existing one — same duplicated-component rule as above. `login.html` and `logout.html` intentionally have no visible toggle (no in-app context to change it from), but still carry the same blocks so they inherit the current/system preference instead of forcing light mode.
+
+### `error` vs `warning`
+
+`error` is reserved for things that actually went wrong or are actively destructive: a failed request, a SOAP fault, "cannot connect to API", the delete-confirmation dialog. `warning` is for informative, actionable states that aren't a failure — most notably overdue tasks (the Overdue box, its date badge, the calendar legend dot and day-grid dots): the app didn't fail, it's just telling you something needs attention. Don't reuse `error` for these just because a red/error palette already exists — it muddies the one color that should mean "something broke." `warning` is a custom role (not part of the base Material 3 token set) added the same way as every other token: `warning` / `on-warning` / `warning-container` / `on-warning-container` in the `tailwind-config` colors map and both `:root`/`.dark` blocks.
+
 ## Testing
 
 - API integration tests live in a separate repo: [Chronos_App_Api_Testing](https://github.com/jirivondra/Chronos_App_Api_Testing).
