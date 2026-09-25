@@ -1000,6 +1000,8 @@
             if (resultNode) {
               const num = parseFloat(resultNode.textContent)
               showResult(Number.isInteger(num) ? num : num.toFixed(10).replace(/\.?0+$/, ''))
+            } else {
+              showError('Neočekávaná odpověď od SOAP service.')
             }
           }
         } catch {
