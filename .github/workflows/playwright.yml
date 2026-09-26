@@ -141,6 +141,9 @@ jobs:
       - name: Start API
         run: uvicorn api.main:app --host 0.0.0.0 --port 8000 &
 
+      - name: Start SOAP API
+        run: python3 -m api.soap_calculator &
+
       - name: Start frontend
         run: python3 -m http.server 3000 --directory frontend &
 
@@ -148,6 +151,11 @@ jobs:
         run: |
           timeout 30 bash -c \
             'until curl -sf -u "$API_USERNAME:$API_PASSWORD" http://localhost:8000/todos > /dev/null; do sleep 1; done'
+
+      - name: Wait for SOAP API
+        run: |
+          timeout 30 bash -c \
+            'until curl -sf http://localhost:8001/?wsdl > /dev/null; do sleep 1; done'
 
       - name: Wait for frontend
         run: |
