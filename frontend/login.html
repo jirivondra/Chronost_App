@@ -482,7 +482,11 @@
           document.getElementById('password-error').classList.remove('hidden')
           valid = false
         }
-        if (!valid) return
+        if (!valid) {
+          btn.disabled = false
+          btn.textContent = 'Sign In →'
+          return
+        }
 
         const token = btoa(`${username}:${password}`)
 
@@ -511,6 +515,8 @@
           document.getElementById('error-msg').classList.remove('hidden')
           document.getElementById('username').classList.add('ring-error/50')
           document.getElementById('password').classList.add('ring-error/50')
+          btn.disabled = false
+          btn.textContent = 'Sign In →'
         }
       })
     </script>
