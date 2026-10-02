@@ -174,13 +174,13 @@ curl http://localhost:8000/todos --user 'your-username:your-password'
 
 All endpoints require authentication.
 
-| Method | Endpoint     | Description    |
-| ------ | ------------ | -------------- |
-| GET    | `/todos`     | List all tasks |
-| POST   | `/todos`     | Create a task  |
-| GET    | `/todos/:id` | Task detail    |
-| PUT    | `/todos/:id` | Update a task  |
-| DELETE | `/todos/:id` | Delete a task  |
+| Method | Endpoint     | Description                                                                                                                                                    |
+| ------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/todos`     | List tasks — optional `order` (`asc`/`desc`), `completed` (bool), `page`, `limit` query params; filtered total count is returned in the `X-Total-Count` header |
+| POST   | `/todos`     | Create a task                                                                                                                                                  |
+| GET    | `/todos/:id` | Task detail                                                                                                                                                    |
+| PUT    | `/todos/:id` | Update a task                                                                                                                                                  |
+| DELETE | `/todos/:id` | Delete a task                                                                                                                                                  |
 
 ## Testing
 
