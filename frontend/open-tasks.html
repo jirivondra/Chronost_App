@@ -444,7 +444,7 @@
           <a href="dashboard.html" class="sidebar-logo-link flex items-center gap-3 min-w-0">
             <img src="assets/image.png" alt="Chronos" class="h-8 w-auto flex-shrink-0" />
             <div class="sidebar-label min-w-0">
-              <h1 class="text-xl font-black text-primary font-headline truncate">Chronos</h1>
+              <p class="text-xl font-black text-primary font-headline truncate">Chronos</p>
               <p class="font-['Manrope'] text-sm font-semibold text-slate-500 truncate">
                 Personal Space
               </p>
@@ -620,26 +620,61 @@
       <!-- Main Content -->
       <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
         <div id="open-tasks-content">
-          <div class="mb-10">
-            <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-              <a
-                class="flex items-center hover:text-primary transition-colors"
-                href="dashboard.html"
-                aria-label="Dashboard"
+          <div class="mb-10 flex items-start justify-between gap-6 flex-wrap">
+            <div>
+              <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
+                <a
+                  class="flex items-center hover:text-primary transition-colors"
+                  href="dashboard.html"
+                  aria-label="Dashboard"
+                >
+                  <span class="material-symbols-outlined text-[18px]">home</span>
+                </a>
+                <span class="material-symbols-outlined text-xs">chevron_right</span>
+                <span class="text-on-surface">Open Tasks</span>
+              </nav>
+              <h1
+                class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
               >
-                <span class="material-symbols-outlined text-[18px]">home</span>
-              </a>
-              <span class="material-symbols-outlined text-xs">chevron_right</span>
-              <span class="text-on-surface">Open Tasks</span>
-            </nav>
-            <h1
-              class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
-            >
-              Open Tasks
-            </h1>
-            <p class="text-on-surface-variant mt-2 text-lg">
-              Everything that still needs your focus.
-            </p>
+                Open Tasks
+              </h1>
+              <p class="text-on-surface-variant mt-2 text-lg">
+                Everything that still needs your focus.
+              </p>
+            </div>
+            <div class="flex items-end gap-4 flex-wrap">
+              <div class="flex flex-col gap-1.5">
+                <label
+                  for="sort-order"
+                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
+                >
+                  Sort by
+                </label>
+                <select
+                  id="sort-order"
+                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  <option value="desc">Newest first</option>
+                  <option value="asc">Oldest first</option>
+                </select>
+              </div>
+              <div id="page-size-wrap" class="hidden flex-col gap-1.5">
+                <label
+                  for="page-size"
+                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
+                >
+                  Items per page
+                </label>
+                <select
+                  id="page-size"
+                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  <option value="10">10</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div id="open-list" class="flex flex-col gap-4">
             <p class="text-on-surface-variant text-sm">Loading tasks...</p>
@@ -878,10 +913,11 @@
         return div
       }
 
-      const PAGE_SIZE = 10
+      const PAGE_SIZE_OPTIONS = [10, 30, 50]
       const PAGINATOR_BUFFER = 1
       let allOpen = []
       let currentPage = 1
+      let pageSize = PAGE_SIZE_OPTIONS[0]
 
       function goToPage(page) {
         currentPage = page
@@ -921,7 +957,7 @@
         const pagination = document.getElementById('pagination')
         pagination.innerHTML = ''
 
-        if (totalItems < PAGE_SIZE) {
+        if (totalItems < pageSize) {
           pagination.classList.add('hidden')
           pagination.classList.remove('flex')
           return
@@ -960,6 +996,10 @@
         const openList = document.getElementById('open-list')
         openList.innerHTML = ''
 
+        document
+          .getElementById('page-size-wrap')
+          .classList.toggle('hidden', allOpen.length <= PAGE_SIZE_OPTIONS[0])
+
         if (allOpen.length === 0) {
           openList.innerHTML =
             '<p class="text-on-surface-variant text-sm italic opacity-50">No open tasks. Create one with + New Task.</p>'
@@ -967,20 +1007,22 @@
           return
         }
 
-        const totalPages = Math.ceil(allOpen.length / PAGE_SIZE)
+        const totalPages = Math.ceil(allOpen.length / pageSize)
         currentPage = Math.min(currentPage, totalPages)
 
         allOpen
-          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           .forEach((todo) => openList.appendChild(renderTodo(todo)))
 
         renderPagination(totalPages, allOpen.length)
       }
 
+      let sortOrder = 'desc'
+
       async function loadTodos() {
         let res
         try {
-          res = await fetch(`${API}/todos`, { headers })
+          res = await fetch(`${API}/todos?order=${sortOrder}`, { headers })
         } catch {
           showBackendDown()
           return
@@ -993,6 +1035,18 @@
         allOpen = todos.filter((t) => !t.completed)
         renderPage()
       }
+
+      document.getElementById('sort-order').addEventListener('change', (e) => {
+        sortOrder = e.target.value
+        currentPage = 1
+        loadTodos()
+      })
+
+      document.getElementById('page-size').addEventListener('change', (e) => {
+        pageSize = parseInt(e.target.value, 10)
+        currentPage = 1
+        renderPage()
+      })
 
       loadTodos()
 
