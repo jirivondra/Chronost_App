@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends, Request, Query
 from fastapi.security import HTTPBasic
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
@@ -113,8 +113,11 @@ def get_openapi_schema(_=Depends(authenticate)):
 
 
 @app.get("/todos", summary="Get all TODOs")
-def get_todos(_=Depends(authenticate)):
-    return sorted(load_db().values(), key=lambda t: t["id"], reverse=True)
+def get_todos(
+    order: str = Query("desc", pattern="^(asc|desc)$", description="Sort order by id"),
+    _=Depends(authenticate),
+):
+    return sorted(load_db().values(), key=lambda t: t["id"], reverse=(order == "desc"))
 
 
 @app.post("/todos", status_code=201, summary="Create a TODO")
