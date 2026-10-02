@@ -642,20 +642,38 @@
                 Everything that still needs your focus.
               </p>
             </div>
-            <div class="flex flex-col gap-1.5">
-              <label
-                for="sort-order"
-                class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
-              >
-                Sort by
-              </label>
-              <select
-                id="sort-order"
-                class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
-              >
-                <option value="desc">Newest first</option>
-                <option value="asc">Oldest first</option>
-              </select>
+            <div class="flex items-end gap-4 flex-wrap">
+              <div class="flex flex-col gap-1.5">
+                <label
+                  for="sort-order"
+                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
+                >
+                  Sort by
+                </label>
+                <select
+                  id="sort-order"
+                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  <option value="desc">Newest first</option>
+                  <option value="asc">Oldest first</option>
+                </select>
+              </div>
+              <div id="page-size-wrap" class="hidden flex-col gap-1.5">
+                <label
+                  for="page-size"
+                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
+                >
+                  Items per page
+                </label>
+                <select
+                  id="page-size"
+                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  <option value="10">10</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
             </div>
           </div>
           <div id="open-list" class="flex flex-col gap-4">
@@ -895,10 +913,11 @@
         return div
       }
 
-      const PAGE_SIZE = 10
+      const PAGE_SIZE_OPTIONS = [10, 30, 50]
       const PAGINATOR_BUFFER = 1
       let allOpen = []
       let currentPage = 1
+      let pageSize = PAGE_SIZE_OPTIONS[0]
 
       function goToPage(page) {
         currentPage = page
@@ -938,7 +957,7 @@
         const pagination = document.getElementById('pagination')
         pagination.innerHTML = ''
 
-        if (totalItems < PAGE_SIZE) {
+        if (totalItems < pageSize) {
           pagination.classList.add('hidden')
           pagination.classList.remove('flex')
           return
@@ -977,6 +996,10 @@
         const openList = document.getElementById('open-list')
         openList.innerHTML = ''
 
+        document
+          .getElementById('page-size-wrap')
+          .classList.toggle('hidden', allOpen.length <= PAGE_SIZE_OPTIONS[0])
+
         if (allOpen.length === 0) {
           openList.innerHTML =
             '<p class="text-on-surface-variant text-sm italic opacity-50">No open tasks. Create one with + New Task.</p>'
@@ -984,11 +1007,11 @@
           return
         }
 
-        const totalPages = Math.ceil(allOpen.length / PAGE_SIZE)
+        const totalPages = Math.ceil(allOpen.length / pageSize)
         currentPage = Math.min(currentPage, totalPages)
 
         allOpen
-          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           .forEach((todo) => openList.appendChild(renderTodo(todo)))
 
         renderPagination(totalPages, allOpen.length)
@@ -1017,6 +1040,12 @@
         sortOrder = e.target.value
         currentPage = 1
         loadTodos()
+      })
+
+      document.getElementById('page-size').addEventListener('change', (e) => {
+        pageSize = parseInt(e.target.value, 10)
+        currentPage = 1
+        renderPage()
       })
 
       loadTodos()
