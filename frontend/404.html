@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Closed Tasks - Chronos</title>
+    <title>Page Not Found - Chronos</title>
     <link rel="icon" type="image/png" href="assets/image.png" />
     <script>
       if (localStorage.getItem('sidebarCollapsed') === 'true')
@@ -462,7 +462,7 @@
             <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
           </a>
           <a
-            class="bg-surface-container text-primary rounded-xl font-bold px-4 py-3 flex items-center gap-3 transition-colors"
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
             href="finished-tasks.html"
             data-tip="Closed Tasks"
           >
@@ -605,149 +605,27 @@
       </header>
       <!-- Main Content -->
       <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
-        <div id="finished-tasks-content">
-          <div class="mb-10 flex items-start justify-between gap-6 flex-wrap">
-            <div>
-              <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-4">
-                <a
-                  class="flex items-center hover:text-primary transition-colors"
-                  href="dashboard.html"
-                  aria-label="Dashboard"
-                >
-                  <span class="material-symbols-outlined text-[18px]">home</span>
-                </a>
-                <span class="material-symbols-outlined text-xs">chevron_right</span>
-                <span class="text-on-surface">Closed Tasks</span>
-              </nav>
-              <h1
-                class="text-4xl md:text-5xl font-black text-on-surface tracking-tight font-headline"
-              >
-                Closed Tasks
-              </h1>
-              <p class="text-on-surface-variant mt-2 text-lg">
-                Everything you've already finished.
-              </p>
-            </div>
-            <div class="flex items-end gap-4 flex-wrap">
-              <div class="flex flex-col gap-1.5">
-                <label
-                  for="sort-order"
-                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
-                >
-                  Sort by
-                </label>
-                <div class="relative">
-                  <select
-                    id="sort-order"
-                    class="appearance-none bg-none bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30 w-full"
-                  >
-                    <option value="desc">Newest first</option>
-                    <option value="asc">Oldest first</option>
-                  </select>
-                  <span
-                    class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]"
-                    >expand_more</span
-                  >
-                </div>
-              </div>
-              <div id="page-size-wrap" class="hidden flex-col gap-1.5">
-                <label
-                  for="page-size"
-                  class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant"
-                >
-                  Items per page
-                </label>
-                <div class="relative">
-                  <select
-                    id="page-size"
-                    class="appearance-none bg-none bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30 w-full"
-                  >
-                    <option value="10">10</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                  </select>
-                  <span
-                    class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]"
-                    >expand_more</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="done-list" class="flex flex-col gap-4">
-            <p class="text-on-surface-variant text-sm">Loading tasks...</p>
-          </div>
-          <div id="pagination" class="hidden items-center justify-center gap-1.5 mt-8"></div>
-        </div>
-        <!-- Backend Unreachable -->
-        <div id="be-down" class="hidden max-w-md mx-auto text-center py-24">
+        <div class="max-w-md mx-auto text-center py-24">
           <div
-            class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-error-container/15 border border-error/20 flex items-center justify-center"
+            class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-surface-container-high border border-outline-variant/30 flex items-center justify-center"
           >
-            <span class="material-symbols-outlined text-error text-[40px]">dns</span>
+            <span class="material-symbols-outlined text-on-surface-variant text-[40px]"
+              >wrong_location</span
+            >
           </div>
-          <p class="font-headline text-6xl font-black text-error mb-2">518</p>
-          <h2 class="font-headline text-xl font-bold text-on-surface mb-3">
-            Can't Reach the Server
-          </h2>
-          <p class="text-on-surface-variant text-sm leading-relaxed mb-1">
-            The backend isn't responding. Make sure it's running (<code
-              class="text-primary font-mono"
-              >task be-up</code
-            >), then try again.
+          <p class="font-headline text-6xl font-black text-primary mb-2">404</p>
+          <h2 class="font-headline text-xl font-bold text-on-surface mb-3">Page Not Found</h2>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+            This page doesn't exist or may have been moved.
           </p>
-          <p class="text-on-surface-variant/50 text-xs italic mb-8">
-            (Not a real HTTP status — we made it up. The backend never got a chance to answer.)
-          </p>
-          <button
-            id="be-down-retry"
-            class="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          <a
+            href="dashboard.html"
+            class="inline-block px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
           >
-            Try Again
-          </button>
+            Back to Dashboard
+          </a>
         </div>
       </main>
-    </div>
-
-    <!-- Delete Task Dialog -->
-    <div
-      id="delete-dialog"
-      class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
-    >
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="delete-dialog-backdrop"></div>
-      <div class="relative bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-sm w-full">
-        <div class="flex items-center gap-3 mb-4">
-          <span class="material-symbols-outlined text-error text-2xl">warning</span>
-          <h3 class="font-headline font-bold text-xl text-on-surface">Delete Task</h3>
-        </div>
-        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
-          Are you sure you want to delete this task? This action cannot be undone.
-        </p>
-        <!-- Delete Error -->
-        <div
-          id="delete-error"
-          class="hidden rounded-xl p-3 bg-error/10 flex items-center gap-2 mb-6"
-        >
-          <span class="material-symbols-outlined text-error text-[18px]">error</span>
-          <p class="text-error text-xs font-medium">
-            Couldn't delete — check that the backend is running, then try again.
-          </p>
-        </div>
-        <div class="flex gap-3 justify-end">
-          <button
-            id="delete-dialog-cancel"
-            class="px-6 py-3 text-on-surface-variant font-bold text-sm hover:text-primary transition-colors rounded-xl"
-          >
-            Cancel
-          </button>
-          <button
-            id="delete-dialog-confirm"
-            class="px-6 py-3 bg-error text-on-error font-bold text-sm rounded-xl shadow-lg shadow-error/20 active:scale-95 transition-transform"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
     </div>
 
     <button
@@ -758,318 +636,36 @@
       <span class="material-symbols-outlined">arrow_upward</span>
     </button>
 
+    <!-- Mobile Navigation -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fbf8fe] border-t border-outline-variant/10 flex justify-around items-center h-20 px-4 z-50"
+    >
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
+      </a>
+      <button
+        class="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg -mt-10 border-4 border-background"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </button>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Config</span>
+      </a>
+    </nav>
+
     <script>
-      const API = 'http://localhost:8000'
       const auth = sessionStorage.getItem('auth')
       if (!auth) window.location.href = 'login.html'
-
-      const headers = { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }
-
-      function showBackendDown() {
-        document.getElementById('finished-tasks-content').classList.add('hidden')
-        document.getElementById('be-down').classList.remove('hidden')
-      }
-      document
-        .getElementById('be-down-retry')
-        .addEventListener('click', () => window.location.reload())
-
-      let pendingDeleteId = null
-      const deleteDialog = document.getElementById('delete-dialog')
-
-      function openDeleteDialog(id) {
-        pendingDeleteId = id
-        document.getElementById('delete-error').classList.add('hidden')
-        deleteDialog.classList.remove('hidden')
-      }
-
-      function closeDeleteDialog() {
-        pendingDeleteId = null
-        deleteDialog.classList.add('hidden')
-      }
-
-      document.getElementById('delete-dialog-cancel').addEventListener('click', closeDeleteDialog)
-      document.getElementById('delete-dialog-backdrop').addEventListener('click', closeDeleteDialog)
-      document.getElementById('delete-dialog-confirm').addEventListener('click', async () => {
-        if (pendingDeleteId == null) return
-        try {
-          const res = await fetch(`${API}/todos/${pendingDeleteId}`, {
-            method: 'DELETE',
-            headers,
-          })
-          if (!res.ok) throw new Error('delete failed')
-        } catch {
-          document.getElementById('delete-error').classList.remove('hidden')
-          return
-        }
-        closeDeleteDialog()
-        loadTodos()
-      })
-
-      function renderTodo(todo) {
-        const div = document.createElement('div')
-        div.className =
-          'group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-container shadow-[0_12px_40px_rgba(49,50,59,0.03)] flex items-start gap-6'
-
-        const checkbox = document.createElement('input')
-        checkbox.type = 'checkbox'
-        checkbox.checked = todo.completed
-        checkbox.className =
-          'w-6 h-6 rounded-lg border-2 border-outline-variant text-primary focus:ring-primary/20 transition-all cursor-pointer'
-        checkbox.dataset.id = todo.id
-
-        const checkboxWrap = document.createElement('div')
-        checkboxWrap.className = 'mt-1'
-        checkboxWrap.appendChild(checkbox)
-
-        const content = document.createElement('div')
-        content.className = 'flex-1 opacity-60'
-
-        const titleRow = document.createElement('div')
-        titleRow.className = 'flex justify-between items-start'
-
-        const title = document.createElement('h4')
-        title.className = 'font-headline text-lg font-bold text-on-surface-variant line-through'
-        title.textContent = todo.title
-
-        const actions = document.createElement('div')
-        actions.className = 'flex items-center gap-1'
-
-        const hoverActions = document.createElement('div')
-        hoverActions.className = 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity'
-
-        const infoBtn = document.createElement('button')
-        infoBtn.className = 'p-2 text-on-surface-variant hover:text-primary transition-colors'
-        infoBtn.title = 'Detail'
-        infoBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">info</span>'
-        infoBtn.addEventListener('click', () => {
-          window.location.href = `task-detail.html?id=${todo.id}&from=dashboard`
-        })
-        hoverActions.appendChild(infoBtn)
-
-        const deleteBtn = document.createElement('button')
-        deleteBtn.className =
-          'p-2 text-on-surface-variant hover:text-error transition-colors delete-btn'
-        deleteBtn.dataset.id = todo.id
-        deleteBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">delete</span>'
-        hoverActions.appendChild(deleteBtn)
-
-        actions.appendChild(hoverActions)
-
-        titleRow.appendChild(title)
-        titleRow.appendChild(actions)
-        content.appendChild(titleRow)
-
-        if (todo.description) {
-          const p = document.createElement('p')
-          p.className = 'text-on-surface-variant font-body text-sm mt-1'
-          p.textContent = todo.description
-          content.appendChild(p)
-        }
-
-        div.appendChild(checkboxWrap)
-        div.appendChild(content)
-
-        checkbox.addEventListener('change', async (e) => {
-          await fetch(`${API}/todos/${todo.id}`, {
-            method: 'PUT',
-            headers,
-            body: JSON.stringify({ completed: e.target.checked }),
-          })
-          loadTodos()
-        })
-
-        deleteBtn.addEventListener('click', () => {
-          openDeleteDialog(todo.id)
-        })
-
-        return div
-      }
-
-      const PAGE_SIZE_OPTIONS = [10, 30, 50]
-      const PAGINATOR_BUFFER = 1
-      let totalDone = 0
-
-      function paramsFromUrl() {
-        return new URLSearchParams(window.location.search)
-      }
-
-      function buildParams(overrides) {
-        const params = paramsFromUrl()
-        Object.entries(overrides).forEach(([key, value]) => params.set(key, value))
-        return params
-      }
-
-      function navigateWithParams(overrides) {
-        window.location.search = buildParams(overrides).toString()
-      }
-
-      function replaceUrlParams(overrides) {
-        const params = buildParams(overrides)
-        window.history.replaceState(
-          null,
-          '',
-          `${window.location.pathname}?${params.toString()}${window.location.hash}`
-        )
-      }
-
-      function readStateFromUrl() {
-        const params = paramsFromUrl()
-        const orderRaw = params.get('order')
-        const limitRaw = parseInt(params.get('limit'), 10)
-        const pageRaw = parseInt(params.get('page'), 10)
-
-        const sortOrder = orderRaw === 'asc' ? 'asc' : 'desc'
-        const pageSize = PAGE_SIZE_OPTIONS.includes(limitRaw) ? limitRaw : PAGE_SIZE_OPTIONS[0]
-        const currentPage = Number.isInteger(pageRaw) && pageRaw > 0 ? pageRaw : 1
-
-        // Unknown/out-of-range values (e.g. ?limit=100000 or ?page=-5) fall back to a
-        // valid default above; reflect the corrected values back into the URL so the
-        // address bar never shows a value that isn't actually in effect.
-        const hasInvalidParam =
-          (params.has('order') && orderRaw !== sortOrder) ||
-          (params.has('limit') && limitRaw !== pageSize) ||
-          (params.has('page') && pageRaw !== currentPage)
-        if (hasInvalidParam) {
-          replaceUrlParams({ order: sortOrder, limit: pageSize, page: currentPage })
-        }
-
-        return { sortOrder, pageSize, currentPage }
-      }
-
-      let { sortOrder, pageSize, currentPage } = readStateFromUrl()
-      document.getElementById('sort-order').value = sortOrder
-      document.getElementById('page-size').value = String(pageSize)
-
-      function goToPage(page) {
-        navigateWithParams({ page })
-      }
-
-      function paginatorArrow(icon, enabled, onClick) {
-        if (!enabled) {
-          const span = document.createElement('span')
-          span.className =
-            'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant/30'
-          span.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
-          return span
-        }
-        const btn = document.createElement('button')
-        btn.className =
-          'w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors'
-        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">${icon}</span>`
-        btn.addEventListener('click', onClick)
-        return btn
-      }
-
-      function paginatorPageList(total, current, buffer) {
-        const pages = []
-        for (let i = 1; i <= total; i++) {
-          if (i === 1 || i === total || (i >= current - buffer && i <= current + buffer)) {
-            pages.push(i)
-          } else if (pages[pages.length - 1] !== '…') {
-            pages.push('…')
-          }
-        }
-        return pages
-      }
-
-      function renderPagination(totalPages, totalItems) {
-        const pagination = document.getElementById('pagination')
-        pagination.innerHTML = ''
-
-        if (totalItems <= PAGE_SIZE_OPTIONS[0]) {
-          pagination.classList.add('hidden')
-          pagination.classList.remove('flex')
-          return
-        }
-        pagination.classList.remove('hidden')
-        pagination.classList.add('flex')
-
-        pagination.appendChild(
-          paginatorArrow('chevron_left', currentPage > 1, () => goToPage(currentPage - 1))
-        )
-
-        paginatorPageList(totalPages, currentPage, PAGINATOR_BUFFER).forEach((page) => {
-          if (page === '…') {
-            const span = document.createElement('span')
-            span.className = 'w-9 h-9 flex items-center justify-center text-on-surface-variant/50'
-            span.textContent = '…'
-            pagination.appendChild(span)
-            return
-          }
-          const btn = document.createElement('button')
-          const active = page === currentPage
-          btn.className = active
-            ? 'w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-sm'
-            : 'w-9 h-9 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container text-sm transition-colors'
-          btn.textContent = page
-          if (!active) btn.addEventListener('click', () => goToPage(page))
-          pagination.appendChild(btn)
-        })
-
-        pagination.appendChild(
-          paginatorArrow('chevron_right', currentPage < totalPages, () => goToPage(currentPage + 1))
-        )
-      }
-
-      function renderPage(todos) {
-        const doneList = document.getElementById('done-list')
-        doneList.innerHTML = ''
-
-        const pageSizeWrap = document.getElementById('page-size-wrap')
-        const showPageSize = totalDone > PAGE_SIZE_OPTIONS[0]
-        pageSizeWrap.classList.toggle('hidden', !showPageSize)
-        pageSizeWrap.classList.toggle('flex', showPageSize)
-
-        if (totalDone === 0) {
-          doneList.innerHTML =
-            '<p class="text-on-surface-variant text-sm italic opacity-50">No finished tasks yet.</p>'
-          renderPagination(0, 0)
-          return
-        }
-
-        todos.forEach((todo) => doneList.appendChild(renderTodo(todo)))
-
-        renderPagination(Math.ceil(totalDone / pageSize), totalDone)
-      }
-
-      async function loadTodos() {
-        let res
-        try {
-          res = await fetch(
-            `${API}/todos?order=${sortOrder}&completed=true&page=${currentPage}&limit=${pageSize}`,
-            { headers }
-          )
-        } catch {
-          showBackendDown()
-          return
-        }
-        if (res.status === 401) {
-          window.location.href = 'login.html'
-          return
-        }
-        const todos = await res.json()
-        const totalCountHeader = res.headers.get('X-Total-Count')
-        totalDone = totalCountHeader !== null ? parseInt(totalCountHeader, 10) : todos.length
-
-        const totalPages = Math.max(1, Math.ceil(totalDone / pageSize))
-        if (currentPage > totalPages) {
-          currentPage = totalPages
-          replaceUrlParams({ page: currentPage })
-          return loadTodos()
-        }
-
-        renderPage(todos)
-      }
-
-      document.getElementById('sort-order').addEventListener('change', (e) => {
-        navigateWithParams({ order: e.target.value, page: 1 })
-      })
-
-      document.getElementById('page-size').addEventListener('change', (e) => {
-        navigateWithParams({ limit: e.target.value, page: 1 })
-      })
-
-      loadTodos()
 
       document.getElementById('back-btn').addEventListener('click', () => {
         window.location.href = 'dashboard.html'

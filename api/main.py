@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Request, Query
+from fastapi import FastAPI, HTTPException, Depends, Request, Query, Response
 from fastapi.security import HTTPBasic
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
@@ -22,6 +22,7 @@ app.add_middleware(
     allow_origins=["http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Total-Count"],
 )
 
 API_USERNAME = os.getenv("API_USERNAME")
@@ -114,10 +115,23 @@ def get_openapi_schema(_=Depends(authenticate)):
 
 @app.get("/todos", summary="Get all TODOs")
 def get_todos(
+    response: Response,
     order: str = Query("desc", pattern="^(asc|desc)$", description="Sort order by id"),
+    completed: Optional[bool] = Query(None, description="Filter by completed status"),
+    page: int = Query(1, ge=1, description="1-indexed page number, used together with limit"),
+    limit: Optional[int] = Query(
+        None, ge=1, description="Items per page; omit to return every matching item"
+    ),
     _=Depends(authenticate),
 ):
-    return sorted(load_db().values(), key=lambda t: t["id"], reverse=(order == "desc"))
+    items = sorted(load_db().values(), key=lambda t: t["id"], reverse=(order == "desc"))
+    if completed is not None:
+        items = [t for t in items if t["completed"] == completed]
+    response.headers["X-Total-Count"] = str(len(items))
+    if limit is not None:
+        start = (page - 1) * limit
+        items = items[start : start + limit]
+    return items
 
 
 @app.post("/todos", status_code=201, summary="Create a TODO")

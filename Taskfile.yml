@@ -36,11 +36,11 @@ tasks:
     desc: Serve the frontend on http://localhost:3000 and open in Chrome
     cmds:
       - open -a "Google Chrome" http://localhost:3000/login.html &
-      - python3 -m http.server 3000 --directory frontend
+      - python3 frontend/serve.py
 
   fe-down:
     desc: Stop the frontend server
-    cmd: pkill -f "http.server 3000" || true
+    cmd: pkill -f "frontend/serve.py" || true
 
   # --- Utilities ---
   clean:
