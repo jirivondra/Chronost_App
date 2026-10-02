@@ -1,0 +1,860 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Page Not Found - Chronos</title>
+    <link rel="icon" type="image/png" href="assets/image.png" />
+    <script>
+      if (localStorage.getItem('sidebarCollapsed') === 'true')
+        document.documentElement.classList.add('sidebar-collapsed')
+      ;(function () {
+        const storedTheme = localStorage.getItem('theme')
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const isDark = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark)
+        document.documentElement.classList.toggle('dark', isDark)
+      })()
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-fixed': 'rgb(var(--color-tertiary-fixed) / <alpha-value>)',
+              'secondary-dim': 'rgb(var(--color-secondary-dim) / <alpha-value>)',
+              'on-primary-container': 'rgb(var(--color-on-primary-container) / <alpha-value>)',
+              'tertiary-fixed-dim': 'rgb(var(--color-tertiary-fixed-dim) / <alpha-value>)',
+              'on-primary-fixed-variant':
+                'rgb(var(--color-on-primary-fixed-variant) / <alpha-value>)',
+              'error-dim': 'rgb(var(--color-error-dim) / <alpha-value>)',
+              outline: 'rgb(var(--color-outline) / <alpha-value>)',
+              'on-secondary-container': 'rgb(var(--color-on-secondary-container) / <alpha-value>)',
+              'secondary-fixed-dim': 'rgb(var(--color-secondary-fixed-dim) / <alpha-value>)',
+              'on-tertiary': 'rgb(var(--color-on-tertiary) / <alpha-value>)',
+              'primary-container': 'rgb(var(--color-primary-container) / <alpha-value>)',
+              background: 'rgb(var(--color-background) / <alpha-value>)',
+              'secondary-container': 'rgb(var(--color-secondary-container) / <alpha-value>)',
+              tertiary: 'rgb(var(--color-tertiary) / <alpha-value>)',
+              'tertiary-container': 'rgb(var(--color-tertiary-container) / <alpha-value>)',
+              primary: 'rgb(var(--color-primary) / <alpha-value>)',
+              'on-surface': 'rgb(var(--color-on-surface) / <alpha-value>)',
+              'on-primary-fixed': 'rgb(var(--color-on-primary-fixed) / <alpha-value>)',
+              'surface-tint': 'rgb(var(--color-surface-tint) / <alpha-value>)',
+              'on-surface-variant': 'rgb(var(--color-on-surface-variant) / <alpha-value>)',
+              error: 'rgb(var(--color-error) / <alpha-value>)',
+              'primary-dim': 'rgb(var(--color-primary-dim) / <alpha-value>)',
+              'tertiary-dim': 'rgb(var(--color-tertiary-dim) / <alpha-value>)',
+              'surface-variant': 'rgb(var(--color-surface-variant) / <alpha-value>)',
+              'surface-bright': 'rgb(var(--color-surface-bright) / <alpha-value>)',
+              'on-secondary-fixed': 'rgb(var(--color-on-secondary-fixed) / <alpha-value>)',
+              'inverse-on-surface': 'rgb(var(--color-inverse-on-surface) / <alpha-value>)',
+              'primary-fixed-dim': 'rgb(var(--color-primary-fixed-dim) / <alpha-value>)',
+              'on-secondary': 'rgb(var(--color-on-secondary) / <alpha-value>)',
+              'error-container': 'rgb(var(--color-error-container) / <alpha-value>)',
+              'on-secondary-fixed-variant':
+                'rgb(var(--color-on-secondary-fixed-variant) / <alpha-value>)',
+              'surface-container-high': 'rgb(var(--color-surface-container-high) / <alpha-value>)',
+              'primary-fixed': 'rgb(var(--color-primary-fixed) / <alpha-value>)',
+              'on-tertiary-container': 'rgb(var(--color-on-tertiary-container) / <alpha-value>)',
+              'surface-container-lowest':
+                'rgb(var(--color-surface-container-lowest) / <alpha-value>)',
+              'surface-container': 'rgb(var(--color-surface-container) / <alpha-value>)',
+              'surface-container-highest':
+                'rgb(var(--color-surface-container-highest) / <alpha-value>)',
+              'on-background': 'rgb(var(--color-on-background) / <alpha-value>)',
+              'inverse-surface': 'rgb(var(--color-inverse-surface) / <alpha-value>)',
+              secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+              'on-primary': 'rgb(var(--color-on-primary) / <alpha-value>)',
+              'on-error': 'rgb(var(--color-on-error) / <alpha-value>)',
+              'on-error-container': 'rgb(var(--color-on-error-container) / <alpha-value>)',
+              'secondary-fixed': 'rgb(var(--color-secondary-fixed) / <alpha-value>)',
+              'on-tertiary-fixed-variant':
+                'rgb(var(--color-on-tertiary-fixed-variant) / <alpha-value>)',
+              surface: 'rgb(var(--color-surface) / <alpha-value>)',
+              'surface-dim': 'rgb(var(--color-surface-dim) / <alpha-value>)',
+              'inverse-primary': 'rgb(var(--color-inverse-primary) / <alpha-value>)',
+              'surface-container-low': 'rgb(var(--color-surface-container-low) / <alpha-value>)',
+              'outline-variant': 'rgb(var(--color-outline-variant) / <alpha-value>)',
+              'on-tertiary-fixed': 'rgb(var(--color-on-tertiary-fixed) / <alpha-value>)',
+            },
+            borderRadius: {
+              DEFAULT: '0.125rem',
+              lg: '0.25rem',
+              xl: '0.5rem',
+              full: '0.75rem',
+            },
+            fontFamily: {
+              headline: ['Manrope'],
+              body: ['Inter'],
+              label: ['Inter'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      :root {
+        --color-tertiary-fixed: 241 206 252;
+        --color-secondary-dim: 61 87 98;
+        --color-on-primary-container: 0 17 106;
+        --color-tertiary-fixed-dim: 226 192 238;
+        --color-on-primary-fixed-variant: 1 24 130;
+        --color-error-dim: 107 2 33;
+        --color-outline: 122 122 132;
+        --color-on-secondary-container: 60 85 97;
+        --color-secondary-fixed-dim: 189 217 230;
+        --color-on-tertiary: 255 247 252;
+        --color-primary-container: 134 150 253;
+        --color-background: 251 248 254;
+        --color-secondary-container: 203 231 245;
+        --color-tertiary: 113 85 124;
+        --color-tertiary-container: 241 206 252;
+        --color-primary: 70 86 184;
+        --color-on-surface: 49 50 59;
+        --color-on-primary-fixed: 0 0 0;
+        --color-surface-tint: 70 86 184;
+        --color-on-surface-variant: 94 94 104;
+        --color-error: 168 54 75;
+        --color-primary-dim: 57 73 171;
+        --color-tertiary-dim: 100 73 111;
+        --color-surface-variant: 227 225 237;
+        --color-surface-bright: 251 248 254;
+        --color-on-secondary-fixed: 41 67 78;
+        --color-inverse-on-surface: 158 156 162;
+        --color-primary-fixed-dim: 121 137 238;
+        --color-on-secondary: 242 250 255;
+        --color-error-container: 249 115 134;
+        --color-on-secondary-fixed-variant: 69 95 107;
+        --color-surface-container-high: 233 231 241;
+        --color-primary-fixed: 134 150 253;
+        --color-on-tertiary-container: 93 67 104;
+        --color-surface-container-lowest: 255 255 255;
+        --color-surface-container: 239 237 246;
+        --color-surface-container-highest: 227 225 237;
+        --color-on-background: 49 50 59;
+        --color-inverse-surface: 13 14 18;
+        --color-secondary: 73 99 111;
+        --color-on-primary: 250 248 255;
+        --color-on-error: 255 247 247;
+        --color-on-error-container: 110 5 35;
+        --color-secondary-fixed: 203 231 245;
+        --color-on-tertiary-fixed-variant: 103 76 114;
+        --color-surface: 251 248 254;
+        --color-surface-dim: 218 217 228;
+        --color-inverse-primary: 134 150 253;
+        --color-surface-container-low: 245 242 251;
+        --color-outline-variant: 178 177 188;
+        --color-on-tertiary-fixed: 73 48 85;
+      }
+      .dark {
+        --color-tertiary-fixed: 241 206 252;
+        --color-secondary-dim: 61 87 98;
+        --color-on-primary-container: 222 224 255;
+        --color-tertiary-fixed-dim: 226 192 238;
+        --color-on-primary-fixed-variant: 1 24 130;
+        --color-error-dim: 107 2 33;
+        --color-outline: 144 144 154;
+        --color-on-secondary-container: 204 231 245;
+        --color-secondary-fixed-dim: 189 217 230;
+        --color-on-tertiary: 51 47 51;
+        --color-primary-container: 43 60 159;
+        --color-background: 19 19 23;
+        --color-secondary-container: 48 74 86;
+        --color-tertiary: 221 187 232;
+        --color-tertiary-container: 87 61 98;
+        --color-primary: 187 195 255;
+        --color-on-surface: 226 225 237;
+        --color-on-primary-fixed: 0 0 0;
+        --color-surface-tint: 187 195 255;
+        --color-on-surface-variant: 199 197 209;
+        --color-error: 255 178 186;
+        --color-primary-dim: 57 73 171;
+        --color-tertiary-dim: 100 73 111;
+        --color-surface-variant: 70 70 79;
+        --color-surface-bright: 57 57 61;
+        --color-on-secondary-fixed: 41 67 78;
+        --color-inverse-on-surface: 48 48 53;
+        --color-primary-fixed-dim: 121 137 238;
+        --color-on-secondary: 42 50 53;
+        --color-error-container: 135 28 51;
+        --color-on-secondary-fixed-variant: 69 95 107;
+        --color-surface-container-high: 41 41 49;
+        --color-primary-fixed: 134 150 253;
+        --color-on-tertiary-container: 247 217 255;
+        --color-surface-container-lowest: 12 15 15;
+        --color-surface-container: 30 31 37;
+        --color-surface-container-highest: 52 52 61;
+        --color-on-background: 226 225 237;
+        --color-inverse-surface: 227 226 231;
+        --color-secondary: 175 203 216;
+        --color-on-primary: 47 48 53;
+        --color-on-error: 51 47 48;
+        --color-on-error-container: 255 218 220;
+        --color-secondary-fixed: 203 231 245;
+        --color-on-tertiary-fixed-variant: 103 76 114;
+        --color-surface: 19 19 23;
+        --color-surface-dim: 18 19 26;
+        --color-inverse-primary: 69 85 184;
+        --color-surface-container-low: 27 27 33;
+        --color-outline-variant: 70 70 79;
+        --color-on-tertiary-fixed: 73 48 85;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .brand-font {
+        font-family: 'Manrope', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      #sidebar {
+        width: 18rem;
+        transition: width 0.3s ease;
+        overflow: visible;
+      }
+      html.sidebar-collapsed #sidebar {
+        width: 4rem;
+      }
+      html.sidebar-collapsed .sidebar-label {
+        display: none !important;
+      }
+      html.sidebar-collapsed #sidebar nav a {
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      html.sidebar-collapsed .sidebar-user {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-logo-link {
+        display: none;
+      }
+      html.sidebar-collapsed #sidebar .sidebar-header {
+        justify-content: center;
+      }
+      html.sidebar-collapsed #toggle-icon {
+        transform: scaleX(-1);
+      }
+      .ml-sidebar {
+        margin-left: 18rem;
+        transition: margin-left 0.3s ease;
+      }
+      html.sidebar-collapsed .ml-sidebar {
+        margin-left: 4rem;
+      }
+      [data-tip] {
+        position: relative;
+      }
+      #sidebar [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translateY(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      #sidebar [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 5px);
+        transform: translateY(-50%);
+        border: 5px solid transparent;
+        border-right-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::after {
+        content: attr(data-tip);
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #31323b;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      header [data-tip]::before {
+        content: '';
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-bottom-color: #31323b;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+      }
+      [data-tip]:hover::after,
+      [data-tip]:hover::before {
+        opacity: 1;
+      }
+      .mech-clock {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #4656b8;
+        background: #fff;
+        position: relative;
+        box-shadow:
+          0 4px 12px rgba(70, 86, 184, 0.12),
+          inset 0 1px 3px rgba(0, 0, 0, 0.04);
+        flex-shrink: 0;
+      }
+      .mech-clock::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        background: #4656b8;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+      .mech-hand {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom center;
+        border-radius: 3px;
+      }
+      .mech-hour {
+        width: 3px;
+        height: 9px;
+        background: #31323b;
+        margin-left: -1.5px;
+        z-index: 3;
+      }
+      .mech-minute {
+        width: 2px;
+        height: 14px;
+        background: #5e5e68;
+        margin-left: -1px;
+        z-index: 2;
+      }
+      .mech-second {
+        width: 1.5px;
+        height: 16px;
+        background: #4656b8;
+        margin-left: -0.75px;
+        z-index: 4;
+      }
+      .search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      input.search-input {
+        width: 0;
+        opacity: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 0.875rem;
+        color: rgb(var(--color-on-surface) / 1);
+        transition:
+          width 0.3s ease,
+          opacity 0.3s ease,
+          padding 0.3s ease;
+        pointer-events: none;
+      }
+      .search-wrap.open .search-input {
+        width: 180px;
+        opacity: 1;
+        padding: 0 0.5rem;
+        pointer-events: all;
+      }
+      .search-wrap.open {
+        background: rgb(var(--color-surface-container-low) / 1);
+        border-radius: 9999px;
+        padding: 0.4rem 0.75rem;
+        gap: 0.25rem;
+      }
+      .search-wrap:not(.open) {
+        gap: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="h-screen fixed left-0 top-0 bg-surface-container-low z-50">
+      <div class="flex flex-col gap-2 p-4 h-full">
+        <div class="sidebar-header mb-8 flex items-center justify-between px-2">
+          <a href="dashboard.html" class="sidebar-logo-link flex items-center gap-3 min-w-0">
+            <img src="assets/image.png" alt="Chronos" class="h-8 w-auto flex-shrink-0" />
+            <div class="sidebar-label min-w-0">
+              <p class="text-xl font-black text-primary font-headline truncate">Chronos</p>
+              <p class="font-['Manrope'] text-sm font-semibold text-slate-500 truncate">
+                Personal Space
+              </p>
+            </div>
+          </a>
+          <button
+            id="sidebar-toggle"
+            class="p-2 rounded-xl hover:bg-surface-container-high transition-colors text-slate-500 flex-shrink-0 ml-1"
+            data-tip="Toggle sidebar"
+          >
+            <span class="material-symbols-outlined" id="toggle-icon">menu_open</span>
+          </button>
+        </div>
+        <nav class="flex-1 flex flex-col gap-1">
+          <a
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
+            href="dashboard.html"
+            data-tip="Dashboard"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">dashboard</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Dashboard</span>
+          </a>
+          <a
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
+            href="open-tasks.html"
+            data-tip="Open Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">check_circle</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Open Tasks</span>
+          </a>
+          <a
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
+            href="finished-tasks.html"
+            data-tip="Closed Tasks"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">done_all</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Closed Tasks</span>
+          </a>
+          <a
+            class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200 rounded-xl"
+            href="calendar.html"
+            data-tip="Calendar"
+          >
+            <span class="material-symbols-outlined flex-shrink-0">calendar_today</span>
+            <span class="sidebar-label font-headline text-sm font-semibold">Calendar</span>
+          </a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-4">
+          <div class="sidebar-label h-px bg-outline-variant/15 mx-2"></div>
+          <div class="sidebar-label px-4 pb-3 flex flex-col items-center gap-0.5">
+            <p class="text-[10px] font-extrabold uppercase tracking-widest text-on-surface/70">
+              App version
+            </p>
+            <p id="app-version" class="text-[10px] text-on-surface-variant/40 font-mono">v—</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="ml-sidebar flex flex-col min-h-screen">
+      <!-- Top Nav Bar -->
+      <header class="bg-surface/80 backdrop-blur-xl top-0 sticky z-40 h-20">
+        <div class="flex justify-between items-center w-full px-8 h-full max-w-screen-2xl mx-auto">
+          <div class="flex items-center gap-3">
+            <button
+              id="back-btn"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Back"
+            >
+              <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+            </button>
+            <h2 class="text-2xl font-extrabold text-primary font-['Manrope'] tracking-tight">
+              Chronos
+            </h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="mech-clock hidden sm:block">
+              <div class="mech-hand mech-hour" id="hand-hour"></div>
+              <div class="mech-hand mech-minute" id="hand-minute"></div>
+              <div class="mech-hand mech-second" id="hand-second"></div>
+            </div>
+            <div class="search-wrap hidden sm:flex" id="search-wrap">
+              <button
+                id="search-btn"
+                class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                data-tip="Search"
+              >
+                <span class="material-symbols-outlined text-[22px]">search</span>
+              </button>
+              <input id="search-input" class="search-input" placeholder="Search..." type="text" />
+              <button
+                id="search-close-btn"
+                class="hidden items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                data-tip="Close"
+              >
+                <span class="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <div id="theme-toggle" class="flex items-center">
+              <button
+                type="button"
+                id="theme-toggle-trigger"
+                class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+                data-tip="Match system"
+              >
+                <span class="material-symbols-outlined text-[22px]" id="theme-toggle-trigger-icon"
+                  >desktop_windows</span
+                >
+              </button>
+              <div
+                id="theme-toggle-panel"
+                class="hidden items-center gap-0.5 bg-surface-container rounded-full p-1"
+              >
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="dark"
+                  data-tip="Dark mode"
+                >
+                  <span class="material-symbols-outlined text-[18px]">dark_mode</span>
+                </button>
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="system"
+                  data-tip="Match system"
+                >
+                  <span class="material-symbols-outlined text-[18px]">desktop_windows</span>
+                </button>
+                <button
+                  type="button"
+                  class="theme-toggle-btn flex items-center justify-center w-7 h-7 rounded-full transition-colors"
+                  data-theme-choice="light"
+                  data-tip="Light mode"
+                >
+                  <span class="material-symbols-outlined text-[18px]">light_mode</span>
+                </button>
+                <button
+                  type="button"
+                  id="theme-toggle-close"
+                  class="flex items-center justify-center w-7 h-7 rounded-full text-on-surface-variant hover:text-primary transition-colors"
+                  data-tip="Close"
+                >
+                  <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              </div>
+            </div>
+            <button
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Settings"
+            >
+              <span class="material-symbols-outlined text-[22px]">settings</span>
+            </button>
+            <a
+              href="logout.html"
+              class="flex items-center justify-center text-slate-500 hover:text-primary transition-colors"
+              data-tip="Log out"
+            >
+              <span class="material-symbols-outlined text-[22px]">logout</span>
+            </a>
+            <div
+              class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20 flex-shrink-0"
+              data-tip="Jiří Vondra"
+            >
+              <img
+                alt="Jiří Vondra"
+                class="w-full h-full object-cover"
+                src="assets/avatars/admin.png"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Main Content -->
+      <main class="flex-1 p-8 md:p-12 max-w-5xl mx-auto w-full">
+        <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-10">
+          <a
+            class="flex items-center hover:text-primary transition-colors"
+            href="dashboard.html"
+            aria-label="Dashboard"
+          >
+            <span class="material-symbols-outlined text-[18px]">home</span>
+          </a>
+          <span class="material-symbols-outlined text-xs">chevron_right</span>
+          <span class="text-on-surface">Page Not Found</span>
+        </nav>
+        <div class="max-w-md mx-auto text-center py-16">
+          <div
+            class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-surface-container-high border border-outline-variant/30 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-on-surface-variant text-[40px]"
+              >wrong_location</span
+            >
+          </div>
+          <p class="font-headline text-6xl font-black text-primary mb-2">404</p>
+          <h2 class="font-headline text-xl font-bold text-on-surface mb-3">Page Not Found</h2>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+            This page doesn't exist or may have been moved.
+          </p>
+          <a
+            href="dashboard.html"
+            class="inline-block px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+          >
+            Back to Dashboard
+          </a>
+        </div>
+      </main>
+    </div>
+
+    <button
+      id="back-to-top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-10 right-10 w-14 h-14 bg-surface-container-highest text-on-surface rounded-full shadow-[0_12px_40px_rgba(49,50,59,0.1)] flex items-center justify-center transition-all duration-300 hover:bg-primary hover:text-on-primary opacity-0 pointer-events-none z-50"
+    >
+      <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+
+    <!-- Mobile Navigation -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#fbf8fe] border-t border-outline-variant/10 flex justify-around items-center h-20 px-4 z-50"
+    >
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Tasks</span>
+      </a>
+      <button
+        class="bg-primary text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg -mt-10 border-4 border-background"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </button>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-[10px] font-bold uppercase tracking-tighter">Config</span>
+      </a>
+    </nav>
+
+    <script>
+      const auth = sessionStorage.getItem('auth')
+      if (!auth) window.location.href = 'login.html'
+
+      document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = 'dashboard.html'
+      })
+
+      // App version
+      fetch('assets/version.json')
+        .then((r) => r.json())
+        .then((d) => {
+          const el = document.getElementById('app-version')
+          if (el) el.textContent = d.version
+        })
+        .catch(() => {})
+
+      // Mechanical clock
+      ;(function () {
+        function updateClock() {
+          const now = new Date()
+          const sec = now.getSeconds() + now.getMilliseconds() / 1000
+          const min = now.getMinutes() + sec / 60
+          const hour = (now.getHours() % 12) + min / 60
+          document.getElementById('hand-second').style.transform =
+            `translateX(-50%) rotate(${sec * 6}deg)`
+          document.getElementById('hand-minute').style.transform =
+            `translateX(-50%) rotate(${min * 6}deg)`
+          document.getElementById('hand-hour').style.transform =
+            `translateX(-50%) rotate(${hour * 30}deg)`
+        }
+        updateClock()
+        setInterval(updateClock, 1000)
+      })()
+
+      // Back to top
+      window.addEventListener('scroll', () => {
+        const btn = document.getElementById('back-to-top')
+        if (window.scrollY > 100) {
+          btn.classList.remove('opacity-0', 'pointer-events-none')
+        } else {
+          btn.classList.add('opacity-0', 'pointer-events-none')
+        }
+      })
+
+      // Sidebar toggle
+      ;(function () {
+        const html = document.documentElement
+        const collapsed = localStorage.getItem('sidebarCollapsed') === 'true'
+        if (collapsed) html.classList.add('sidebar-collapsed')
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+          const isNowCollapsed = !html.classList.contains('sidebar-collapsed')
+          html.classList.toggle('sidebar-collapsed', isNowCollapsed)
+          localStorage.setItem('sidebarCollapsed', isNowCollapsed)
+        })
+      })()
+
+      // Theme toggle (light / dark / system)
+      ;(function () {
+        const html = document.documentElement
+        const buttons = document.querySelectorAll('.theme-toggle-btn')
+        const container = document.getElementById('theme-toggle')
+        const trigger = document.getElementById('theme-toggle-trigger')
+        const triggerIcon = document.getElementById('theme-toggle-trigger-icon')
+        const panel = document.getElementById('theme-toggle-panel')
+        const closeBtn = document.getElementById('theme-toggle-close')
+
+        const CHOICE_META = {
+          dark: { icon: 'dark_mode', tip: 'Dark mode' },
+          light: { icon: 'light_mode', tip: 'Light mode' },
+          system: { icon: 'desktop_windows', tip: 'Match system' },
+        }
+
+        function systemPrefersDark() {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches
+        }
+
+        function currentChoice() {
+          const stored = localStorage.getItem('theme')
+          return stored === 'dark' || stored === 'light' ? stored : 'system'
+        }
+
+        function updateActiveButton(choice) {
+          buttons.forEach((btn) => {
+            const active = btn.dataset.themeChoice === choice
+            btn.classList.toggle('bg-surface-container-lowest', active)
+            btn.classList.toggle('shadow-sm', active)
+            btn.classList.toggle('text-primary', active)
+            btn.classList.toggle('text-on-surface-variant', !active)
+          })
+        }
+
+        function updateTrigger(choice) {
+          const meta = CHOICE_META[choice]
+          triggerIcon.textContent = meta.icon
+          trigger.setAttribute('data-tip', meta.tip)
+        }
+
+        function applyTheme(choice) {
+          if (choice === 'system') {
+            localStorage.removeItem('theme')
+            html.classList.toggle('dark', systemPrefersDark())
+          } else {
+            localStorage.setItem('theme', choice)
+            html.classList.toggle('dark', choice === 'dark')
+          }
+          updateActiveButton(choice)
+          updateTrigger(choice)
+        }
+
+        function expandPanel() {
+          trigger.classList.add('hidden')
+          panel.classList.remove('hidden')
+          panel.classList.add('flex')
+        }
+
+        function collapsePanel() {
+          panel.classList.add('hidden')
+          panel.classList.remove('flex')
+          trigger.classList.remove('hidden')
+        }
+
+        trigger.addEventListener('click', expandPanel)
+        closeBtn.addEventListener('click', collapsePanel)
+
+        buttons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            applyTheme(btn.dataset.themeChoice)
+            collapsePanel()
+          })
+        })
+
+        document.addEventListener('click', (e) => {
+          if (!panel.classList.contains('hidden') && !container.contains(e.target)) {
+            collapsePanel()
+          }
+        })
+
+        updateActiveButton(currentChoice())
+        updateTrigger(currentChoice())
+      })()
+
+      // Expandable search
+      ;(function () {
+        const wrap = document.getElementById('search-wrap')
+        const btn = document.getElementById('search-btn')
+        const input = document.getElementById('search-input')
+        const closeBtn = document.getElementById('search-close-btn')
+
+        function openSearch() {
+          wrap.classList.add('open')
+          closeBtn.classList.remove('hidden')
+          closeBtn.classList.add('flex')
+          input.focus()
+          btn.removeAttribute('data-tip')
+        }
+
+        function closeSearch() {
+          wrap.classList.remove('open')
+          closeBtn.classList.add('hidden')
+          closeBtn.classList.remove('flex')
+          input.value = ''
+          btn.setAttribute('data-tip', 'Search')
+        }
+
+        btn.addEventListener('click', () => {
+          if (wrap.classList.contains('open')) {
+            closeSearch()
+          } else {
+            openSearch()
+          }
+        })
+
+        closeBtn.addEventListener('click', closeSearch)
+
+        input.addEventListener('blur', () => {
+          if (!input.value) {
+            closeSearch()
+          }
+        })
+      })()
+    </script>
+  </body>
+</html>
