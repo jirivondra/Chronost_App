@@ -4,6 +4,8 @@
 
 A full-stack TODO application with a FastAPI backend and a static HTML/CSS frontend.
 
+> **Note:** This is a personal learning project, not a production app. The stack deliberately mixes technologies (REST, SOAP, multiple test frameworks, a Postman sync pipeline, etc.) that a real TODO app wouldn't need together — they're here so I could practice with each one, not because this combination is the "right" architecture for the job.
+
 ## Stack
 
 | Layer        | Technology                                                               |

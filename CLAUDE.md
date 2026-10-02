@@ -41,7 +41,7 @@ Always run `task lint` and `task format-check` (or `task fix` to auto-fix both) 
 
 ## Architecture
 
-- `api/main.py` — FastAPI TODO REST API.
+- `api/main.py` — FastAPI TODO REST API. Changing it can trigger the `postman-sync` workflow — see the `api-change-checklist` skill (`.claude/skills/api-change-checklist/SKILL.md`).
 - `api/soap_calculator.py` — SOAP 1.1 calculator service (spyne).
 - `frontend/` — static HTML/Tailwind CSS screens (login, dashboard, edit-task, task-detail, calculator).
 - `schemas/schemas.ts` — shared Joi schemas used by the test suites.

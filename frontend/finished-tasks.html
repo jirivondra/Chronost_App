@@ -1032,6 +1032,8 @@
         renderPagination(Math.ceil(totalDone / pageSize), totalDone)
       }
 
+      let sortOrder = 'desc'
+
       async function loadTodos() {
         let res
         try {
