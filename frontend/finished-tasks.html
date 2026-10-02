@@ -636,13 +636,19 @@
                 >
                   Sort by
                 </label>
-                <select
-                  id="sort-order"
-                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                >
-                  <option value="desc">Newest first</option>
-                  <option value="asc">Oldest first</option>
-                </select>
+                <div class="relative">
+                  <select
+                    id="sort-order"
+                    class="appearance-none bg-none bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30 w-full"
+                  >
+                    <option value="desc">Newest first</option>
+                    <option value="asc">Oldest first</option>
+                  </select>
+                  <span
+                    class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]"
+                    >expand_more</span
+                  >
+                </div>
               </div>
               <div id="page-size-wrap" class="hidden flex-col gap-1.5">
                 <label
@@ -651,14 +657,20 @@
                 >
                   Items per page
                 </label>
-                <select
-                  id="page-size"
-                  class="bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                >
-                  <option value="10">10</option>
-                  <option value="30">30</option>
-                  <option value="50">50</option>
-                </select>
+                <div class="relative">
+                  <select
+                    id="page-size"
+                    class="appearance-none bg-none bg-surface-container-low text-on-surface font-headline text-sm font-semibold rounded-xl border border-outline-variant pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30 w-full"
+                  >
+                    <option value="10">10</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                  </select>
+                  <span
+                    class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]"
+                    >expand_more</span
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -875,14 +887,61 @@
 
       const PAGE_SIZE_OPTIONS = [10, 30, 50]
       const PAGINATOR_BUFFER = 1
-      let allDone = []
-      let currentPage = 1
-      let pageSize = PAGE_SIZE_OPTIONS[0]
+      let totalDone = 0
+
+      function paramsFromUrl() {
+        return new URLSearchParams(window.location.search)
+      }
+
+      function buildParams(overrides) {
+        const params = paramsFromUrl()
+        Object.entries(overrides).forEach(([key, value]) => params.set(key, value))
+        return params
+      }
+
+      function navigateWithParams(overrides) {
+        window.location.search = buildParams(overrides).toString()
+      }
+
+      function replaceUrlParams(overrides) {
+        const params = buildParams(overrides)
+        window.history.replaceState(
+          null,
+          '',
+          `${window.location.pathname}?${params.toString()}${window.location.hash}`
+        )
+      }
+
+      function readStateFromUrl() {
+        const params = paramsFromUrl()
+        const orderRaw = params.get('order')
+        const limitRaw = parseInt(params.get('limit'), 10)
+        const pageRaw = parseInt(params.get('page'), 10)
+
+        const sortOrder = orderRaw === 'asc' ? 'asc' : 'desc'
+        const pageSize = PAGE_SIZE_OPTIONS.includes(limitRaw) ? limitRaw : PAGE_SIZE_OPTIONS[0]
+        const currentPage = Number.isInteger(pageRaw) && pageRaw > 0 ? pageRaw : 1
+
+        // Unknown/out-of-range values (e.g. ?limit=100000 or ?page=-5) fall back to a
+        // valid default above; reflect the corrected values back into the URL so the
+        // address bar never shows a value that isn't actually in effect.
+        const hasInvalidParam =
+          (params.has('order') && orderRaw !== sortOrder) ||
+          (params.has('limit') && limitRaw !== pageSize) ||
+          (params.has('page') && pageRaw !== currentPage)
+        if (hasInvalidParam) {
+          replaceUrlParams({ order: sortOrder, limit: pageSize, page: currentPage })
+        }
+
+        return { sortOrder, pageSize, currentPage }
+      }
+
+      let { sortOrder, pageSize, currentPage } = readStateFromUrl()
+      document.getElementById('sort-order').value = sortOrder
+      document.getElementById('page-size').value = String(pageSize)
 
       function goToPage(page) {
-        currentPage = page
-        renderPage()
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        navigateWithParams({ page })
       }
 
       function paginatorArrow(icon, enabled, onClick) {
@@ -917,7 +976,7 @@
         const pagination = document.getElementById('pagination')
         pagination.innerHTML = ''
 
-        if (totalItems < pageSize) {
+        if (totalItems <= PAGE_SIZE_OPTIONS[0]) {
           pagination.classList.add('hidden')
           pagination.classList.remove('flex')
           return
@@ -952,37 +1011,34 @@
         )
       }
 
-      function renderPage() {
+      function renderPage(todos) {
         const doneList = document.getElementById('done-list')
         doneList.innerHTML = ''
 
-        document
-          .getElementById('page-size-wrap')
-          .classList.toggle('hidden', allDone.length <= PAGE_SIZE_OPTIONS[0])
+        const pageSizeWrap = document.getElementById('page-size-wrap')
+        const showPageSize = totalDone > PAGE_SIZE_OPTIONS[0]
+        pageSizeWrap.classList.toggle('hidden', !showPageSize)
+        pageSizeWrap.classList.toggle('flex', showPageSize)
 
-        if (allDone.length === 0) {
+        if (totalDone === 0) {
           doneList.innerHTML =
             '<p class="text-on-surface-variant text-sm italic opacity-50">No finished tasks yet.</p>'
           renderPagination(0, 0)
           return
         }
 
-        const totalPages = Math.ceil(allDone.length / pageSize)
-        currentPage = Math.min(currentPage, totalPages)
+        todos.forEach((todo) => doneList.appendChild(renderTodo(todo)))
 
-        allDone
-          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-          .forEach((todo) => doneList.appendChild(renderTodo(todo)))
-
-        renderPagination(totalPages, allDone.length)
+        renderPagination(Math.ceil(totalDone / pageSize), totalDone)
       }
-
-      let sortOrder = 'desc'
 
       async function loadTodos() {
         let res
         try {
-          res = await fetch(`${API}/todos?order=${sortOrder}`, { headers })
+          res = await fetch(
+            `${API}/todos?order=${sortOrder}&completed=true&page=${currentPage}&limit=${pageSize}`,
+            { headers }
+          )
         } catch {
           showBackendDown()
           return
@@ -992,20 +1048,25 @@
           return
         }
         const todos = await res.json()
-        allDone = todos.filter((t) => t.completed)
-        renderPage()
+        const totalCountHeader = res.headers.get('X-Total-Count')
+        totalDone = totalCountHeader !== null ? parseInt(totalCountHeader, 10) : todos.length
+
+        const totalPages = Math.max(1, Math.ceil(totalDone / pageSize))
+        if (currentPage > totalPages) {
+          currentPage = totalPages
+          replaceUrlParams({ page: currentPage })
+          return loadTodos()
+        }
+
+        renderPage(todos)
       }
 
       document.getElementById('sort-order').addEventListener('change', (e) => {
-        sortOrder = e.target.value
-        currentPage = 1
-        loadTodos()
+        navigateWithParams({ order: e.target.value, page: 1 })
       })
 
       document.getElementById('page-size').addEventListener('change', (e) => {
-        pageSize = parseInt(e.target.value, 10)
-        currentPage = 1
-        renderPage()
+        navigateWithParams({ limit: e.target.value, page: 1 })
       })
 
       loadTodos()
